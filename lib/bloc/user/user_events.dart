@@ -1,5 +1,7 @@
 abstract class UserEvent {}
 
-class UserLoginEvent extends UserEvent {}
+class UserLoginWithGoogleEvent extends UserEvent {}
+
+class UserLoginWithFacebookEvent extends UserEvent {}
 
 class UserLogoutEvent extends UserEvent {}
