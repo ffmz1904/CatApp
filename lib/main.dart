@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Cat App",
-      initialRoute: "/auth",
+      initialRoute: "/",
       routes: {
         "/": (context) => HomePage(),
         "/auth": (context) => AuthPage(),
