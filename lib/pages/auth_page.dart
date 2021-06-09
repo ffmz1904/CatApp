@@ -37,7 +37,7 @@ class AuthPage extends StatelessWidget {
                   SizedBox(height: 50),
                   ElevatedButton.icon(
                     onPressed: () {
-                      userBloc.add(UserLoginWithGoogleEvent());
+                      userBloc.add(UserLoginEvent(type: UserAuthTypes.Google));
                     },
                     icon: FaIcon(FontAwesomeIcons.google, color: Colors.white),
                     label: Text('Sign in with Google'),
@@ -45,7 +45,8 @@ class AuthPage extends StatelessWidget {
                   SizedBox(height: 10),
                   ElevatedButton.icon(
                     onPressed: () {
-                      userBloc.add(UserLoginWithFacebookEvent());
+                      userBloc
+                          .add(UserLoginEvent(type: UserAuthTypes.Facebook));
                     },
                     icon:
                         FaIcon(FontAwesomeIcons.facebook, color: Colors.white),
