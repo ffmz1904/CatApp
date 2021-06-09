@@ -35,7 +35,15 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+  flutter_native_splash: ^1.1.8+4
 
+flutter_native_splash: 
+  color: "#ffffff"
+  image: assets/cat-main.jpg
+  android: true
+  ios: true
+  android_gravity: fill
+  ios_content_mode: scaleAspectFill
 # The following section is specific to Flutter.
 flutter:
 
