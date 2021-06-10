@@ -6,9 +6,9 @@ class CatRepository {
   CatImageProvider _catImageProvider = CatImageProvider();
   CatFactProvider _catFactProvider = CatFactProvider();
 
-  Future getCats() async {
-    List catImages = await _catImageProvider.getCats();
-    List catFacts = await _catFactProvider.getFacts();
+  Future getCats(int limit, int page) async {
+    List catImages = await _catImageProvider.getCats(limit, page);
+    List catFacts = await _catFactProvider.getFacts(limit);
 
     List<Cat> cats = [];
 

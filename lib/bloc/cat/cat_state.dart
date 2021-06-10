@@ -8,8 +8,9 @@ class CatLoadingState extends CatState {}
 
 class CatLoadedState extends CatState {
   List<Cat> cats;
+  int page;
 
-  CatLoadedState({required this.cats});
+  CatLoadedState({required this.cats, required this.page});
 }
 
 class CatErrorState extends CatState {}
