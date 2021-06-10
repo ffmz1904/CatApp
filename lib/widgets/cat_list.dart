@@ -1,6 +1,7 @@
 import 'package:cat_app/bloc/cat/cat_block.dart';
 import 'package:cat_app/bloc/cat/cat_events.dart';
 import 'package:cat_app/models/cat_model.dart';
+import 'package:cat_app/widgets/cat_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -42,32 +43,7 @@ class _CatListState extends State<CatList> {
             return Center(child: CircularProgressIndicator());
           }
 
-          return Card(
-            elevation: 4,
-            margin: EdgeInsets.symmetric(vertical: 15),
-            child: Stack(
-              alignment: AlignmentDirectional.bottomEnd,
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 250,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(widget.cats[i].image),
-                    ),
-                  ),
-                ),
-                IconButton(
-                    onPressed: null,
-                    icon: FaIcon(
-                      FontAwesomeIcons.heart,
-                      color: Colors.red[900],
-                      size: 30,
-                    ))
-              ],
-            ),
-          );
+          return CatListItem(cat: widget.cats[i]);
         });
   }
 }
