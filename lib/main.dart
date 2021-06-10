@@ -21,7 +21,6 @@ class MyApp extends StatelessWidget {
         create: (context) => UserBloc(),
         child: BlocBuilder<UserBloc, UserState>(
           builder: (context, state) {
-            print('State is $state');
             if (state is UserNotAuthState || state is UserErrorState) {
               return AuthPage();
             }

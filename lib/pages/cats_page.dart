@@ -1,12 +1,48 @@
+import 'package:cat_app/bloc/cat/cat_block.dart';
+import 'package:cat_app/bloc/cat/cat_events.dart';
+import 'package:cat_app/bloc/cat/cat_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CatsPage extends StatelessWidget {
   const CatsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text('cats'),
+    return BlocProvider<CatBloc>(
+      create: (context) => CatBloc(),
+      child: BlocBuilder<CatBloc, CatState>(
+        builder: (context, state) {
+          final CatBloc catBloc = BlocProvider.of<CatBloc>(context);
+
+          if (state is CatEmptyState) {
+            catBloc.add(CatLoadEvent());
+            return Center(
+              child: Text('No cats yet!'),
+            );
+          }
+
+          if (state is CatLoadingState) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (state is CatLoadedState) {
+            return Container(
+              child: Text('cats'),
+            );
+          }
+
+          if (state is CatErrorState) {
+            return Center(
+              child: Text('Error cat fetching!'),
+            );
+          }
+
+          return SizedBox();
+        },
+      ),
     );
   }
 }
