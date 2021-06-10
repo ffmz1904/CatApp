@@ -14,7 +14,8 @@ class CatRepository {
 
     for (int i = 0; i < catImages.length; i++) {
       cats.add(Cat(
-        image: catImages[i],
+        id: catImages[i]['id'],
+        image: catImages[i]['img'],
         fact: catFacts[i],
       ));
     }

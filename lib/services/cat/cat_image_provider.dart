@@ -10,7 +10,12 @@ class CatImageProvider {
                 'https://api.thecatapi.com/v1/images/search?limit=$limit&page=$page&order=rand')
         .request();
 
-    final List catImages = response.map((cat) => cat['url']).toList();
+    final List catImages = response
+        .map((cat) => {
+              'id': cat['id'],
+              'img': cat['url'],
+            })
+        .toList();
 
     return catImages;
   }
