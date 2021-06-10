@@ -30,7 +30,7 @@ class CatImageProvider {
         body: body,
         headers: {'x-api-key': CAT_API_KEY}).request();
 
-    print(response);
+    return response;
   }
 
   Future<List> getFavorite(String userId, int limit, int page) async {

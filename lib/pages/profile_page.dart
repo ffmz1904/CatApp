@@ -38,8 +38,8 @@ class ProfilePage extends StatelessWidget {
               onPressed: () {
                 print(user);
                 // userBloc.add(UserLogoutEvent(type: UserAuthTypes.Google));
-                // userBloc.add(UserLogoutEvent(type: UserAuthTypes.Facebook));
-                userBloc.add(UserLogoutEvent(type: type!));
+                userBloc.add(UserLogoutEvent(type: UserAuthTypes.Facebook));
+                // userBloc.add(UserLogoutEvent(type: type!));
                 Navigator.push(
                     context, MaterialPageRoute(builder: (context) => MyApp()));
               },

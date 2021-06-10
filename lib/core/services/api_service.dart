@@ -39,13 +39,16 @@ class ApiService {
         response = await http.get(uri, headers: headers);
         break;
       case RequestTypes.POST:
-        response = await http.post(uri, body: this.body, headers: headers);
+        response = await http.post(uri,
+            body: json.encode(this.body), headers: headers);
         break;
       case RequestTypes.PUT:
-        response = await http.put(uri, body: this.body, headers: headers);
+        response =
+            await http.put(uri, body: json.encode(this.body), headers: headers);
         break;
       case RequestTypes.PATCH:
-        response = await http.patch(uri, body: this.body, headers: headers);
+        response = await http.patch(uri,
+            body: json.encode(this.body), headers: headers);
         break;
       case RequestTypes.DELETE:
         response = await http.delete(uri, headers: headers);

@@ -9,7 +9,10 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
   FavoriteBloc() : super(FavoriteEmptyState());
 
   @override
-  Stream<FavoriteState> mapEventToState(FavoriteEvent event) {
-    throw UnimplementedError();
+  Stream<FavoriteState> mapEventToState(FavoriteEvent event) async* {
+    if (event is FavoriteAddEvent) {
+      final response = await _repository.addFavorite(event.imgId, event.userId);
+      // todo ...
+    }
   }
 }

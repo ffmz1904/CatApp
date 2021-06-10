@@ -29,7 +29,7 @@ class CatRepository {
       "sub_id": userId,
     };
 
-    await _catImageProvider.addToFavorite(body);
+    return await _catImageProvider.addToFavorite(body);
   }
 
   Future getFavorite(String userId, int limit, int page) async {
