@@ -1,6 +1,9 @@
+import 'package:cat_app/bloc/favorite/favorite_bloc.dart';
+import 'package:cat_app/bloc/favorite/favorite_events.dart';
 import 'package:cat_app/models/cat_model.dart';
 import 'package:cat_app/pages/cat_details_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CatListItem extends StatelessWidget {
@@ -9,6 +12,8 @@ class CatListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FavoriteBloc favoriteBloc = BlocProvider.of<FavoriteBloc>(context);
+
     return Card(
       elevation: 4,
       margin: EdgeInsets.symmetric(vertical: 15),
@@ -36,7 +41,9 @@ class CatListItem extends StatelessWidget {
             ),
           ),
           IconButton(
-              onPressed: null,
+              onPressed: () {
+                favoriteBloc.add(FavoriteAddEvent());
+              },
               icon: FaIcon(
                 FontAwesomeIcons.heart,
                 color: Colors.red[900],
