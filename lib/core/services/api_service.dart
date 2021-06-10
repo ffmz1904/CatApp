@@ -7,25 +7,31 @@ enum RequestTypes { GET, POST, PUT, PATCH, DELETE }
 class ApiService {
   String endpoint;
   Map<String, dynamic> body = {};
+  Map<String, String>? headers;
   RequestTypes method = RequestTypes.GET;
 
-  ApiService.get({required this.endpoint});
+  ApiService.get({required this.endpoint, this.headers});
 
-  ApiService.post({required this.endpoint, required this.body})
+  ApiService.post({required this.endpoint, required this.body, this.headers})
       : this.method = RequestTypes.POST;
 
-  ApiService.put({required this.endpoint, required this.body})
+  ApiService.put({required this.endpoint, required this.body, this.headers})
       : this.method = RequestTypes.PUT;
 
-  ApiService.patch({required this.endpoint, required this.body})
+  ApiService.patch({required this.endpoint, required this.body, this.headers})
       : this.method = RequestTypes.PATCH;
 
-  ApiService.delete({required this.endpoint})
+  ApiService.delete({required this.endpoint, this.headers})
       : this.method = RequestTypes.DELETE;
 
   Future request() async {
     var uri = Uri.parse(this.endpoint);
-    var headers = {'Content-Type': 'application/json'};
+    Map<String, String> headers = {'Content-Type': 'application/json'};
+
+    if (this.headers != null) {
+      headers.addAll(this.headers!);
+    }
+
     var response;
 
     switch (method) {
