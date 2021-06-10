@@ -36,7 +36,9 @@ class ProfilePage extends StatelessWidget {
 
             return ElevatedButton(
               onPressed: () {
+                print(user);
                 // userBloc.add(UserLogoutEvent(type: UserAuthTypes.Google));
+                // userBloc.add(UserLogoutEvent(type: UserAuthTypes.Facebook));
                 userBloc.add(UserLogoutEvent(type: type!));
                 Navigator.push(
                     context, MaterialPageRoute(builder: (context) => MyApp()));
