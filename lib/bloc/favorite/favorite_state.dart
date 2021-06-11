@@ -8,20 +8,9 @@ class FavoriteLoadingState extends FavoriteState {}
 
 class FavoriteLoadedState extends FavoriteState {
   List<Cat> cats;
-  static FavoriteLoadedState? state;
+  int page;
 
-  FavoriteLoadedState({required this.cats});
-
-  factory FavoriteLoadedState.setState(List<Cat> catsList) {
-    if (state == null) {
-      return FavoriteLoadedState(cats: catsList);
-    }
-
-    List<Cat>? newCatsList = state?.cats;
-    newCatsList?.addAll(catsList);
-
-    return FavoriteLoadedState(cats: newCatsList!);
-  }
+  FavoriteLoadedState({required this.cats, this.page = 1});
 }
 
 class FavoriteErrorState extends FavoriteState {}

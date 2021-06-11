@@ -12,26 +12,30 @@ class CatBloc extends Bloc<CatEvent, CatState> {
   @override
   Stream<CatState> mapEventToState(CatEvent event) async* {
     if (event is CatLoadEvent) {
-      if (event.cats == null) {
-        yield CatLoadingState();
+      yield* _mapCatLoadedToState(event);
+    }
+  }
+
+  Stream<CatState> _mapCatLoadedToState(CatLoadEvent event) async* {
+    if (state is CatEmptyState) {
+      yield CatLoadingState();
+    }
+
+    int limit = 5;
+    int page = event.page;
+
+    try {
+      List<Cat> cats = await _repository.getCats(limit, page);
+
+      if (state is CatLoadedState) {
+        List<Cat> catState = (state as CatLoadedState).cats;
+        catState.addAll(cats);
+        yield CatLoadedState(cats: catState, page: page);
+      } else {
+        yield CatLoadedState(cats: cats, page: page);
       }
-
-      int limit = 5;
-      int page = event.page;
-
-      try {
-        List<Cat> cats = await _repository.getCats(limit, page);
-
-        if (event.cats != null) {
-          List<Cat> catState = event.cats!;
-          catState.addAll(cats);
-          yield CatLoadedState(cats: catState, page: page);
-        } else {
-          yield CatLoadedState(cats: cats, page: page);
-        }
-      } catch (e) {
-        yield CatErrorState();
-      }
+    } catch (e) {
+      yield CatErrorState();
     }
   }
 }

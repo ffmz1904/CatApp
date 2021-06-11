@@ -9,7 +9,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class CatList extends StatefulWidget {
   List<Cat> cats;
   int page;
-  CatList({Key? key, required this.cats, required this.page}) : super(key: key);
+  final loadMore;
+  CatList({
+    Key? key,
+    required this.cats,
+    required this.page,
+    required this.loadMore,
+  }) : super(key: key);
 
   @override
   _CatListState createState() => _CatListState();
@@ -26,8 +32,7 @@ class _CatListState extends State<CatList> {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         //getMoreCats
-        CatBloc catBloc = BlocProvider.of<CatBloc>(context);
-        catBloc.add(CatLoadEvent(page: widget.page + 1, cats: widget.cats));
+        widget.loadMore(widget.page);
         setState(() {});
       }
     });

@@ -31,10 +31,16 @@ class CatsPage extends StatelessWidget {
           }
 
           if (state is CatLoadedState) {
+            void loadMore(page) {
+              CatBloc catBloc = BlocProvider.of<CatBloc>(context);
+              catBloc.add(CatLoadEvent(page: page + 1));
+            }
+
             return BlocProvider<FavoriteBloc>(
               create: (context) => FavoriteBloc(),
               child: Container(
-                child: CatList(cats: state.cats, page: state.page),
+                child: CatList(
+                    cats: state.cats, page: state.page, loadMore: loadMore),
               ),
             );
           }
