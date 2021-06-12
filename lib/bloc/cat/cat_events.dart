@@ -5,3 +5,9 @@ class CatLoadEvent extends CatEvent {
 
   CatLoadEvent({this.page = 1});
 }
+
+class CatAddToFavoriteEvent extends CatEvent {
+  String userId;
+  String catId;
+  CatAddToFavoriteEvent({required this.catId, required this.userId});
+}

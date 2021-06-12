@@ -1,7 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cat_app/bloc/cat/cat_bloc.dart';
+import 'package:cat_app/bloc/cat/cat_events.dart';
+import 'package:cat_app/bloc/user/user_bloc.dart';
+import 'package:cat_app/bloc/user/user_state.dart';
 import 'package:cat_app/models/cat_model.dart';
 import 'package:cat_app/pages/cat_details_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CatListItem extends StatelessWidget {
@@ -10,6 +15,9 @@ class CatListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    CatBloc catBloc = BlocProvider.of<CatBloc>(context);
+    UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+
     return Card(
       elevation: 4,
       margin: EdgeInsets.symmetric(vertical: 15),
@@ -43,7 +51,11 @@ class CatListItem extends StatelessWidget {
             ),
           ),
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                final userId = (userBloc.state as UserAuthState).userData.id;
+                catBloc
+                    .add(CatAddToFavoriteEvent(catId: cat.id, userId: userId));
+              },
               icon: FaIcon(
                 cat.isFavorite
                     ? FontAwesomeIcons.solidHeart

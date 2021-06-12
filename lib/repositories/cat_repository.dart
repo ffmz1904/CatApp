@@ -46,4 +46,10 @@ class CatRepository {
     List<CatModel> catList = CatModel.decode(catListString);
     return catList;
   }
+
+  Future addToFavorite(String catId, String userId) =>
+      api.addCatToFavorite(catId, userId);
+
+  Future removeFromFavorite(dynamic favoriteId) =>
+      api.removeCatFromFavorite(favoriteId);
 }

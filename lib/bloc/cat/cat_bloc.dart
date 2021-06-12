@@ -13,6 +13,8 @@ class CatBloc extends Bloc<CatEvent, CatState> {
   Stream<CatState> mapEventToState(CatEvent event) async* {
     if (event is CatLoadEvent) {
       yield* _mapCatLoadToState(event);
+    } else if (event is CatAddToFavoriteEvent) {
+      yield* _mapCatAddFavoriteToState(event);
     }
   }
 
@@ -49,5 +51,20 @@ class CatBloc extends Bloc<CatEvent, CatState> {
         yield CatLoadedState(catList: cats);
       }
     }
+  }
+
+  Stream<CatState> _mapCatAddFavoriteToState(CatEvent event) async* {
+    CatAddToFavoriteEvent eventData = (event as CatAddToFavoriteEvent);
+    await repository.addToFavorite(eventData.catId, eventData.userId);
+
+    List<CatModel> cats = (state as CatLoadedState)
+        .catList
+        .map((cat) => cat.id != eventData.catId
+            ? cat
+            : CatModel(
+                id: cat.id, image: cat.image, fact: cat.fact, isFavorite: true))
+        .toList();
+
+    yield CatLoadedState(catList: cats, page: (state as CatLoadedState).page);
   }
 }
