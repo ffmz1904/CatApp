@@ -11,3 +11,9 @@ class CatAddToFavoriteEvent extends CatEvent {
   String catId;
   CatAddToFavoriteEvent({required this.catId, required this.userId});
 }
+
+class CatRemoveFromFavoritesEvent extends CatEvent {
+  dynamic favoriteId;
+
+  CatRemoveFromFavoritesEvent({required this.favoriteId});
+}

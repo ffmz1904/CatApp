@@ -52,9 +52,14 @@ class CatListItem extends StatelessWidget {
           ),
           IconButton(
               onPressed: () {
-                final userId = (userBloc.state as UserAuthState).userData.id;
-                catBloc
-                    .add(CatAddToFavoriteEvent(catId: cat.id, userId: userId));
+                if (cat.isFavorite) {
+                  catBloc.add(
+                      CatRemoveFromFavoritesEvent(favoriteId: cat.favoriteId));
+                } else {
+                  final userId = (userBloc.state as UserAuthState).userData.id;
+                  catBloc.add(
+                      CatAddToFavoriteEvent(catId: cat.id, userId: userId));
+                }
               },
               icon: FaIcon(
                 cat.isFavorite

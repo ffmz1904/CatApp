@@ -15,6 +15,8 @@ class CatBloc extends Bloc<CatEvent, CatState> {
       yield* _mapCatLoadToState(event);
     } else if (event is CatAddToFavoriteEvent) {
       yield* _mapCatAddFavoriteToState(event);
+    } else if (event is CatRemoveFromFavoritesEvent) {
+      yield* _mapCatRemoveFromFavoritesToState(event);
     }
   }
 
@@ -55,16 +57,43 @@ class CatBloc extends Bloc<CatEvent, CatState> {
 
   Stream<CatState> _mapCatAddFavoriteToState(CatEvent event) async* {
     CatAddToFavoriteEvent eventData = (event as CatAddToFavoriteEvent);
-    await repository.addToFavorite(eventData.catId, eventData.userId);
+    final response =
+        await repository.addToFavorite(eventData.catId, eventData.userId);
+    print(response);
+    if (response['message'] == 'SUCCESS') {
+      List<CatModel> cats = (state as CatLoadedState)
+          .catList
+          .map((cat) => cat.id != eventData.catId
+              ? cat
+              : CatModel(
+                  id: cat.id,
+                  image: cat.image,
+                  fact: cat.fact,
+                  isFavorite: true,
+                  favoriteId: response['id']))
+          .toList();
 
-    List<CatModel> cats = (state as CatLoadedState)
-        .catList
-        .map((cat) => cat.id != eventData.catId
-            ? cat
-            : CatModel(
-                id: cat.id, image: cat.image, fact: cat.fact, isFavorite: true))
-        .toList();
+      yield CatLoadedState(catList: cats, page: (state as CatLoadedState).page);
+    }
+  }
 
-    yield CatLoadedState(catList: cats, page: (state as CatLoadedState).page);
+  Stream<CatState> _mapCatRemoveFromFavoritesToState(CatEvent event) async* {
+    dynamic favoriteId = (event as CatRemoveFromFavoritesEvent).favoriteId;
+    final response = await repository.removeFromFavorite(favoriteId);
+
+    if (response['message'] == 'SUCCESS') {
+      List<CatModel> cats = (state as CatLoadedState)
+          .catList
+          .map((cat) => cat.favoriteId != favoriteId
+              ? cat
+              : CatModel(
+                  id: cat.id,
+                  image: cat.image,
+                  fact: cat.fact,
+                  isFavorite: false,
+                  favoriteId: null))
+          .toList();
+      yield CatLoadedState(catList: cats, page: (state as CatLoadedState).page);
+    }
   }
 }
