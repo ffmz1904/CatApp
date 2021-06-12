@@ -12,6 +12,11 @@ class CatsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     CatBloc catBloc = BlocProvider.of<CatBloc>(context);
 
+    loadMoreCats() {
+      catBloc
+          .add(CatLoadEvent(page: (catBloc.state as CatLoadedState).page + 1));
+    }
+
     return BlocBuilder<CatBloc, CatState>(builder: (context, catState) {
       if (catState is CatEmptyState) {
         catBloc.add(CatLoadEvent());
@@ -27,7 +32,7 @@ class CatsPage extends StatelessWidget {
       }
 
       if (catState is CatLoadedState) {
-        return CatList(catList: catState.catList);
+        return CatList(catList: catState.catList, loadMore: loadMoreCats);
       }
 
       return SizedBox();

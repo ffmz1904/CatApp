@@ -2,38 +2,56 @@ import 'package:cat_app/models/cat_model.dart';
 import 'package:cat_app/widgets/cat_list_item.dart';
 import 'package:flutter/material.dart';
 
-class CatList extends StatelessWidget {
+class CatList extends StatefulWidget {
   final List<CatModel> catList;
+  Function loadMore;
 
-  CatList({Key? key, required this.catList}) : super(key: key);
+  CatList({
+    Key? key,
+    required this.catList,
+    required this.loadMore,
+  }) : super(key: key);
+
+  @override
+  _CatListState createState() => _CatListState();
+}
+
+class _CatListState extends State<CatList> {
+  ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        //getMoreCats
+        widget.loadMore();
+        setState(() {});
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: ListView.builder(
-          itemCount: catList.length,
+          controller: _scrollController,
+          itemCount: widget.catList.length + 1,
           itemBuilder: (context, i) {
-            return CatListItem(cat: catList[i]);
+            if (i == widget.catList.length) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            return CatListItem(cat: widget.catList[i]);
           }),
     );
   }
 }
 
-  // ScrollController _scrollController = ScrollController();
 
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   _scrollController.addListener(() {
-  //     if (_scrollController.position.pixels ==
-  //         _scrollController.position.maxScrollExtent) {
-  //       //getMoreCats
-  //       widget.loadMore(widget.page);
-  //       setState(() {});
-  //     }
-  //   });
-  // }
+  
 
   // return ListView.builder(
   //       controller: _scrollController,

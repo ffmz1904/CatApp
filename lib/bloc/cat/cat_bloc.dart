@@ -25,12 +25,20 @@ class CatBloc extends Bloc<CatEvent, CatState> {
     int page = (event as CatLoadEvent).page;
 
     try {
-      List<CatModel> cats = await repository.getCats(limit, page);
+      List<CatModel> cats;
+      List<CatModel> loadedCats = await repository.getCats(limit, page);
+
+      if (page != 1) {
+        cats = (state as CatLoadedState).catList;
+        cats.addAll(loadedCats);
+      } else {
+        cats = loadedCats;
+      }
 
       bool setToLocal = await repository.setCatLocal(catList: cats);
 
       if (setToLocal) {
-        yield CatLoadedState(catList: cats);
+        yield CatLoadedState(catList: cats, page: page);
       }
     } catch (e) {
       print(e);
