@@ -37,7 +37,6 @@ class FavoritesPage extends StatelessWidget {
           favoriteBloc.add(FavoriteCatLoadEvent(
               userId: (userBloc.state as UserAuthState).userData.id,
               page: favoriteState.page + 1));
-          // (page: (catBloc.state as CatLoadedState).page + 1));
         }
 
         return Container(
