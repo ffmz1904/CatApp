@@ -1,5 +1,4 @@
 import 'package:cat_app/bloc/cat/cat_bloc.dart';
-import 'package:cat_app/bloc/user/user_bloc.dart';
 import 'package:cat_app/pages/cats_page.dart';
 import 'package:cat_app/pages/favorites_page.dart';
 import 'package:cat_app/pages/profile_page.dart';
@@ -32,9 +31,6 @@ class HomePage extends StatelessWidget {
               )),
           body: MultiBlocProvider(
             providers: [
-              BlocProvider<UserBloc>(
-                create: (context) => UserBloc(),
-              ),
               BlocProvider<CatBloc>(
                 create: (context) => CatBloc(),
               ),

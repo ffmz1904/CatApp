@@ -1,4 +1,5 @@
 import 'package:cat_app/bloc/user/user_bloc.dart';
+import 'package:cat_app/bloc/user/user_events.dart';
 import 'package:cat_app/pages/auth_page.dart';
 import 'package:cat_app/pages/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,6 +23,12 @@ class MyApp extends StatelessWidget {
         create: (context) => UserBloc(),
         child: BlocBuilder<UserBloc, UserState>(
           builder: (context, userState) {
+            final UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+
+            if (userState is UserNotAuthState) {
+              userBloc.add(UserGetCacheDataEvent());
+            }
+
             if (userState is UserAuthState) {
               return HomePage();
             }

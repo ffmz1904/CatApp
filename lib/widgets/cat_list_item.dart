@@ -1,18 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cat_app/bloc/cat/cat_bloc.dart';
 import 'package:cat_app/models/cat_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CatListItem extends StatelessWidget {
-  CatModel cat;
+  final CatModel cat;
   CatListItem({Key? key, required this.cat}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final CatBloc catBloc = BlocProvider.of<CatBloc>(context);
-
     return Card(
       elevation: 4,
       margin: EdgeInsets.symmetric(vertical: 15),

@@ -3,7 +3,7 @@ import 'package:cat_app/widgets/cat_list_item.dart';
 import 'package:flutter/material.dart';
 
 class CatList extends StatelessWidget {
-  List<CatModel> catList;
+  final List<CatModel> catList;
 
   CatList({Key? key, required this.catList}) : super(key: key);
 

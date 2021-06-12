@@ -14,7 +14,6 @@ class CatModel {
   });
 
   factory CatModel.fromJson(Map<String, dynamic> jsonData) {
-    print(jsonData);
     return CatModel(
       id: jsonData['id'],
       image: jsonData['image'],

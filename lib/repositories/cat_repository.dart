@@ -28,7 +28,6 @@ class CatRepository {
 
   Future setCatLocal({required List<CatModel> catList}) async {
     SharedPreferences local = await SharedPreferences.getInstance();
-    print(catList[0].isFavorite);
     String catListString = CatModel.encode(catList);
     await local.setString(localKey, catListString);
     print('set cat in cache');
