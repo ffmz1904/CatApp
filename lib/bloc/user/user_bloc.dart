@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class UserBloc extends Bloc<UserEvent, UserState> {
   UserRepository repository = UserRepository();
 
-  UserBloc() : super(UserNotAuthState());
+  UserBloc() : super(UserEmptyState());
 
   @override
   Stream<UserState> mapEventToState(UserEvent event) async* {

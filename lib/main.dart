@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
           builder: (context, userState) {
             final UserBloc userBloc = BlocProvider.of<UserBloc>(context);
 
-            if (userState is UserNotAuthState) {
+            if (userState is UserEmptyState) {
               userBloc.add(UserGetCacheDataEvent());
             }
 
