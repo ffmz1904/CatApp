@@ -1,6 +1,11 @@
+import 'package:cat_app/bloc/user/user_bloc.dart';
+import 'package:cat_app/pages/auth_page.dart';
 import 'package:cat_app/pages/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'bloc/user/user_state.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +18,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Cat App",
-      home: HomePage(),
+      home: BlocProvider<UserBloc>(
+        create: (context) => UserBloc(),
+        child: BlocBuilder<UserBloc, UserState>(
+          builder: (context, userState) {
+            if (userState is UserAuthState) {
+              return HomePage();
+            }
+
+            return AuthPage();
+          },
+        ),
+      ),
     );
   }
 }
