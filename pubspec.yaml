@@ -38,6 +38,8 @@ dependencies:
   flutter_bloc: ^7.0.1
   flutter_login_facebook: ^1.0.1
   http: ^0.13.3
+  shared_preferences: ^2.0.6
+  cached_network_image: ^3.0.0
 
 dev_dependencies:
   flutter_test:

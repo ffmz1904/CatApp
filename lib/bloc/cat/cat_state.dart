@@ -7,10 +7,13 @@ class CatEmptyState extends CatState {}
 class CatLoadingState extends CatState {}
 
 class CatLoadedState extends CatState {
-  List<Cat> cats;
+  List<CatModel> catList;
   int page;
 
-  CatLoadedState({required this.cats, required this.page});
+  CatLoadedState({
+    required this.catList,
+    this.page = 1,
+  });
 }
 
 class CatErrorState extends CatState {}

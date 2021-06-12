@@ -34,26 +34,30 @@ class ApiService {
 
     var response;
 
-    switch (method) {
-      case RequestTypes.GET:
-        response = await http.get(uri, headers: headers);
-        break;
-      case RequestTypes.POST:
-        response = await http.post(uri,
-            body: json.encode(this.body), headers: headers);
-        break;
-      case RequestTypes.PUT:
-        response =
-            await http.put(uri, body: json.encode(this.body), headers: headers);
-        break;
-      case RequestTypes.PATCH:
-        response = await http.patch(uri,
-            body: json.encode(this.body), headers: headers);
-        break;
-      case RequestTypes.DELETE:
-        response = await http.delete(uri, headers: headers);
-        break;
+    try {
+      switch (method) {
+        case RequestTypes.GET:
+          response = await http.get(uri, headers: headers);
+          break;
+        case RequestTypes.POST:
+          response = await http.post(uri,
+              body: json.encode(this.body), headers: headers);
+          break;
+        case RequestTypes.PUT:
+          response = await http.put(uri,
+              body: json.encode(this.body), headers: headers);
+          break;
+        case RequestTypes.PATCH:
+          response = await http.patch(uri,
+              body: json.encode(this.body), headers: headers);
+          break;
+        case RequestTypes.DELETE:
+          response = await http.delete(uri, headers: headers);
+          break;
+      }
+      return json.decode(response.body);
+    } catch (e) {
+      return throw Exception('No interner connection!');
     }
-    return json.decode(response.body);
   }
 }

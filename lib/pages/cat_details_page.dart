@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CatDetailsPage extends StatelessWidget {
-  Cat cat;
+  CatModel cat;
   CatDetailsPage({Key? key, required this.cat}) : super(key: key);
 
   @override
