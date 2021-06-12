@@ -1,64 +1,56 @@
+import 'package:cat_app/bloc/cat/cat_state.dart';
+import 'package:cat_app/bloc/favorite_cat/favorite_cat_bloc.dart';
+import 'package:cat_app/bloc/favorite_cat/favorite_cat_events.dart';
+import 'package:cat_app/bloc/favorite_cat/favorite_cat_state.dart';
+import 'package:cat_app/bloc/user/user_bloc.dart';
+import 'package:cat_app/bloc/user/user_state.dart';
+import 'package:cat_app/widgets/cat_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FavoritesPage extends StatelessWidget {
   const FavoritesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container();
-    // return BlocProvider<FavoriteBloc>(
-    //   create: (context) => FavoriteBloc(),
-    //   child: BlocBuilder<FavoriteBloc, FavoriteState>(
-    //     builder: (context, state) {
-    //       return BlocBuilder<UserBloc, UserState>(
-    //           builder: (context, userState) {
-    //         final FavoriteBloc favoriteBloc =
-    //             BlocProvider.of<FavoriteBloc>(context);
+    FavoriteCatBloc favoriteBloc = BlocProvider.of<FavoriteCatBloc>(context);
+    UserBloc userBloc = BlocProvider.of<UserBloc>(context);
 
-    //         if (state is FavoriteEmptyState && userState is UserAuthState) {
-    //           favoriteBloc
-    //               .add(FavoriteLoadEvent(userId: userState.userData.id));
-    //           return Center(
-    //             child: Text('No cats yet!'),
-    //           );
-    //         }
+    return BlocBuilder<FavoriteCatBloc, CatState>(
+        builder: (context, favoriteState) {
+      if (favoriteState is FavoriteCatEmptyState) {
+        favoriteBloc.add(FavoriteCatLoadEvent(
+            userId: (userBloc.state as UserAuthState).userData.id));
+        return Center(
+          child: Text('No favorite yet!'),
+        );
+      }
 
-    //         if (state is FavoriteLoadingState) {
-    //           return Center(
-    //             child: CircularProgressIndicator(),
-    //           );
-    //         }
+      if (favoriteState is FavoriteCatLoadingState) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
 
-    //         if (state is FavoriteLoadedState && userState is UserAuthState) {
-    //           void loadMore(page) {
-    //             FavoriteBloc favoriteBloc =
-    //                 BlocProvider.of<FavoriteBloc>(context);
-    //             favoriteBloc.add(FavoriteLoadEvent(
-    //                 userId: userState.userData.id, page: page + 1));
-    //           }
+      if (favoriteState is FavoriteCatLoadedState) {
+        loadMoreCats() {
+          // favoriteBloc.add(
+          //     FavoriteCatLo(page: (catBloc.state as CatLoadedState).page + 1));
+        }
 
-    //           return BlocProvider<FavoriteBloc>(
-    //             create: (context) => FavoriteBloc(),
-    //             child: Container(
-    //               child: CatList(
-    //                 cats: state.cats,
-    //                 page: state.page,
-    //                 loadMore: loadMore,
-    //               ),
-    //             ),
-    //           );
-    //         }
+        return Container(
+          child:
+              CatList(catList: favoriteState.catList, loadMore: loadMoreCats),
+        );
+      }
 
-    //         if (state is FavoriteErrorState) {
-    //           return Center(
-    //             child: Text('Error cat fetching!'),
-    //           );
-    //         }
+      if (favoriteState is FavoriteCatErrorState) {
+        return Center(
+          child: Text('No internet connection!'),
+        );
+      }
 
-    //         return SizedBox();
-    //       });
-    //     },
-    //   ),
-    // );
+      return SizedBox();
+    });
   }
 }

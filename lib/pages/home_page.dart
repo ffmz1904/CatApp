@@ -1,4 +1,5 @@
 import 'package:cat_app/bloc/cat/cat_bloc.dart';
+import 'package:cat_app/bloc/favorite_cat/favorite_cat_bloc.dart';
 import 'package:cat_app/pages/cats_page.dart';
 import 'package:cat_app/pages/favorites_page.dart';
 import 'package:cat_app/pages/profile_page.dart';
@@ -34,6 +35,8 @@ class HomePage extends StatelessWidget {
               BlocProvider<CatBloc>(
                 create: (context) => CatBloc(),
               ),
+              BlocProvider<FavoriteCatBloc>(
+                  create: (context) => FavoriteCatBloc()),
             ],
             child: TabBarView(children: [
               Container(

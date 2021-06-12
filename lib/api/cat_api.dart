@@ -57,4 +57,23 @@ class CatApi {
 
     return response;
   }
+
+  /// get favorites by user id with pagination (limit and page params)
+  Future getFavorites(String userId, int limit, int page) async {
+    final response = await ApiService.get(
+      endpoint:
+          'https://api.thecatapi.com/v1/favourites?sub_id=$userId&limit=$limit&page=$page',
+      headers: {'x-api-key': CAT_API_KEY},
+    ).request();
+
+    List favoritesData = response
+        .map((favorite) => {
+              'id': favorite['image']['id'],
+              'img': favorite['image']['url'],
+              'favoriteId': favorite['id'],
+            })
+        .toList();
+
+    return favoritesData;
+  }
 }

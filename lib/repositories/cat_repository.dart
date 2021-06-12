@@ -52,4 +52,26 @@ class CatRepository {
 
   Future removeFromFavorite(dynamic favoriteId) =>
       api.removeCatFromFavorite(favoriteId);
+
+  Future getUserFavorites(String userId, int limit, int page) async {
+    try {
+      List favorites = await api.getFavorites(userId, limit, page);
+      List facts = await api.getCatFacts(limit);
+
+      List<CatModel> cats = [];
+
+      for (int i = 0; i < favorites.length; i++) {
+        cats.add(CatModel(
+          id: favorites[i]['id'],
+          image: favorites[i]['img'],
+          fact: facts[i],
+          isFavorite: true,
+          favoriteId: favorites[i]['favoriteId'],
+        ));
+      }
+      return cats;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }
