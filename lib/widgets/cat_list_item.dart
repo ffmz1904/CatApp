@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cat_app/models/cat_model.dart';
+import 'package:cat_app/pages/cat_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -17,12 +18,12 @@ class CatListItem extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) => CatDetailsPage(
-              //               cat: cat,
-              //             )));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CatDetailsPage(
+                            cat: cat,
+                          )));
             },
             child: Container(
               width: MediaQuery.of(context).size.width,

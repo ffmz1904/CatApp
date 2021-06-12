@@ -1,4 +1,5 @@
 import 'package:cat_app/api/api_service.dart';
+import 'package:http/http.dart';
 
 class CatApi {
   Future getCatImages(int limit, int page) async {
@@ -15,5 +16,14 @@ class CatApi {
         .toList();
 
     return catImages;
+  }
+
+  Future getCatFacts(int limit) async {
+    final response = await ApiService.get(
+            endpoint: 'https://catfact.ninja/facts?limit=$limit')
+        .request();
+
+    final List catFacts = response['data'].map((fact) => fact['fact']).toList();
+    return catFacts;
   }
 }

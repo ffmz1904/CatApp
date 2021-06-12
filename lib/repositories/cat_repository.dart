@@ -9,6 +9,7 @@ class CatRepository {
   Future getCats(int limit, int page) async {
     try {
       List images = await api.getCatImages(limit, page);
+      List facts = await api.getCatFacts(limit);
 
       List<CatModel> cats = [];
 
@@ -16,7 +17,7 @@ class CatRepository {
         cats.add(CatModel(
           id: images[i]['id'],
           image: images[i]['img'],
-          fact: 'hardcode',
+          fact: facts[i],
         ));
       }
 
