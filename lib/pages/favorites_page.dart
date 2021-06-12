@@ -34,8 +34,10 @@ class FavoritesPage extends StatelessWidget {
 
       if (favoriteState is FavoriteCatLoadedState) {
         loadMoreCats() {
-          // favoriteBloc.add(
-          //     FavoriteCatLo(page: (catBloc.state as CatLoadedState).page + 1));
+          favoriteBloc.add(FavoriteCatLoadEvent(
+              userId: (userBloc.state as UserAuthState).userData.id,
+              page: favoriteState.page + 1));
+          // (page: (catBloc.state as CatLoadedState).page + 1));
         }
 
         return Container(

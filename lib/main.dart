@@ -1,3 +1,5 @@
+import 'package:cat_app/bloc/cat/cat_bloc.dart';
+import 'package:cat_app/bloc/favorite_cat/favorite_cat_bloc.dart';
 import 'package:cat_app/bloc/user/user_bloc.dart';
 import 'package:cat_app/bloc/user/user_events.dart';
 import 'package:cat_app/pages/auth_page.dart';
@@ -11,7 +13,14 @@ import 'bloc/user/user_state.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider<UserBloc>(create: (_) => UserBloc()),
+      BlocProvider<CatBloc>(create: (_) => CatBloc()),
+      BlocProvider<FavoriteCatBloc>(create: (_) => FavoriteCatBloc()),
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

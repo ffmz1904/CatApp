@@ -28,9 +28,18 @@ class FavoriteCatBloc extends Bloc<CatEvent, CatState> {
     int limit = 5;
     int page = eventData.page;
     String userId = eventData.userId;
-    List<CatModel> catList =
+
+    List<CatModel> cats;
+    List<CatModel> loadedCats =
         await repository.getUserFavorites(userId, limit, page);
 
-    yield FavoriteCatLoadedState(catList: catList, page: page);
+    if (page != 0) {
+      cats = (state as FavoriteCatLoadedState).catList;
+      cats.addAll(loadedCats);
+    } else {
+      cats = loadedCats;
+    }
+
+    yield FavoriteCatLoadedState(catList: cats, page: page);
   }
 }
