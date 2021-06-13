@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cat_app/bloc/cat/cat_bloc.dart';
 import 'package:cat_app/bloc/cat/cat_events.dart';
+import 'package:cat_app/bloc/favorite_cat/favorite_cat_bloc.dart';
 import 'package:cat_app/bloc/user/user_bloc.dart';
 import 'package:cat_app/bloc/user/user_state.dart';
 import 'package:cat_app/models/cat_model.dart';
@@ -48,8 +50,14 @@ class CatListItem extends StatelessWidget {
           IconButton(
               onPressed: () {
                 if (cat.isFavorite) {
-                  bloc.add(
-                      CatRemoveFromFavoritesEvent(favoriteId: cat.favoriteId));
+                  final favoriteId = cat.favoriteId;
+                  bloc.add(CatRemoveFromFavoritesEvent(favoriteId: favoriteId));
+
+                  if (bloc is FavoriteCatBloc) {
+                    CatBloc catBloc = BlocProvider.of<CatBloc>(context);
+                    catBloc.add(CatRemoveFromFavoritesEvent(
+                        favoriteId: favoriteId, favoriteBlocEvent: true));
+                  }
                 } else {
                   final userId = (userBloc.state as UserAuthState).userData.id;
                   bloc.add(

@@ -14,6 +14,8 @@ class CatAddToFavoriteEvent extends CatEvent {
 
 class CatRemoveFromFavoritesEvent extends CatEvent {
   dynamic favoriteId;
+  bool favoriteBlocEvent;
 
-  CatRemoveFromFavoritesEvent({required this.favoriteId});
+  CatRemoveFromFavoritesEvent(
+      {required this.favoriteId, this.favoriteBlocEvent = false});
 }

@@ -78,13 +78,12 @@ class CatBloc extends Bloc<CatEvent, CatState> {
   }
 
   Stream<CatState> _mapCatRemoveFromFavoritesToState(CatEvent event) async* {
-    dynamic favoriteId = (event as CatRemoveFromFavoritesEvent).favoriteId;
-    final response = await repository.removeFromFavorite(favoriteId);
+    final eventData = (event as CatRemoveFromFavoritesEvent);
 
-    if (response['message'] == 'SUCCESS') {
+    if (eventData.favoriteBlocEvent) {
       List<CatModel> cats = (state as CatLoadedState)
           .catList
-          .map((cat) => cat.favoriteId != favoriteId
+          .map((cat) => cat.favoriteId != eventData.favoriteId
               ? cat
               : CatModel(
                   id: cat.id,
@@ -94,6 +93,25 @@ class CatBloc extends Bloc<CatEvent, CatState> {
                   favoriteId: null))
           .toList();
       yield CatLoadedState(catList: cats, page: (state as CatLoadedState).page);
+    } else {
+      final response =
+          await repository.removeFromFavorite(eventData.favoriteId);
+
+      if (response['message'] == 'SUCCESS') {
+        List<CatModel> cats = (state as CatLoadedState)
+            .catList
+            .map((cat) => cat.favoriteId != eventData.favoriteId
+                ? cat
+                : CatModel(
+                    id: cat.id,
+                    image: cat.image,
+                    fact: cat.fact,
+                    isFavorite: false,
+                    favoriteId: null))
+            .toList();
+        yield CatLoadedState(
+            catList: cats, page: (state as CatLoadedState).page);
+      }
     }
   }
 }
