@@ -26,9 +26,9 @@ class ProfilePage extends StatelessWidget {
               placeholder: (context, url) =>
                   Center(child: CircularProgressIndicator()),
               imageUrl: user.photo!,
-              imageBuilder: (context, img) => CircleAvatar(
+              imageBuilder: (context, imageProvider) => CircleAvatar(
                 radius: 50,
-                backgroundImage: NetworkImage(user.photo!),
+                backgroundImage: imageProvider,
               ),
               errorWidget: (context, url, error) => Icon(Icons.error),
             ),

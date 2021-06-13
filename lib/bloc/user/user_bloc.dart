@@ -24,22 +24,26 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Stream<UserState> _mapUserLoginToState(UserEvent event) async* {
     yield UserLoadingState();
 
-    final credential =
-        await repository.login((event as UserLoginEvent).authProvider);
+    try {
+      final credential =
+          await repository.login((event as UserLoginEvent).authProvider);
 
-    if (credential == null) {
-      yield UserNotAuthState();
-    } else {
-      AuthUserModel user = AuthUserModel.fromFirebaseCredential(credential);
-      await repository.setUserToCache(user: user);
-      yield UserAuthState(userData: user);
+      if (credential == null) {
+        yield UserNotAuthState();
+      } else {
+        AuthUserModel user = AuthUserModel.fromFirebaseCredential(credential);
+        await repository.setUserToCache(user: user);
+        yield UserAuthState(userData: user);
+      }
+    } catch (e) {
+      yield UserErrorState(message: 'Login error!');
     }
   }
 
   Stream<UserState> _mapUserLogoutToState(UserEvent event) async* {
     await repository.logout((event as UserLogoutEvent).authProvider);
     await repository.clearUserCache();
-    yield UserNotAuthState();
+    yield UserEmptyState();
   }
 
   Stream<UserState> _mapUserDataFromCache(UserEvent event) async* {

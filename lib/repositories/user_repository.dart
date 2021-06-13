@@ -12,16 +12,20 @@ class UserRepository {
   Future login(UserAuthProviders provider) async {
     UserCredential? credential;
 
-    switch (provider) {
-      case UserAuthProviders.google_auth:
-        credential = await googleRepository.login();
-        break;
-      case UserAuthProviders.facebook_auth:
-        credential = await facebookRepository.login();
-        break;
-    }
+    try {
+      switch (provider) {
+        case UserAuthProviders.google_auth:
+          credential = await googleRepository.login();
+          break;
+        case UserAuthProviders.facebook_auth:
+          credential = await facebookRepository.login();
+          break;
+      }
 
-    return credential;
+      return credential;
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 
   Future logout(UserAuthProviders provider) async {
