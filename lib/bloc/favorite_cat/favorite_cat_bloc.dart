@@ -37,14 +37,18 @@ class FavoriteCatBloc extends Bloc<CatEvent, CatState> {
     List<CatModel> loadedCats =
         await repository.getUserFavorites(userId, limit, page);
 
-    if (page != 0) {
-      cats = (state as FavoriteCatLoadedState).catList;
-      cats.addAll(loadedCats);
-    } else {
-      cats = loadedCats;
-    }
+    if (loadedCats.isNotEmpty) {
+      if (page != 0) {
+        cats = (state as FavoriteCatLoadedState).catList;
+        cats.addAll(loadedCats);
+      } else {
+        cats = loadedCats;
+      }
 
-    yield FavoriteCatLoadedState(catList: cats, page: page);
+      yield FavoriteCatLoadedState(catList: cats, page: page);
+    } else {
+      yield FavoriteCatEmptyState();
+    }
   }
 
   Stream<CatState> _mapFavoriteAddCatToState(CatEvent event) async* {
@@ -89,7 +93,20 @@ class FavoriteCatBloc extends Bloc<CatEvent, CatState> {
                 ))
           .toList();
 
-      yield FavoriteCatLoadedState(catList: catList, page: stateData.page);
+      bool isEmpty = true;
+
+      for (int i = 0; i < catList.length; i++) {
+        if (catList[i].favoriteId != null) {
+          isEmpty = false;
+          break;
+        }
+      }
+
+      if (isEmpty) {
+        yield FavoriteCatEmptyState();
+      } else {
+        yield FavoriteCatLoadedState(catList: catList, page: stateData.page);
+      }
     }
   }
 }

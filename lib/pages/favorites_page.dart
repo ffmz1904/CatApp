@@ -17,12 +17,12 @@ class FavoritesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     FavoriteCatBloc favoriteBloc = BlocProvider.of<FavoriteCatBloc>(context);
     UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+    favoriteBloc.add(FavoriteCatLoadEvent(
+        userId: (userBloc.state as UserAuthState).userData.id));
 
     return BlocBuilder<FavoriteCatBloc, CatState>(
         builder: (context, favoriteState) {
       if (favoriteState is FavoriteCatEmptyState) {
-        favoriteBloc.add(FavoriteCatLoadEvent(
-            userId: (userBloc.state as UserAuthState).userData.id));
         return Center(
           child: Text('No favorite yet!'),
         );
