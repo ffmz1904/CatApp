@@ -7,12 +7,14 @@ class CatList extends StatefulWidget {
   final List<CatModel> catList;
   final Function loadMore;
   final Bloc bloc;
+  final int limit;
 
   CatList({
     Key? key,
     required this.bloc,
     required this.catList,
     required this.loadMore,
+    required this.limit,
   }) : super(key: key);
 
   @override
@@ -38,12 +40,14 @@ class _CatListState extends State<CatList> {
 
   @override
   Widget build(BuildContext context) {
+    int catLength = widget.catList.length;
+
     return Container(
       child: ListView.builder(
           controller: _scrollController,
-          itemCount: widget.catList.length + 1,
+          itemCount: catLength == widget.limit ? catLength + 1 : catLength,
           itemBuilder: (context, i) {
-            if (i == widget.catList.length) {
+            if (i == catLength && catLength >= widget.limit) {
               return Center(child: CircularProgressIndicator());
             }
 
@@ -52,17 +56,3 @@ class _CatListState extends State<CatList> {
     );
   }
 }
-
-
-  
-
-  // return ListView.builder(
-  //       controller: _scrollController,
-  //       itemCount: widget.cats.length + 1,
-  //       itemBuilder: (context, i) {
-  //         if (i == widget.cats.length) {
-  //           return Center(child: CircularProgressIndicator());
-  //         }
-
-  //         return CatListItem(cat: widget.cats[i]);
-  //       });

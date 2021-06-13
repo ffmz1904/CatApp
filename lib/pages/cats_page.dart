@@ -5,6 +5,8 @@ import 'package:cat_app/widgets/cat_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+const CAT_LIMIT = 5;
+
 class CatsPage extends StatelessWidget {
   const CatsPage({Key? key}) : super(key: key);
 
@@ -33,7 +35,11 @@ class CatsPage extends StatelessWidget {
 
       if (catState is CatLoadedState) {
         return CatList(
-            bloc: catBloc, catList: catState.catList, loadMore: loadMoreCats);
+          bloc: catBloc,
+          catList: catState.catList,
+          loadMore: loadMoreCats,
+          limit: CAT_LIMIT,
+        );
       }
 
       return SizedBox();

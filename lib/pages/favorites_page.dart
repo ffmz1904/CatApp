@@ -8,6 +8,8 @@ import 'package:cat_app/widgets/cat_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+const CAT_LIMIT = 5;
+
 class FavoritesPage extends StatelessWidget {
   const FavoritesPage({Key? key}) : super(key: key);
 
@@ -41,11 +43,13 @@ class FavoritesPage extends StatelessWidget {
 
         return Container(
           child: CatList(
-              bloc: favoriteBloc,
-              catList: favoriteState.catList
-                  .where((cat) => cat.favoriteId != null)
-                  .toList(),
-              loadMore: loadMoreCats),
+            bloc: favoriteBloc,
+            catList: favoriteState.catList
+                .where((cat) => cat.favoriteId != null)
+                .toList(),
+            loadMore: loadMoreCats,
+            limit: CAT_LIMIT,
+          ),
         );
       }
 
