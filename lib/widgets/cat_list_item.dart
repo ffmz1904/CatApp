@@ -44,6 +44,7 @@ class CatListItem extends StatelessWidget {
                 placeholder: (context, url) =>
                     Center(child: CircularProgressIndicator()),
                 imageUrl: cat.image,
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
             ),
           ),

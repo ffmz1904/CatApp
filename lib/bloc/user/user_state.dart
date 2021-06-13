@@ -14,4 +14,7 @@ class UserAuthState extends UserState {
   UserAuthState({required this.userData});
 }
 
-class UserErrorState extends UserState {}
+class UserErrorState extends UserState {
+  String message;
+  UserErrorState({this.message = ''});
+}

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cat_app/bloc/user/user_bloc.dart';
 import 'package:cat_app/bloc/user/user_events.dart';
 import 'package:cat_app/bloc/user/user_state.dart';
@@ -20,9 +21,16 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(
-              radius: 50,
-              backgroundImage: NetworkImage(user.photo!),
+            CachedNetworkImage(
+              fit: BoxFit.fill,
+              placeholder: (context, url) =>
+                  Center(child: CircularProgressIndicator()),
+              imageUrl: user.photo!,
+              imageBuilder: (context, img) => CircleAvatar(
+                radius: 50,
+                backgroundImage: NetworkImage(user.photo!),
+              ),
+              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
             SizedBox(height: 15),
             Text(user.name!),

@@ -33,21 +33,32 @@ class FavoriteCatBloc extends Bloc<CatEvent, CatState> {
     int page = eventData.page;
     String userId = eventData.userId;
 
-    List<CatModel> cats;
-    List<CatModel> loadedCats =
-        await repository.getUserFavorites(userId, limit, page);
+    try {
+      List<CatModel> cats;
+      List<CatModel> loadedCats =
+          await repository.getUserFavorites(userId, limit, page);
 
-    if (loadedCats.isNotEmpty) {
-      if (page != 0) {
-        cats = (state as FavoriteCatLoadedState).catList;
-        cats.addAll(loadedCats);
+      if (loadedCats.isNotEmpty) {
+        if (page != 0) {
+          cats = (state as FavoriteCatLoadedState).catList;
+          cats.addAll(loadedCats);
+        } else {
+          cats = loadedCats;
+        }
+
+        await repository.setCatLocal(catList: cats, type: CatTypes.favorite);
+        yield FavoriteCatLoadedState(catList: cats, page: page);
       } else {
-        cats = loadedCats;
+        yield FavoriteCatEmptyState();
       }
-
-      yield FavoriteCatLoadedState(catList: cats, page: page);
-    } else {
-      yield FavoriteCatEmptyState();
+    } catch (e) {
+      List<CatModel>? cats =
+          await repository.getCatLocal(type: CatTypes.favorite);
+      if (cats == null) {
+        yield FavoriteCatErrorState(message: 'Error fatching data!');
+      } else {
+        yield FavoriteCatLoadedState(catList: cats);
+      }
     }
   }
 

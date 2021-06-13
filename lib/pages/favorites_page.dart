@@ -55,7 +55,7 @@ class FavoritesPage extends StatelessWidget {
 
       if (favoriteState is FavoriteCatErrorState) {
         return Center(
-          child: Text('No internet connection!'),
+          child: Text(favoriteState.message),
         );
       }
 

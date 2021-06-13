@@ -12,4 +12,8 @@ class FavoriteCatLoadedState extends CatState {
   FavoriteCatLoadedState({required this.catList, this.page = 0});
 }
 
-class FavoriteCatErrorState extends CatState {}
+class FavoriteCatErrorState extends CatState {
+  String message;
+
+  FavoriteCatErrorState({this.message = ''});
+}

@@ -1,5 +1,6 @@
 import 'package:cat_app/bloc/user/user_bloc.dart';
 import 'package:cat_app/bloc/user/user_events.dart';
+import 'package:cat_app/bloc/user/user_state.dart';
 import 'package:cat_app/models/auth_user_model.dart';
 import 'package:cat_app/pages/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,10 +23,16 @@ class AuthPage extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(
-              child: Text('we have an error!'),
+              child: Text('We have an error!'),
             );
           } else if (snapshot.hasData) {
             return HomePage();
+          } else if (userBloc.state is UserErrorState) {
+            String message = (userBloc.state as UserErrorState).message;
+
+            return Center(
+              child: Text(message),
+            );
           } else {
             return Center(
               child: Column(

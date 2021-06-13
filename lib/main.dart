@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Cat App",
+      debugShowCheckedModeBanner: false,
       home: BlocBuilder<UserBloc, UserState>(
         builder: (context, userState) {
           final UserBloc userBloc = BlocProvider.of<UserBloc>(context);

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cat_app/bloc/cat/cat_bloc.dart';
 import 'package:cat_app/bloc/cat/cat_events.dart';
 import 'package:cat_app/bloc/cat/cat_state.dart';
@@ -56,11 +57,12 @@ class CatDetailsPage extends StatelessWidget {
           Container(
             width: MediaQuery.of(context).size.width,
             height: 250,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: NetworkImage(catDetail.image),
-              ),
+            child: CachedNetworkImage(
+              fit: BoxFit.fill,
+              placeholder: (context, url) =>
+                  Center(child: CircularProgressIndicator()),
+              imageUrl: cat.image,
+              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
           ),
           IconButton(

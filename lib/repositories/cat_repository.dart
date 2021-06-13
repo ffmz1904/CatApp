@@ -2,9 +2,12 @@ import 'package:cat_app/api/cat_api.dart';
 import 'package:cat_app/models/cat_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+enum CatTypes { cats, favorite }
+
 class CatRepository {
   CatApi api = CatApi();
-  final String localKey = 'CAT_LIST_LOCAL';
+  final String localCatKey = 'CAT_LIST_LOCAL';
+  final String localFavoriteCatKey = 'FAVORITE_CAT_LIST_LOCAL';
 
   Future getCats(int limit, int page) async {
     try {
@@ -27,17 +30,23 @@ class CatRepository {
     }
   }
 
-  Future setCatLocal({required List<CatModel> catList}) async {
+  Future setCatLocal(
+      {required List<CatModel> catList, required CatTypes type}) async {
+    String key =
+        (type == CatTypes.favorite) ? localFavoriteCatKey : localCatKey;
     SharedPreferences local = await SharedPreferences.getInstance();
     String catListString = CatModel.encode(catList);
-    await local.setString(localKey, catListString);
+
+    await local.setString(key, catListString);
     print('set cat in cache');
     return true;
   }
 
-  Future getCatLocal() async {
+  Future getCatLocal({required CatTypes type}) async {
+    String key =
+        (type == CatTypes.favorite) ? localFavoriteCatKey : localCatKey;
     SharedPreferences local = await SharedPreferences.getInstance();
-    String? catListString = local.getString(localKey);
+    String? catListString = local.getString(key);
 
     if (catListString == null) {
       return null;

@@ -39,14 +39,15 @@ class CatBloc extends Bloc<CatEvent, CatState> {
         cats = loadedCats;
       }
 
-      bool setToLocal = await repository.setCatLocal(catList: cats);
+      bool setToLocal =
+          await repository.setCatLocal(catList: cats, type: CatTypes.cats);
 
       if (setToLocal) {
         yield CatLoadedState(catList: cats, page: page);
       }
     } catch (e) {
       print(e);
-      List<CatModel>? cats = await repository.getCatLocal();
+      List<CatModel>? cats = await repository.getCatLocal(type: CatTypes.cats);
       if (cats == null) {
         yield CatEmptyState();
       } else {
@@ -57,24 +58,27 @@ class CatBloc extends Bloc<CatEvent, CatState> {
 
   Stream<CatState> _mapCatAddFavoriteToState(CatEvent event) async* {
     CatAddToFavoriteEvent eventData = (event as CatAddToFavoriteEvent);
-    final response =
-        await repository.addToFavorite(eventData.catId, eventData.userId);
-    print(response);
-    if (response['message'] == 'SUCCESS') {
-      List<CatModel> cats = (state as CatLoadedState)
-          .catList
-          .map((cat) => cat.id != eventData.catId
-              ? cat
-              : CatModel(
-                  id: cat.id,
-                  image: cat.image,
-                  fact: cat.fact,
-                  isFavorite: true,
-                  favoriteId: response['id']))
-          .toList();
+    try {
+      final response =
+          await repository.addToFavorite(eventData.catId, eventData.userId);
+      print(response);
+      if (response['message'] == 'SUCCESS') {
+        List<CatModel> cats = (state as CatLoadedState)
+            .catList
+            .map((cat) => cat.id != eventData.catId
+                ? cat
+                : CatModel(
+                    id: cat.id,
+                    image: cat.image,
+                    fact: cat.fact,
+                    isFavorite: true,
+                    favoriteId: response['id']))
+            .toList();
 
-      yield CatLoadedState(catList: cats, page: (state as CatLoadedState).page);
-    }
+        yield CatLoadedState(
+            catList: cats, page: (state as CatLoadedState).page);
+      }
+    } catch (e) {}
   }
 
   Stream<CatState> _mapCatRemoveFromFavoritesToState(CatEvent event) async* {
