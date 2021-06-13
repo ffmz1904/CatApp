@@ -47,7 +47,6 @@ class CatDetailsPage extends StatelessWidget {
   }
 
   Widget _body(context, bloc, catDetail) {
-    CatBloc catBloc = BlocProvider.of<CatBloc>(context);
     UserBloc userBloc = BlocProvider.of<UserBloc>(context);
 
     return Container(

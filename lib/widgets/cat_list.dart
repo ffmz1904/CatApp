@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CatList extends StatefulWidget {
   final List<CatModel> catList;
-  Function loadMore;
-  Bloc bloc;
+  final Function loadMore;
+  final Bloc bloc;
 
   CatList({
     Key? key,

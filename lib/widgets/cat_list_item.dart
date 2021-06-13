@@ -1,7 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cat_app/bloc/cat/cat_bloc.dart';
 import 'package:cat_app/bloc/cat/cat_events.dart';
-import 'package:cat_app/bloc/cat/cat_state.dart';
 import 'package:cat_app/bloc/user/user_bloc.dart';
 import 'package:cat_app/bloc/user/user_state.dart';
 import 'package:cat_app/models/cat_model.dart';
@@ -12,13 +10,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CatListItem extends StatelessWidget {
   final CatModel cat;
-  Bloc bloc;
+  final Bloc bloc;
   CatListItem({Key? key, required this.bloc, required this.cat})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    CatBloc catBloc = BlocProvider.of<CatBloc>(context);
     UserBloc userBloc = BlocProvider.of<UserBloc>(context);
 
     return Card(
@@ -40,14 +37,8 @@ class CatListItem extends StatelessWidget {
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: 250,
-              // decoration: BoxDecoration(
-              //   image: DecorationImage(
-              //     fit: BoxFit.fill,
-              //     image: NetworkImage(cat.image),
-              //   ),
-              // ),
-
               child: CachedNetworkImage(
+                fit: BoxFit.fill,
                 placeholder: (context, url) =>
                     Center(child: CircularProgressIndicator()),
                 imageUrl: cat.image,
@@ -57,11 +48,11 @@ class CatListItem extends StatelessWidget {
           IconButton(
               onPressed: () {
                 if (cat.isFavorite) {
-                  catBloc.add(
+                  bloc.add(
                       CatRemoveFromFavoritesEvent(favoriteId: cat.favoriteId));
                 } else {
                   final userId = (userBloc.state as UserAuthState).userData.id;
-                  catBloc.add(
+                  bloc.add(
                       CatAddToFavoriteEvent(catId: cat.id, userId: userId));
                 }
               },

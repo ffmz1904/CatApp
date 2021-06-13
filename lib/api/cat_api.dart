@@ -1,9 +1,8 @@
 import 'package:cat_app/api/api_service.dart';
-import 'package:http/http.dart';
+
+const CAT_API_KEY = '53f28e90-2da9-4935-a8ce-ce25707666ae';
 
 class CatApi {
-  final CAT_API_KEY = '53f28e90-2da9-4935-a8ce-ce25707666ae';
-
   /// get random cat images with pagination (page and limit)
   Future getCatImages(int limit, int page) async {
     final response = await ApiService.get(
