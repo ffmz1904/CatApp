@@ -7,7 +7,6 @@ import 'package:cat_app/pages/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'bloc/user/user_state.dart';
 
 void main() async {
@@ -28,23 +27,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Cat App",
-      home: BlocProvider<UserBloc>(
-        create: (context) => UserBloc(),
-        child: BlocBuilder<UserBloc, UserState>(
-          builder: (context, userState) {
-            final UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+      home: BlocBuilder<UserBloc, UserState>(
+        builder: (context, userState) {
+          final UserBloc userBloc = BlocProvider.of<UserBloc>(context);
 
-            if (userState is UserEmptyState) {
-              userBloc.add(UserGetCacheDataEvent());
-            }
+          if (userState is UserEmptyState) {
+            userBloc.add(UserGetCacheDataEvent());
+          }
 
-            if (userState is UserAuthState) {
-              return HomePage();
-            }
+          if (userState is UserAuthState) {
+            return HomePage();
+          }
 
-            return AuthPage();
-          },
-        ),
+          return AuthPage();
+        },
       ),
     );
   }

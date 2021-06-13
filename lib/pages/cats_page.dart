@@ -32,7 +32,8 @@ class CatsPage extends StatelessWidget {
       }
 
       if (catState is CatLoadedState) {
-        return CatList(catList: catState.catList, loadMore: loadMoreCats);
+        return CatList(
+            bloc: catBloc, catList: catState.catList, loadMore: loadMoreCats);
       }
 
       return SizedBox();

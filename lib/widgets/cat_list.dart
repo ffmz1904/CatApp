@@ -1,13 +1,16 @@
 import 'package:cat_app/models/cat_model.dart';
 import 'package:cat_app/widgets/cat_list_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CatList extends StatefulWidget {
   final List<CatModel> catList;
   Function loadMore;
+  Bloc bloc;
 
   CatList({
     Key? key,
+    required this.bloc,
     required this.catList,
     required this.loadMore,
   }) : super(key: key);
@@ -44,7 +47,7 @@ class _CatListState extends State<CatList> {
               return Center(child: CircularProgressIndicator());
             }
 
-            return CatListItem(cat: widget.catList[i]);
+            return CatListItem(bloc: widget.bloc, cat: widget.catList[i]);
           }),
     );
   }

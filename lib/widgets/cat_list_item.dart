@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cat_app/bloc/cat/cat_bloc.dart';
 import 'package:cat_app/bloc/cat/cat_events.dart';
+import 'package:cat_app/bloc/cat/cat_state.dart';
 import 'package:cat_app/bloc/user/user_bloc.dart';
 import 'package:cat_app/bloc/user/user_state.dart';
 import 'package:cat_app/models/cat_model.dart';
@@ -11,7 +12,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CatListItem extends StatelessWidget {
   final CatModel cat;
-  CatListItem({Key? key, required this.cat}) : super(key: key);
+  Bloc bloc;
+  CatListItem({Key? key, required this.bloc, required this.cat})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +33,7 @@ class CatListItem extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => CatDetailsPage(
+                            bloc: bloc,
                             cat: cat,
                           )));
             },

@@ -40,8 +40,12 @@ class FavoritesPage extends StatelessWidget {
         }
 
         return Container(
-          child:
-              CatList(catList: favoriteState.catList, loadMore: loadMoreCats),
+          child: CatList(
+              bloc: favoriteBloc,
+              catList: favoriteState.catList
+                  .where((cat) => cat.favoriteId != null)
+                  .toList(),
+              loadMore: loadMoreCats),
         );
       }
 
