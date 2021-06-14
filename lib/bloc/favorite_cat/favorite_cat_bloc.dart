@@ -38,14 +38,14 @@ class FavoriteCatBloc extends Bloc<CatEvent, CatState> {
       List<CatModel> loadedCats =
           await repository.getUserFavorites(userId, limit, page);
 
-      if (loadedCats.isNotEmpty) {
-        if (page != 0) {
-          cats = (state as FavoriteCatLoadedState).catList;
-          cats.addAll(loadedCats);
-        } else {
-          cats = loadedCats;
-        }
+      if (page != 0) {
+        cats = (state as FavoriteCatLoadedState).catList;
+        cats.addAll(loadedCats);
+      } else {
+        cats = loadedCats;
+      }
 
+      if (cats.isNotEmpty) {
         await repository.setCatLocal(catList: cats, type: CatTypes.favorite);
         yield FavoriteCatLoadedState(catList: cats, page: page);
       } else {
