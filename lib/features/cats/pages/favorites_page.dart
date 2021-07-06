@@ -4,7 +4,7 @@ import 'package:cat_app/features/cats/cubit/cat/cat_cubit.dart';
 import 'package:cat_app/features/cats/cubit/cat/cat_state.dart';
 import 'package:cat_app/features/cats/cubit/favorite/favorite_cubit.dart';
 import 'package:cat_app/features/cats/cubit/favorite/favorite_state.dart';
-import 'package:cat_app/features/cats/repositories/cat_repository.dart';
+import 'package:cat_app/features/cats/repositories/cat_from_api_repository.dart';
 import 'package:cat_app/features/cats/widgets/cat_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -8,15 +8,15 @@ import 'features/authentication/pages/auth_page.dart';
 import 'features/authentication/repositories/authentication_repository.dart';
 import 'features/cats/cubit/cat/cat_cubit.dart';
 import 'features/cats/cubit/favorite/favorite_cubit.dart';
-import 'features/cats/repositories/cat_repository.dart';
+import 'features/cats/repositories/cat_from_api_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MultiBlocProvider(providers: [
     BlocProvider(create: (context) => AuthCubit(AuthenticationRepository())),
-    BlocProvider(create: (context) => CatCubit(CatRepository())),
-    BlocProvider(create: (context) => FavoriteCatCubit(CatRepository())),
+    BlocProvider(create: (context) => CatCubit(CatFromApiRepository())),
+    BlocProvider(create: (context) => FavoriteCatCubit(CatFromApiRepository())),
   ], child: MyApp()));
 }
 

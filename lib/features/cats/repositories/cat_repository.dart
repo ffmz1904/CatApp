@@ -1,87 +1,18 @@
-import 'package:cat_app/features/cats/api/cat_api.dart';
 import 'package:cat_app/features/cats/model/cat_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 enum CatTypes { cats, favorite }
 
-class CatRepository {
-  CatApi api = CatApi();
-  final String localCatKey = 'CAT_LIST_LOCAL';
-  final String localFavoriteCatKey = 'FAVORITE_CAT_LIST_LOCAL';
-
-  Future<List<CatModel>> getCats(int limit, int page) async {
-    try {
-      List images = await api.getCatImages(limit, page);
-      List facts = await api.getCatFacts(limit);
-
-      List<CatModel> cats = [];
-
-      for (int i = 0; i < images.length; i++) {
-        cats.add(CatModel(
-          id: images[i]['id'],
-          image: images[i]['img'],
-          fact: facts[i],
-        ));
-      }
-
-      return cats;
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
+abstract class CatRepository {
+  Future<List<CatModel>> getCats(int limit, int page);
 
   Future<bool> setCatLocal(
-      {required List<CatModel> catList, required CatTypes type}) async {
-    String key =
-        (type == CatTypes.favorite) ? localFavoriteCatKey : localCatKey;
-    SharedPreferences local = await SharedPreferences.getInstance();
-    String catListString = CatModel.encode(catList);
+      {required List<CatModel> catList, required CatTypes type});
 
-    await local.setString(key, catListString);
-    print('set cat in cache');
-    return true;
-  }
+  Future<List<CatModel>?> getCatLocal({required CatTypes type});
 
-  Future<List<CatModel>?> getCatLocal({required CatTypes type}) async {
-    String key =
-        (type == CatTypes.favorite) ? localFavoriteCatKey : localCatKey;
-    SharedPreferences local = await SharedPreferences.getInstance();
-    String? catListString = local.getString(key);
+  Future addToFavorite(String catId, String userId);
 
-    if (catListString == null) {
-      return null;
-    }
+  Future removeFromFavorite(dynamic favoriteId);
 
-    List<CatModel> catList = CatModel.decode(catListString);
-    return catList;
-  }
-
-  Future addToFavorite(String catId, String userId) =>
-      api.addCatToFavorite(catId, userId);
-
-  Future removeFromFavorite(dynamic favoriteId) =>
-      api.removeCatFromFavorite(favoriteId);
-
-  Future<List<CatModel>> getUserFavorites(
-      String userId, int limit, int page) async {
-    try {
-      List favorites = await api.getFavorites(userId, limit, page);
-      List facts = await api.getCatFacts(limit);
-
-      List<CatModel> cats = [];
-
-      for (int i = 0; i < favorites.length; i++) {
-        cats.add(CatModel(
-          id: favorites[i]['id'],
-          image: favorites[i]['img'],
-          fact: facts[i],
-          isFavorite: true,
-          favoriteId: favorites[i]['favoriteId'],
-        ));
-      }
-      return cats;
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
+  Future<List<CatModel>> getUserFavorites(String userId, int limit, int page);
 }
