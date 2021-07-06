@@ -1,4 +1,4 @@
-import 'package:cat_app/services/auth/facebook_signin_provider.dart';
+import 'package:cat_app/authentication/services/facebook_signin_provider.dart';
 
 class FacebookSignInRepository {
   FacebookSignInProvider _provider = FacebookSignInProvider();

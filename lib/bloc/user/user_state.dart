@@ -1,4 +1,4 @@
-import 'package:cat_app/models/auth_user_model.dart';
+import 'package:cat_app/authentication/model/auth_user_model.dart';
 
 abstract class UserState {}
 

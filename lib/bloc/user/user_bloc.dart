@@ -1,7 +1,7 @@
 import 'package:cat_app/bloc/user/user_events.dart';
 import 'package:cat_app/bloc/user/user_state.dart';
 import 'package:cat_app/helpers/check_internet_connection.dart';
-import 'package:cat_app/models/auth_user_model.dart';
+import 'package:cat_app/authentication/model/auth_user_model.dart';
 import 'package:cat_app/repositories/user_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -18,7 +18,7 @@ class CatListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+    // UserBloc userBloc = BlocProvider.of<UserBloc>(context);
 
     return Card(
       elevation: 4,
@@ -60,9 +60,9 @@ class CatListItem extends StatelessWidget {
                         favoriteId: favoriteId, favoriteBlocEvent: true));
                   }
                 } else {
-                  final userId = (userBloc.state as UserAuthState).userData.id;
-                  bloc.add(
-                      CatAddToFavoriteEvent(catId: cat.id, userId: userId));
+                  // final userId = (userBloc.state as UserAuthState).userData.id;
+                  // bloc.add(
+                  //     CatAddToFavoriteEvent(catId: cat.id, userId: userId));
                 }
               },
               icon: FaIcon(

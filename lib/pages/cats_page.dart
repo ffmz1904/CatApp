@@ -12,37 +12,40 @@ class CatsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CatBloc catBloc = BlocProvider.of<CatBloc>(context);
+    return BlocProvider(
+      create: (context) => CatBloc(),
+      child: BlocBuilder<CatBloc, CatState>(builder: (context, catState) {
+        CatBloc catBloc = BlocProvider.of<CatBloc>(context);
 
-    loadMoreCats() {
-      catBloc
-          .add(CatLoadEvent(page: (catBloc.state as CatLoadedState).page + 1));
-    }
+        loadMoreCats() {
+          catBloc.add(
+              CatLoadEvent(page: (catBloc.state as CatLoadedState).page + 1));
+        }
 
-    return BlocBuilder<CatBloc, CatState>(builder: (context, catState) {
-      if (catState is CatEmptyState) {
-        catBloc.add(CatLoadEvent());
-        return Center(
-          child: Text('No cats yet!'),
-        );
-      }
+        if (catState is CatEmptyState) {
+          catBloc.add(CatLoadEvent());
+          return Center(
+            child: Text('No cats yet!'),
+          );
+        }
 
-      if (catState is CatLoadingState) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      }
+        if (catState is CatLoadingState) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
 
-      if (catState is CatLoadedState) {
-        return CatList(
-          bloc: catBloc,
-          catList: catState.catList,
-          loadMore: loadMoreCats,
-          limit: CAT_LIMIT,
-        );
-      }
+        if (catState is CatLoadedState) {
+          return CatList(
+            bloc: catBloc,
+            catList: catState.catList,
+            loadMore: loadMoreCats,
+            limit: CAT_LIMIT,
+          );
+        }
 
-      return SizedBox();
-    });
+        return SizedBox();
+      }),
+    );
   }
 }

@@ -1,17 +1,17 @@
-import 'package:cat_app/models/auth_user_model.dart';
+import 'package:cat_app/authentication/model/auth_user_model.dart';
 
 abstract class UserEvent {}
 
 class UserGetCacheDataEvent extends UserEvent {}
 
 class UserLoginEvent extends UserEvent {
-  UserAuthProviders authProvider;
+  AuthProviders authProvider;
 
   UserLoginEvent({required this.authProvider});
 }
 
 class UserLogoutEvent extends UserEvent {
-  UserAuthProviders authProvider;
+  AuthProviders authProvider;
 
   UserLogoutEvent({required this.authProvider});
 }

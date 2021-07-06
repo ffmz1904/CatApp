@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
-enum UserAuthProviders {
+enum AuthProviders {
   google_auth,
   facebook_auth,
 }
@@ -12,7 +12,7 @@ class AuthUserModel {
   String? name;
   String? email;
   String? photo;
-  UserAuthProviders authProvider;
+  AuthProviders authProvider;
 
   AuthUserModel({
     required this.id,
@@ -25,14 +25,14 @@ class AuthUserModel {
   factory AuthUserModel.fromFirebaseCredential(UserCredential credential) {
     User? user = credential.user;
     AuthCredential? authCredential = credential.credential;
-    UserAuthProviders? loginProvider;
+    AuthProviders? loginProvider;
 
     switch (authCredential?.signInMethod) {
       case 'google.com':
-        loginProvider = UserAuthProviders.google_auth;
+        loginProvider = AuthProviders.google_auth;
         break;
       case 'facebook.com':
-        loginProvider = UserAuthProviders.facebook_auth;
+        loginProvider = AuthProviders.facebook_auth;
         break;
     }
 
@@ -46,14 +46,14 @@ class AuthUserModel {
   }
 
   factory AuthUserModel.fromJson(Map<String, dynamic> jsonData) {
-    UserAuthProviders? loginProvider;
+    AuthProviders? loginProvider;
 
     switch (jsonData['authProvider']) {
       case 'google.com':
-        loginProvider = UserAuthProviders.google_auth;
+        loginProvider = AuthProviders.google_auth;
         break;
       case 'facebook.com':
-        loginProvider = UserAuthProviders.facebook_auth;
+        loginProvider = AuthProviders.facebook_auth;
         break;
     }
 
@@ -71,7 +71,7 @@ class AuthUserModel {
         'name': user.name,
         'email': user.email,
         'photo': user.photo,
-        'authProvider': user.authProvider == UserAuthProviders.google_auth
+        'authProvider': user.authProvider == AuthProviders.google_auth
             ? 'google.com'
             : 'facebook.com',
       };
