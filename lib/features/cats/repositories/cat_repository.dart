@@ -9,7 +9,7 @@ class CatRepository {
   final String localCatKey = 'CAT_LIST_LOCAL';
   final String localFavoriteCatKey = 'FAVORITE_CAT_LIST_LOCAL';
 
-  Future getCats(int limit, int page) async {
+  Future<List<CatModel>> getCats(int limit, int page) async {
     try {
       List images = await api.getCatImages(limit, page);
       List facts = await api.getCatFacts(limit);
@@ -30,7 +30,7 @@ class CatRepository {
     }
   }
 
-  Future setCatLocal(
+  Future<bool> setCatLocal(
       {required List<CatModel> catList, required CatTypes type}) async {
     String key =
         (type == CatTypes.favorite) ? localFavoriteCatKey : localCatKey;
@@ -42,7 +42,7 @@ class CatRepository {
     return true;
   }
 
-  Future getCatLocal({required CatTypes type}) async {
+  Future<List<CatModel>?> getCatLocal({required CatTypes type}) async {
     String key =
         (type == CatTypes.favorite) ? localFavoriteCatKey : localCatKey;
     SharedPreferences local = await SharedPreferences.getInstance();
@@ -62,7 +62,8 @@ class CatRepository {
   Future removeFromFavorite(dynamic favoriteId) =>
       api.removeCatFromFavorite(favoriteId);
 
-  Future getUserFavorites(String userId, int limit, int page) async {
+  Future<List<CatModel>> getUserFavorites(
+      String userId, int limit, int page) async {
     try {
       List favorites = await api.getFavorites(userId, limit, page);
       List facts = await api.getCatFacts(limit);
