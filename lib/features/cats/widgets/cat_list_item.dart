@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cat_app/bloc/cat/cat_bloc.dart';
-import 'package:cat_app/bloc/favorite_cat/favorite_cat_bloc.dart';
+import 'package:cat_app/features/authentication/cubit/auth_cubit.dart';
+import 'package:cat_app/features/authentication/cubit/auth_state.dart';
+import 'package:cat_app/features/cats/cubit/cat/cat_cubit.dart';
+import 'package:cat_app/features/cats/cubit/favorite/favorite_cubit.dart';
 import 'package:cat_app/features/cats/model/cat_model.dart';
 import 'package:cat_app/features/cats/pages/cat_details_page.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +17,9 @@ class CatListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+    AuthCubit authCubit = context.read<AuthCubit>();
+    CatCubit catCubit = context.read<CatCubit>();
+    FavoriteCatCubit favoriteCubit = context.read<FavoriteCatCubit>();
 
     return Card(
       elevation: 4,
@@ -47,20 +51,24 @@ class CatListItem extends StatelessWidget {
           ),
           IconButton(
               onPressed: () {
-                // if (cat.isFavorite) {
-                //   final favoriteId = cat.favoriteId;
-                //   bloc.add(CatRemoveFromFavoritesEvent(favoriteId: favoriteId));
+                if (cat.isFavorite) {
+                  final favoriteId = cat.favoriteId;
 
-                //   if (bloc is FavoriteCatBloc) {
-                //     CatBloc catBloc = BlocProvider.of<CatBloc>(context);
-                //     catBloc.add(CatRemoveFromFavoritesEvent(
-                //         favoriteId: favoriteId, favoriteBlocEvent: true));
-                //   }
-                // } else {
-                // final userId = (userBloc.state as UserAuthState).userData.id;
-                // bloc.add(
-                //     CatAddToFavoriteEvent(catId: cat.id, userId: userId));
-                // }
+                  if (cubit is CatCubit) {
+                    catCubit.removeFromFavorites(favoriteId);
+                  } else {
+                    favoriteCubit.removeFavorite(favoriteId);
+                    catCubit.removeFromFavorites(favoriteId, true);
+                  }
+                } else {
+                  final userId =
+                      (authCubit.state as AuthAuthorizedState).userData.id;
+                  if (cubit is CatCubit) {
+                    catCubit.addFavorite(cat.id, userId);
+                  } else {
+                    favoriteCubit.addToFavorite(cat.id, userId);
+                  }
+                }
               },
               icon: FaIcon(
                 cat.isFavorite

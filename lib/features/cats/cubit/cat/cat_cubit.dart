@@ -42,4 +42,62 @@ class CatCubit extends Cubit<CatState> {
       }
     }
   }
+
+  Future addFavorite(catId, userId) async {
+    try {
+      final response = await catRepository.addToFavorite(catId, userId);
+
+      if (response['message'] == 'SUCCESS') {
+        List<CatModel> cats = (state as CatLoadedState)
+            .catList
+            .map((cat) => cat.id != catId
+                ? cat
+                : CatModel(
+                    id: cat.id,
+                    image: cat.image,
+                    fact: cat.fact,
+                    isFavorite: true,
+                    favoriteId: response['id']))
+            .toList();
+
+        emit(CatLoadedState(
+            catList: cats, page: (state as CatLoadedState).page));
+      }
+    } catch (e) {}
+  }
+
+  Future removeFromFavorites(favoriteId, [favoriteBlocEvent = false]) async {
+    if (favoriteBlocEvent) {
+      List<CatModel> cats = (state as CatLoadedState)
+          .catList
+          .map((cat) => cat.favoriteId != favoriteId
+              ? cat
+              : CatModel(
+                  id: cat.id,
+                  image: cat.image,
+                  fact: cat.fact,
+                  isFavorite: false,
+                  favoriteId: null))
+          .toList();
+      emit(CatLoadedState(catList: cats, page: (state as CatLoadedState).page));
+    } else {
+      final response = await catRepository.removeFromFavorite(favoriteId);
+
+      if (response['message'] == 'SUCCESS') {
+        List<CatModel> cats = (state as CatLoadedState)
+            .catList
+            .map((cat) => cat.favoriteId != favoriteId
+                ? cat
+                : CatModel(
+                    id: cat.id,
+                    image: cat.image,
+                    fact: cat.fact,
+                    isFavorite: false,
+                    favoriteId: null))
+            .toList();
+        emit(CatLoadedState(
+            catList: cats, page: (state as CatLoadedState).page));
+      }
+    }
+  }
 }

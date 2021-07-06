@@ -1,3 +1,6 @@
+import 'package:cat_app/features/authentication/cubit/auth_cubit.dart';
+import 'package:cat_app/features/authentication/cubit/auth_state.dart';
+import 'package:cat_app/features/cats/cubit/cat/cat_cubit.dart';
 import 'package:cat_app/features/cats/cubit/cat/cat_state.dart';
 import 'package:cat_app/features/cats/cubit/favorite/favorite_cubit.dart';
 import 'package:cat_app/features/cats/cubit/favorite/favorite_state.dart';
@@ -13,13 +16,19 @@ class FavoritesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => FavoriteCatCubit(CatRepository()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => CatCubit(CatRepository())),
+        BlocProvider(create: (context) => FavoriteCatCubit(CatRepository())),
+      ],
       child: BlocBuilder<FavoriteCatCubit, CatState>(
           builder: (context, favoriteState) {
         FavoriteCatCubit favoriteCubit = context.read<FavoriteCatCubit>();
+        AuthCubit authCubit = context.read<AuthCubit>();
 
         if (favoriteState is FavoriteCatEmptyState) {
+          favoriteCubit.loadFavorites(
+              (authCubit.state as AuthAuthorizedState).userData.id);
           return Center(
             child: Text('No favorite yet!'),
           );
@@ -33,9 +42,9 @@ class FavoritesPage extends StatelessWidget {
 
         if (favoriteState is FavoriteCatLoadedState) {
           loadMoreCats() {
-            // favoriteBloc.add(FavoriteCatLoadEvent(
-            // userId: (userBloc.state as UserAuthState).userData.id,
-            // page: favoriteState.page + 1));
+            favoriteCubit.loadFavorites(
+                (authCubit.state as AuthAuthorizedState).userData.id,
+                favoriteState.page + 1);
           }
 
           return Container(

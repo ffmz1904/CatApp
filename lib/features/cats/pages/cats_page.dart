@@ -1,5 +1,6 @@
 import 'package:cat_app/features/cats/cubit/cat/cat_cubit.dart';
 import 'package:cat_app/features/cats/cubit/cat/cat_state.dart';
+import 'package:cat_app/features/cats/cubit/favorite/favorite_cubit.dart';
 import 'package:cat_app/features/cats/repositories/cat_repository.dart';
 import 'package:cat_app/features/cats/widgets/cat_list.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +13,11 @@ class CatsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CatCubit(CatRepository()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => CatCubit(CatRepository())),
+        BlocProvider(create: (context) => FavoriteCatCubit(CatRepository())),
+      ],
       child: BlocBuilder<CatCubit, CatState>(builder: (context, catState) {
         CatCubit catCubit = context.read<CatCubit>();
 
