@@ -13,41 +13,34 @@ class CatsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => CatCubit(CatRepository())),
-        BlocProvider(create: (context) => FavoriteCatCubit(CatRepository())),
-      ],
-      child: BlocBuilder<CatCubit, CatState>(builder: (context, catState) {
-        CatCubit catCubit = context.read<CatCubit>();
+    return BlocBuilder<CatCubit, CatState>(builder: (context, catState) {
+      CatCubit catCubit = context.read<CatCubit>();
+      loadMoreCats() => catCubit.loadCat((catState as CatLoadedState).page + 1);
 
-        loadMoreCats() =>
-            catCubit.loadCat((catState as CatLoadedState).page + 1);
+      if (catState is CatEmptyState) {
+        catCubit.loadCat();
+        return Center(
+          child: Text('No cats yet!'),
+        );
+      }
 
-        if (catState is CatEmptyState) {
-          catCubit.loadCat();
-          return Center(
-            child: Text('No cats yet!'),
-          );
-        }
+      if (catState is CatLoadingState) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
 
-        if (catState is CatLoadingState) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+      if (catState is CatLoadedState) {
+        return CatList(
+          cubit: catCubit,
+          catList: catState.catList,
+          loadMore: loadMoreCats,
+          limit: CAT_LIMIT,
+        );
+      }
 
-        if (catState is CatLoadedState) {
-          return CatList(
-            cubit: catCubit,
-            catList: catState.catList,
-            loadMore: loadMoreCats,
-            limit: CAT_LIMIT,
-          );
-        }
-
-        return SizedBox();
-      }),
-    );
+      return SizedBox();
+    });
+    // );
   }
 }

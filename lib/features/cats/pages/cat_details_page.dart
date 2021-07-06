@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cat_app/features/authentication/cubit/auth_cubit.dart';
+import 'package:cat_app/features/authentication/cubit/auth_state.dart';
 import 'package:cat_app/features/cats/cubit/cat/cat_cubit.dart';
 import 'package:cat_app/features/cats/cubit/cat/cat_state.dart';
 import 'package:cat_app/features/cats/cubit/favorite/favorite_cubit.dart';
 import 'package:cat_app/features/cats/cubit/favorite/favorite_state.dart';
 import 'package:cat_app/features/cats/model/cat_model.dart';
+import 'package:cat_app/features/cats/repositories/cat_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,6 +19,10 @@ class CatDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    CatCubit catCubit = context.read<CatCubit>();
+    FavoriteCatCubit favoriteCubit = context.read<FavoriteCatCubit>();
+    AuthCubit authCubit = context.read<AuthCubit>();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Cat App'),
@@ -29,7 +36,8 @@ class CatDetailsPage extends StatelessWidget {
                   .toList()
                   .first;
 
-              return _body(context, cubit, catDetail);
+              return _body(context, cubit, catDetail, catCubit, favoriteCubit,
+                  authCubit);
             })
           : BlocBuilder<FavoriteCatCubit, CatState>(
               builder: (context, favoriteState) {
@@ -39,14 +47,13 @@ class CatDetailsPage extends StatelessWidget {
                   .toList()
                   .first;
 
-              return _body(context, cubit, catDetail);
+              return _body(context, cubit, catDetail, catCubit, favoriteCubit,
+                  authCubit);
             }),
     );
   }
 
-  Widget _body(context, bloc, catDetail) {
-    // UserBloc userBloc = BlocProvider.of<UserBloc>(context);
-
+  Widget _body(context, cubit, catDetail, catCubit, favoriteCubit, authCubit) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -65,12 +72,20 @@ class CatDetailsPage extends StatelessWidget {
           IconButton(
               onPressed: () {
                 if (catDetail.isFavorite) {
-                  // bloc.add(CatRemoveFromFavoritesEvent(
-                  //     favoriteId: catDetail.favoriteId));
+                  if (cubit is CatCubit) {
+                    catCubit.removeFromFavorites(catDetail.favoriteId);
+                  } else {
+                    favoriteCubit.removeFavorite(catDetail.favoriteId);
+                  }
                 } else {
-                  // final userId = (userBloc.state as UserAuthState).userData.id;
-                  // bloc.add(CatAddToFavoriteEvent(
-                  //     catId: catDetail.id, userId: userId));
+                  final userId =
+                      (authCubit.state as AuthAuthorizedState).userData.id;
+
+                  if (cubit is CatCubit) {
+                    catCubit.addFavorite(catDetail.id, userId);
+                  } else {
+                    favoriteCubit.addToFavorite(catDetail.id, userId);
+                  }
                 }
               },
               icon: FaIcon(

@@ -16,57 +16,51 @@ class FavoritesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => CatCubit(CatRepository())),
-        BlocProvider(create: (context) => FavoriteCatCubit(CatRepository())),
-      ],
-      child: BlocBuilder<FavoriteCatCubit, CatState>(
-          builder: (context, favoriteState) {
-        FavoriteCatCubit favoriteCubit = context.read<FavoriteCatCubit>();
-        AuthCubit authCubit = context.read<AuthCubit>();
+    return BlocBuilder<FavoriteCatCubit, CatState>(
+        builder: (context, favoriteState) {
+      FavoriteCatCubit favoriteCubit = context.read<FavoriteCatCubit>();
+      AuthCubit authCubit = context.read<AuthCubit>();
 
-        if (favoriteState is FavoriteCatEmptyState) {
+      if (favoriteState is FavoriteCatEmptyState) {
+        favoriteCubit.loadFavorites(
+            (authCubit.state as AuthAuthorizedState).userData.id);
+        return Center(
+          child: Text('No favorite yet!'),
+        );
+      }
+
+      if (favoriteState is FavoriteCatLoadingState) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+
+      if (favoriteState is FavoriteCatLoadedState) {
+        loadMoreCats() {
           favoriteCubit.loadFavorites(
-              (authCubit.state as AuthAuthorizedState).userData.id);
-          return Center(
-            child: Text('No favorite yet!'),
-          );
+              (authCubit.state as AuthAuthorizedState).userData.id,
+              favoriteState.page + 1);
         }
 
-        if (favoriteState is FavoriteCatLoadingState) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+        return Container(
+          child: CatList(
+            cubit: favoriteCubit,
+            catList: favoriteState.catList
+                .where((cat) => cat.favoriteId != null)
+                .toList(),
+            loadMore: loadMoreCats,
+            limit: CAT_LIMIT,
+          ),
+        );
+      }
 
-        if (favoriteState is FavoriteCatLoadedState) {
-          loadMoreCats() {
-            favoriteCubit.loadFavorites(
-                (authCubit.state as AuthAuthorizedState).userData.id,
-                favoriteState.page + 1);
-          }
+      if (favoriteState is FavoriteCatErrorState) {
+        return Center(
+          child: Text(favoriteState.message),
+        );
+      }
 
-          return Container(
-            child: CatList(
-              cubit: favoriteCubit,
-              catList: favoriteState.catList
-                  .where((cat) => cat.favoriteId != null)
-                  .toList(),
-              loadMore: loadMoreCats,
-              limit: CAT_LIMIT,
-            ),
-          );
-        }
-
-        if (favoriteState is FavoriteCatErrorState) {
-          return Center(
-            child: Text(favoriteState.message),
-          );
-        }
-
-        return SizedBox();
-      }),
-    );
+      return SizedBox();
+    });
   }
 }

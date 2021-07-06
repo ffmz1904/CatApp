@@ -9,7 +9,7 @@ class CatCubit extends Cubit<CatState> {
   CatCubit(this.catRepository) : super(CatEmptyState());
 
   Future loadCat([int page = 1]) async {
-    if (state is CatEmptyState) {
+    if (page == 1) {
       emit(CatLoadingState());
     }
 

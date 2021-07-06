@@ -6,11 +6,18 @@ import 'features/authentication/cubit/auth_cubit.dart';
 import 'features/authentication/cubit/auth_state.dart';
 import 'features/authentication/pages/auth_page.dart';
 import 'features/authentication/repositories/authentication_repository.dart';
+import 'features/cats/cubit/cat/cat_cubit.dart';
+import 'features/cats/cubit/favorite/favorite_cubit.dart';
+import 'features/cats/repositories/cat_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(MultiBlocProvider(providers: [
+    BlocProvider(create: (context) => AuthCubit(AuthenticationRepository())),
+    BlocProvider(create: (context) => CatCubit(CatRepository())),
+    BlocProvider(create: (context) => FavoriteCatCubit(CatRepository())),
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -19,24 +26,21 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Cat App",
       debugShowCheckedModeBanner: false,
-      home: BlocProvider(
-        create: (context) => AuthCubit(AuthenticationRepository()),
-        child: BlocBuilder<AuthCubit, AuthState>(
-          builder: (context, authState) {
-            if (authState is AuthUnauthorizedState) {
-              context.read<AuthCubit>().getCachedData();
-              return AuthPage();
-            }
+      home: BlocBuilder<AuthCubit, AuthState>(
+        builder: (context, authState) {
+          if (authState is AuthUnauthorizedState) {
+            context.read<AuthCubit>().getCachedData();
+            return AuthPage();
+          }
 
-            if (authState is AuthAuthorizedState) {
-              return HomePage();
-            }
+          if (authState is AuthAuthorizedState) {
+            return HomePage();
+          }
 
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          },
-        ),
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
     );
   }
