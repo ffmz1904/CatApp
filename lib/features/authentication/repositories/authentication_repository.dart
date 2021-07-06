@@ -1,11 +1,11 @@
-import 'package:cat_app/authentication/services/facebook_signin_repository.dart';
-import 'package:cat_app/authentication/services/google_signin_repository.dart';
-import 'package:cat_app/authentication/model/auth_user_model.dart';
+import 'package:cat_app/features/authentication/model/auth_user_model.dart';
+import 'package:cat_app/features/authentication/services/facebook_signin_repository.dart';
+import 'package:cat_app/features/authentication/services/google_signin_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UserRepository {
-  final String localKey = 'USER_DATA_LOCAL';
+class AuthenticationRepository {
+  final String localKey = 'USER_AUTH_DATA_LOCAL';
   GoogleSignInRepository googleRepository = GoogleSignInRepository();
   FacebookSignInRepository facebookRepository = FacebookSignInRepository();
 
@@ -28,7 +28,7 @@ class UserRepository {
     }
   }
 
-  Future logout(AuthProviders provider) async {
+  Future<void> logout(AuthProviders provider) async {
     switch (provider) {
       case AuthProviders.google_auth:
         await googleRepository.logout();
@@ -39,7 +39,7 @@ class UserRepository {
     }
   }
 
-  Future setUserToCache({required AuthUserModel user}) async {
+  Future<bool> setAuthDataToCache({required AuthUserModel user}) async {
     SharedPreferences local = await SharedPreferences.getInstance();
     String userDataString = AuthUserModel.encode(user);
     await local.setString(localKey, userDataString);
@@ -47,7 +47,7 @@ class UserRepository {
     return true;
   }
 
-  Future getUserFromCache() async {
+  Future getAuthDataFromCache() async {
     SharedPreferences local = await SharedPreferences.getInstance();
     String? userDataString = local.getString(localKey);
     print('Get user from cache');
@@ -59,7 +59,7 @@ class UserRepository {
     return user;
   }
 
-  Future clearUserCache() async {
+  Future<void> clearAuthDataCache() async {
     SharedPreferences local = await SharedPreferences.getInstance();
     local.clear();
   }

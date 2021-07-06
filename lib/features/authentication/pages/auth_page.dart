@@ -1,5 +1,5 @@
-import 'package:cat_app/authentication/cubit/auth_cubit.dart';
-import 'package:cat_app/authentication/model/auth_user_model.dart';
+import 'package:cat_app/features/authentication/cubit/auth_cubit.dart';
+import 'package:cat_app/features/authentication/model/auth_user_model.dart';
 import 'package:cat_app/pages/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,4 @@
-import 'package:cat_app/authentication/services/google_signin_provider.dart';
+import 'package:cat_app/features/authentication/services/google_signin_provider.dart';
 
 class GoogleSignInRepository {
   GoogleSignInProvider _provider = GoogleSignInProvider();

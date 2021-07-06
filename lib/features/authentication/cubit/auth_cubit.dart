@@ -1,6 +1,7 @@
-import 'package:cat_app/authentication/cubit/auth_state.dart';
-import 'package:cat_app/authentication/model/auth_user_model.dart';
-import 'package:cat_app/authentication/repositories/authentication_repository.dart';
+import 'package:cat_app/features/authentication/cubit/auth_state.dart';
+import 'package:cat_app/features/authentication/model/auth_user_model.dart';
+import 'package:cat_app/features/authentication/repositories/authentication_repository.dart';
+import 'package:cat_app/helpers/check_internet_connection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -18,6 +19,7 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthUnauthorizedState());
       } else {
         AuthUserModel user = AuthUserModel.fromFirebaseCredential(credential);
+        await authRepository.setAuthDataToCache(user: user);
         emit(AuthAuthorizedState(userData: user));
       }
     } catch (e) {
@@ -28,10 +30,26 @@ class AuthCubit extends Cubit<AuthState> {
   Future logout(authProvider) async {
     try {
       await authRepository.logout(authProvider);
-      // cache clear
+      await authRepository.clearAuthDataCache();
       emit(AuthUnauthorizedState());
     } catch (e) {
       emit(AuthErrorState());
+    }
+  }
+
+  Future getCachedData() async {
+    final user = await authRepository.getAuthDataFromCache();
+
+    if (user == null) {
+      bool connect = await checkInternetConnection();
+
+      if (connect) {
+        emit(AuthUnauthorizedState());
+      } else {
+        emit(AuthErrorState());
+      }
+    } else {
+      emit(AuthAuthorizedState(userData: user));
     }
   }
 }

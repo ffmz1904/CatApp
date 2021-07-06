@@ -4,9 +4,7 @@ import 'package:cat_app/bloc/cat/cat_events.dart';
 import 'package:cat_app/bloc/cat/cat_state.dart';
 import 'package:cat_app/bloc/favorite_cat/favorite_cat_bloc.dart';
 import 'package:cat_app/bloc/favorite_cat/favorite_cat_state.dart';
-import 'package:cat_app/bloc/user/user_bloc.dart';
-import 'package:cat_app/bloc/user/user_state.dart';
-import 'package:cat_app/models/cat_model.dart';
+import 'package:cat_app/features/cats/model/cat_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -48,7 +46,7 @@ class CatDetailsPage extends StatelessWidget {
   }
 
   Widget _body(context, bloc, catDetail) {
-    UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+    // UserBloc userBloc = BlocProvider.of<UserBloc>(context);
 
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10),
@@ -71,9 +69,9 @@ class CatDetailsPage extends StatelessWidget {
                   bloc.add(CatRemoveFromFavoritesEvent(
                       favoriteId: catDetail.favoriteId));
                 } else {
-                  final userId = (userBloc.state as UserAuthState).userData.id;
-                  bloc.add(CatAddToFavoriteEvent(
-                      catId: catDetail.id, userId: userId));
+                  // final userId = (userBloc.state as UserAuthState).userData.id;
+                  // bloc.add(CatAddToFavoriteEvent(
+                  //     catId: catDetail.id, userId: userId));
                 }
               },
               icon: FaIcon(

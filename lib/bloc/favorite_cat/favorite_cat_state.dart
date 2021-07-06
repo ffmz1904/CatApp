@@ -1,5 +1,5 @@
 import 'package:cat_app/bloc/cat/cat_state.dart';
-import 'package:cat_app/models/cat_model.dart';
+import 'package:cat_app/features/cats/model/cat_model.dart';
 
 class FavoriteCatEmptyState extends CatState {}
 

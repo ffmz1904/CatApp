@@ -1,5 +1,5 @@
-import 'package:cat_app/api/cat_api.dart';
-import 'package:cat_app/models/cat_model.dart';
+import 'package:cat_app/features/cats/api/cat_api.dart';
+import 'package:cat_app/features/cats/model/cat_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum CatTypes { cats, favorite }

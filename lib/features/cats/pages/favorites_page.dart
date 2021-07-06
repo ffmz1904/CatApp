@@ -2,9 +2,7 @@ import 'package:cat_app/bloc/cat/cat_state.dart';
 import 'package:cat_app/bloc/favorite_cat/favorite_cat_bloc.dart';
 import 'package:cat_app/bloc/favorite_cat/favorite_cat_events.dart';
 import 'package:cat_app/bloc/favorite_cat/favorite_cat_state.dart';
-import 'package:cat_app/bloc/user/user_bloc.dart';
-import 'package:cat_app/bloc/user/user_state.dart';
-import 'package:cat_app/widgets/cat_list.dart';
+import 'package:cat_app/features/cats/widgets/cat_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,9 +14,9 @@ class FavoritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FavoriteCatBloc favoriteBloc = BlocProvider.of<FavoriteCatBloc>(context);
-    UserBloc userBloc = BlocProvider.of<UserBloc>(context);
-    favoriteBloc.add(FavoriteCatLoadEvent(
-        userId: (userBloc.state as UserAuthState).userData.id));
+    // UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+    // favoriteBloc.add(FavoriteCatLoadEvent(
+    //     userId: (userBloc.state as UserAuthState).userData.id));
 
     return BlocBuilder<FavoriteCatBloc, CatState>(
         builder: (context, favoriteState) {
@@ -36,9 +34,9 @@ class FavoritesPage extends StatelessWidget {
 
       if (favoriteState is FavoriteCatLoadedState) {
         loadMoreCats() {
-          favoriteBloc.add(FavoriteCatLoadEvent(
-              userId: (userBloc.state as UserAuthState).userData.id,
-              page: favoriteState.page + 1));
+          // favoriteBloc.add(FavoriteCatLoadEvent(
+          // userId: (userBloc.state as UserAuthState).userData.id,
+          // page: favoriteState.page + 1));
         }
 
         return Container(

@@ -1,5 +1,5 @@
-import 'package:cat_app/pages/cats_page.dart';
-import 'package:cat_app/pages/favorites_page.dart';
+import 'package:cat_app/features/cats/pages/cats_page.dart';
+import 'package:cat_app/features/cats/pages/favorites_page.dart';
 import 'package:cat_app/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 

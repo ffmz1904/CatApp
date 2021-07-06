@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cat_app/authentication/cubit/auth_cubit.dart';
-import 'package:cat_app/authentication/cubit/auth_state.dart';
-import 'package:cat_app/authentication/model/auth_user_model.dart';
+import 'package:cat_app/features/authentication/cubit/auth_cubit.dart';
+import 'package:cat_app/features/authentication/cubit/auth_state.dart';
+import 'package:cat_app/features/authentication/model/auth_user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

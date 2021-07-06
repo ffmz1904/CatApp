@@ -1,7 +1,7 @@
 import 'package:cat_app/bloc/cat/cat_bloc.dart';
 import 'package:cat_app/bloc/cat/cat_events.dart';
 import 'package:cat_app/bloc/cat/cat_state.dart';
-import 'package:cat_app/widgets/cat_list.dart';
+import 'package:cat_app/features/cats/widgets/cat_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
