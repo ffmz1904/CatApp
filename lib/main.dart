@@ -1,4 +1,4 @@
-import 'package:cat_app/pages/home_page.dart';
+import 'package:cat_app/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,8 +28,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, authState) {
-          if (authState is AuthUnauthorizedState) {
+          print(authState);
+          if (authState is AuthEmptyState) {
             context.read<AuthCubit>().getCachedData();
+          }
+
+          if (authState is AuthUnauthorizedState) {
             return AuthPage();
           }
 

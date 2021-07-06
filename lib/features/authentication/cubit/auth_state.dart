@@ -2,6 +2,8 @@ import 'package:cat_app/features/authentication/model/auth_user_model.dart';
 
 abstract class AuthState {}
 
+class AuthEmptyState extends AuthState {}
+
 class AuthUnauthorizedState extends AuthState {}
 
 class AuthInProcessState extends AuthState {}

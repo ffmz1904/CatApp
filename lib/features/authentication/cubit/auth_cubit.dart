@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AuthCubit extends Cubit<AuthState> {
   final AuthenticationRepository authRepository;
 
-  AuthCubit(this.authRepository) : super(AuthUnauthorizedState());
+  AuthCubit(this.authRepository) : super(AuthEmptyState());
 
   Future login(authProvider) async {
     try {

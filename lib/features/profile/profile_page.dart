@@ -35,7 +35,7 @@ class ProfilePage extends StatelessWidget {
           SizedBox(height: 25),
           ElevatedButton(
             onPressed: () {
-              authCubit.logout(AuthProviders.google_auth);
+              authCubit.logout(user.authProvider);
             },
             child: Text('Logout'),
           ),
