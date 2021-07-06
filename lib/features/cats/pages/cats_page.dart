@@ -1,6 +1,6 @@
-import 'package:cat_app/bloc/cat/cat_bloc.dart';
-import 'package:cat_app/bloc/cat/cat_events.dart';
-import 'package:cat_app/bloc/cat/cat_state.dart';
+import 'package:cat_app/features/cats/cubit/cat/cat_cubit.dart';
+import 'package:cat_app/features/cats/cubit/cat/cat_state.dart';
+import 'package:cat_app/features/cats/repositories/cat_repository.dart';
 import 'package:cat_app/features/cats/widgets/cat_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,17 +13,15 @@ class CatsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CatBloc(),
-      child: BlocBuilder<CatBloc, CatState>(builder: (context, catState) {
-        CatBloc catBloc = BlocProvider.of<CatBloc>(context);
+      create: (context) => CatCubit(CatRepository()),
+      child: BlocBuilder<CatCubit, CatState>(builder: (context, catState) {
+        CatCubit catCubit = context.read<CatCubit>();
 
-        loadMoreCats() {
-          catBloc.add(
-              CatLoadEvent(page: (catBloc.state as CatLoadedState).page + 1));
-        }
+        loadMoreCats() =>
+            catCubit.loadCat((catState as CatLoadedState).page + 1);
 
         if (catState is CatEmptyState) {
-          catBloc.add(CatLoadEvent());
+          catCubit.loadCat();
           return Center(
             child: Text('No cats yet!'),
           );
@@ -37,7 +35,7 @@ class CatsPage extends StatelessWidget {
 
         if (catState is CatLoadedState) {
           return CatList(
-            bloc: catBloc,
+            cubit: catCubit,
             catList: catState.catList,
             loadMore: loadMoreCats,
             limit: CAT_LIMIT,

@@ -6,12 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class CatList extends StatefulWidget {
   final List<CatModel> catList;
   final Function loadMore;
-  final Bloc bloc;
+  final Cubit cubit;
   final int limit;
 
   CatList({
     Key? key,
-    required this.bloc,
+    required this.cubit,
     required this.catList,
     required this.loadMore,
     required this.limit,
@@ -51,7 +51,7 @@ class _CatListState extends State<CatList> {
               return Center(child: CircularProgressIndicator());
             }
 
-            return CatListItem(bloc: widget.bloc, cat: widget.catList[i]);
+            return CatListItem(cubit: widget.cubit, cat: widget.catList[i]);
           }),
     );
   }

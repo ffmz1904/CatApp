@@ -1,9 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cat_app/bloc/cat/cat_bloc.dart';
-import 'package:cat_app/bloc/cat/cat_events.dart';
-import 'package:cat_app/bloc/cat/cat_state.dart';
-import 'package:cat_app/bloc/favorite_cat/favorite_cat_bloc.dart';
-import 'package:cat_app/bloc/favorite_cat/favorite_cat_state.dart';
+import 'package:cat_app/features/cats/cubit/cat/cat_cubit.dart';
+import 'package:cat_app/features/cats/cubit/cat/cat_state.dart';
+import 'package:cat_app/features/cats/cubit/favorite/favorite_cubit.dart';
+import 'package:cat_app/features/cats/cubit/favorite/favorite_state.dart';
 import 'package:cat_app/features/cats/model/cat_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,8 +10,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CatDetailsPage extends StatelessWidget {
   final CatModel cat;
-  final Bloc bloc;
-  CatDetailsPage({Key? key, required this.bloc, required this.cat})
+  final Cubit cubit;
+  CatDetailsPage({Key? key, required this.cubit, required this.cat})
       : super(key: key);
 
   @override
@@ -22,17 +21,17 @@ class CatDetailsPage extends StatelessWidget {
         title: Text('Cat App'),
         centerTitle: true,
       ),
-      body: (bloc is CatBloc)
-          ? BlocBuilder<CatBloc, CatState>(builder: (context, catState) {
+      body: (cubit is CatCubit)
+          ? BlocBuilder<CatCubit, CatState>(builder: (context, catState) {
               CatModel catDetail = (catState as CatLoadedState)
                   .catList
                   .where((c) => c.id == cat.id)
                   .toList()
                   .first;
 
-              return _body(context, bloc, catDetail);
+              return _body(context, cubit, catDetail);
             })
-          : BlocBuilder<FavoriteCatBloc, CatState>(
+          : BlocBuilder<FavoriteCatCubit, CatState>(
               builder: (context, favoriteState) {
               CatModel catDetail = (favoriteState as FavoriteCatLoadedState)
                   .catList
@@ -40,7 +39,7 @@ class CatDetailsPage extends StatelessWidget {
                   .toList()
                   .first;
 
-              return _body(context, bloc, catDetail);
+              return _body(context, cubit, catDetail);
             }),
     );
   }
@@ -66,8 +65,8 @@ class CatDetailsPage extends StatelessWidget {
           IconButton(
               onPressed: () {
                 if (catDetail.isFavorite) {
-                  bloc.add(CatRemoveFromFavoritesEvent(
-                      favoriteId: catDetail.favoriteId));
+                  // bloc.add(CatRemoveFromFavoritesEvent(
+                  //     favoriteId: catDetail.favoriteId));
                 } else {
                   // final userId = (userBloc.state as UserAuthState).userData.id;
                   // bloc.add(CatAddToFavoriteEvent(

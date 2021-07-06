@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cat_app/bloc/cat/cat_bloc.dart';
-import 'package:cat_app/bloc/cat/cat_events.dart';
 import 'package:cat_app/bloc/favorite_cat/favorite_cat_bloc.dart';
 import 'package:cat_app/features/cats/model/cat_model.dart';
 import 'package:cat_app/features/cats/pages/cat_details_page.dart';
@@ -10,8 +9,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CatListItem extends StatelessWidget {
   final CatModel cat;
-  final Bloc bloc;
-  CatListItem({Key? key, required this.bloc, required this.cat})
+  final Cubit cubit;
+  CatListItem({Key? key, required this.cubit, required this.cat})
       : super(key: key);
 
   @override
@@ -30,7 +29,7 @@ class CatListItem extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => CatDetailsPage(
-                            bloc: bloc,
+                            cubit: cubit,
                             cat: cat,
                           )));
             },
@@ -48,20 +47,20 @@ class CatListItem extends StatelessWidget {
           ),
           IconButton(
               onPressed: () {
-                if (cat.isFavorite) {
-                  final favoriteId = cat.favoriteId;
-                  bloc.add(CatRemoveFromFavoritesEvent(favoriteId: favoriteId));
+                // if (cat.isFavorite) {
+                //   final favoriteId = cat.favoriteId;
+                //   bloc.add(CatRemoveFromFavoritesEvent(favoriteId: favoriteId));
 
-                  if (bloc is FavoriteCatBloc) {
-                    CatBloc catBloc = BlocProvider.of<CatBloc>(context);
-                    catBloc.add(CatRemoveFromFavoritesEvent(
-                        favoriteId: favoriteId, favoriteBlocEvent: true));
-                  }
-                } else {
-                  // final userId = (userBloc.state as UserAuthState).userData.id;
-                  // bloc.add(
-                  //     CatAddToFavoriteEvent(catId: cat.id, userId: userId));
-                }
+                //   if (bloc is FavoriteCatBloc) {
+                //     CatBloc catBloc = BlocProvider.of<CatBloc>(context);
+                //     catBloc.add(CatRemoveFromFavoritesEvent(
+                //         favoriteId: favoriteId, favoriteBlocEvent: true));
+                //   }
+                // } else {
+                // final userId = (userBloc.state as UserAuthState).userData.id;
+                // bloc.add(
+                //     CatAddToFavoriteEvent(catId: cat.id, userId: userId));
+                // }
               },
               icon: FaIcon(
                 cat.isFavorite
