@@ -24,34 +24,32 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Cat App",
-      debugShowCheckedModeBanner: false,
-      home: BlocBuilder<AuthCubit, AuthState>(
-        builder: (context, authState) {
-          if (authState is AuthEmptyState) {
-            context.read<AuthCubit>().getCachedData();
-          }
+    return BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
+      if (state is AuthAuthorizedState) {
+        return MultiBlocProvider(providers: [
+          BlocProvider(create: (context) => CatCubit(CatFromApiRepository())),
+          BlocProvider(
+              create: (context) => FavoriteCatCubit(CatFromApiRepository())),
+        ], child: HomePage());
+      }
 
-          if (authState is AuthUnauthorizedState) {
+      return StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasData) {
+              final user = FirebaseAuth.instance.currentUser;
+              final info = user?.providerData[0];
+              context.read<AuthCubit>().setCachedData(user, info);
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
             return AuthPage();
-          }
-
-          if (authState is AuthAuthorizedState) {
-            return MultiBlocProvider(providers: [
-              BlocProvider(
-                  create: (context) => CatCubit(CatFromApiRepository())),
-              BlocProvider(
-                  create: (context) =>
-                      FavoriteCatCubit(CatFromApiRepository())),
-            ], child: HomePage());
-          }
-
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      ),
-    );
+          });
+    });
   }
 }
