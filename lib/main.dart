@@ -1,4 +1,5 @@
 import 'package:cat_app/home_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +25,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
-      print(state);
       if (state is AuthAuthorizedState) {
         return MultiBlocProvider(providers: [
           BlocProvider(create: (context) => CatCubit(CatFromApiRepository())),
@@ -33,7 +33,23 @@ class MyApp extends StatelessWidget {
         ], child: HomePage());
       }
 
-      return AuthPage();
+      return StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasData) {
+              final user = FirebaseAuth.instance.currentUser;
+              final info = user?.providerData[0];
+              context.read<AuthCubit>().setCachedData(user, info);
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return AuthPage();
+          });
     });
   }
 }

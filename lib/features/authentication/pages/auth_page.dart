@@ -11,58 +11,44 @@ class AuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthCubit authCubit = context.read<AuthCubit>();
+    final authCubit = context.read<AuthCubit>();
 
     return MaterialApp(
       title: 'Cat App',
-      home: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
-
-            if (snapshot.hasData) {
-              User? user = FirebaseAuth.instance.currentUser;
-              UserInfo? info = user?.providerData[0];
-              context.read<AuthCubit>().setCachedData(user, info);
-            }
-
-            if (snapshot.hasError) {
-              print('Error!');
-            }
-
-            return BlocListener<AuthCubit, AuthState>(
-              listener: (context, state) {
-                if (state is AuthErrorState) {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext dialogContext) {
-                        return AlertDialog(
-                          title: Text(
-                            'Error',
-                            textAlign: TextAlign.center,
-                          ),
-                          content: Text(
-                            state.message,
-                            textAlign: TextAlign.center,
-                          ),
-                        );
-                      });
-                }
-              },
-              child: Scaffold(
-                body: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Select login method',
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 50),
-                      ElevatedButton.icon(
+      home: BlocListener<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if (state is AuthErrorState) {
+            showDialog(
+                context: context,
+                builder: (BuildContext dialogContext) {
+                  return AlertDialog(
+                    title: Text(
+                      'Error',
+                      textAlign: TextAlign.center,
+                    ),
+                    content: Text(
+                      state.message,
+                      textAlign: TextAlign.center,
+                    ),
+                  );
+                });
+          }
+        },
+        child: Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  'Select login method',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                Column(
+                  children: [
+                    SizedBox(
+                      width: 220,
+                      height: 40,
+                      child: ElevatedButton.icon(
                         onPressed: () {
                           authCubit.login(AuthProviders.google_auth);
                         },
@@ -70,8 +56,12 @@ class AuthPage extends StatelessWidget {
                             color: Colors.white),
                         label: Text('Sign in with Google'),
                       ),
-                      SizedBox(height: 10),
-                      ElevatedButton.icon(
+                    ),
+                    SizedBox(height: 20),
+                    SizedBox(
+                      width: 220,
+                      height: 40,
+                      child: ElevatedButton.icon(
                         onPressed: () {
                           authCubit.login(AuthProviders.facebook_auth);
                         },
@@ -79,12 +69,14 @@ class AuthPage extends StatelessWidget {
                             color: Colors.white),
                         label: Text('Sign in with Facebook'),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ),
-            );
-          }),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
