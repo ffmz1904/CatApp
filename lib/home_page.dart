@@ -8,36 +8,39 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-            title: Text('Cat App'),
-            centerTitle: true,
-            bottom: TabBar(
-              tabs: [
-                Tab(
-                  text: 'Cats',
-                ),
-                Tab(
-                  text: 'Favorite',
-                ),
-                Tab(
-                  text: 'Profile',
-                )
-              ],
-            )),
-        body: TabBarView(children: [
-          Container(
-            child: CatsPage(),
-          ),
-          Container(
-            child: FavoritesPage(),
-          ),
-          Container(
-            child: ProfilePage(),
-          ),
-        ]),
+    return MaterialApp(
+      title: 'Cat App',
+      home: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: AppBar(
+              title: Text('Cat App'),
+              centerTitle: true,
+              bottom: TabBar(
+                tabs: [
+                  Tab(
+                    text: 'Cats',
+                  ),
+                  Tab(
+                    text: 'Favorite',
+                  ),
+                  Tab(
+                    text: 'Profile',
+                  )
+                ],
+              )),
+          body: TabBarView(children: [
+            Container(
+              child: CatsPage(),
+            ),
+            Container(
+              child: FavoritesPage(),
+            ),
+            Container(
+              child: ProfilePage(),
+            ),
+          ]),
+        ),
       ),
     );
   }

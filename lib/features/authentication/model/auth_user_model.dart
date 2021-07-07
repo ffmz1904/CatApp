@@ -24,10 +24,10 @@ class AuthUserModel {
 
   factory AuthUserModel.fromFirebaseCredential(UserCredential credential) {
     User? user = credential.user;
-    AuthCredential? authCredential = credential.credential;
+    UserInfo? userInfo = user?.providerData[0];
     AuthProviders? loginProvider;
 
-    switch (authCredential?.signInMethod) {
+    switch (userInfo?.providerId) {
       case 'google.com':
         loginProvider = AuthProviders.google_auth;
         break;
@@ -45,10 +45,10 @@ class AuthUserModel {
     );
   }
 
-  factory AuthUserModel.fromJson(Map<String, dynamic> jsonData) {
+  factory AuthUserModel.fromCacheData(User? user, UserInfo? userInfo) {
     AuthProviders? loginProvider;
 
-    switch (jsonData['authProvider']) {
+    switch (userInfo?.providerId) {
       case 'google.com':
         loginProvider = AuthProviders.google_auth;
         break;
@@ -58,29 +58,11 @@ class AuthUserModel {
     }
 
     return AuthUserModel(
-      id: jsonData['id'],
-      name: jsonData['name'],
-      email: jsonData['email'],
-      photo: jsonData['photo'],
+      id: user?.uid,
+      name: user?.displayName,
+      email: user?.email,
+      photo: user?.photoURL,
       authProvider: loginProvider!,
     );
-  }
-
-  static Map<String, dynamic> toMap(AuthUserModel user) => {
-        'id': user.id,
-        'name': user.name,
-        'email': user.email,
-        'photo': user.photo,
-        'authProvider': user.authProvider == AuthProviders.google_auth
-            ? 'google.com'
-            : 'facebook.com',
-      };
-
-  static String encode(AuthUserModel user) =>
-      json.encode(AuthUserModel.toMap(user));
-
-  static AuthUserModel decode(String userDataString) {
-    final user = json.decode(userDataString);
-    return AuthUserModel.fromJson(user);
   }
 }
