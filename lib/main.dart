@@ -1,4 +1,5 @@
 import 'package:cat_app/home_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,11 +14,11 @@ import 'features/cats/repositories/cat_from_api_repository.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MultiBlocProvider(providers: [
-    BlocProvider(create: (context) => AuthCubit(AuthenticationRepository())),
-    BlocProvider(create: (context) => CatCubit(CatFromApiRepository())),
-    BlocProvider(create: (context) => FavoriteCatCubit(CatFromApiRepository())),
-  ], child: MyApp()));
+  runApp(
+    BlocProvider(
+        create: (context) => AuthCubit(AuthenticationRepository()),
+        child: MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -28,7 +29,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, authState) {
-          print(authState);
           if (authState is AuthEmptyState) {
             context.read<AuthCubit>().getCachedData();
           }
@@ -38,7 +38,13 @@ class MyApp extends StatelessWidget {
           }
 
           if (authState is AuthAuthorizedState) {
-            return HomePage();
+            return MultiBlocProvider(providers: [
+              BlocProvider(
+                  create: (context) => CatCubit(CatFromApiRepository())),
+              BlocProvider(
+                  create: (context) =>
+                      FavoriteCatCubit(CatFromApiRepository())),
+            ], child: HomePage());
           }
 
           return Center(
