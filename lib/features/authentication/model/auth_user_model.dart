@@ -22,30 +22,7 @@ class AuthUserModel {
     required this.authProvider,
   });
 
-  factory AuthUserModel.fromFirebaseCredential(UserCredential credential) {
-    User? user = credential.user;
-    UserInfo? userInfo = user?.providerData[0];
-    AuthProviders? loginProvider;
-
-    switch (userInfo?.providerId) {
-      case 'google.com':
-        loginProvider = AuthProviders.google_auth;
-        break;
-      case 'facebook.com':
-        loginProvider = AuthProviders.facebook_auth;
-        break;
-    }
-
-    return AuthUserModel(
-      id: user?.uid,
-      name: user?.displayName,
-      email: user?.email,
-      photo: user?.photoURL,
-      authProvider: loginProvider!,
-    );
-  }
-
-  factory AuthUserModel.fromCacheData(User? user, UserInfo? userInfo) {
+  factory AuthUserModel.fromFirebaseCredential(User? user, UserInfo? userInfo) {
     AuthProviders? loginProvider;
 
     switch (userInfo?.providerId) {

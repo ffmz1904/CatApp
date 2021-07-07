@@ -17,7 +17,11 @@ class AuthCubit extends Cubit<AuthState> {
       if (credential == null) {
         emit(AuthUnauthorizedState());
       } else {
-        AuthUserModel user = AuthUserModel.fromFirebaseCredential(credential);
+        User? userData = credential?.user;
+        UserInfo? userInfo = userData?.providerData[0];
+
+        AuthUserModel user =
+            AuthUserModel.fromFirebaseCredential(userData, userInfo);
         emit(AuthAuthorizedState(userData: user));
       }
     } catch (e) {
@@ -35,7 +39,8 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future setCachedData(User? userData, UserInfo? userInfo) async {
-    AuthUserModel user = AuthUserModel.fromCacheData(userData, userInfo);
+    AuthUserModel user =
+        AuthUserModel.fromFirebaseCredential(userData, userInfo);
     emit(AuthAuthorizedState(userData: user));
   }
 }
