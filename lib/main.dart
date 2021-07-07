@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
+      print(state);
       if (state is AuthAuthorizedState) {
         return MultiBlocProvider(providers: [
           BlocProvider(create: (context) => CatCubit(CatFromApiRepository())),

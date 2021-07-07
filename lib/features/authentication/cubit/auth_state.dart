@@ -9,4 +9,7 @@ class AuthAuthorizedState extends AuthState {
   AuthAuthorizedState({required this.userData});
 }
 
-class AuthErrorState extends AuthState {}
+class AuthErrorState extends AuthState {
+  String message;
+  AuthErrorState({this.message = 'Auth Error!'});
+}

@@ -12,35 +12,35 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future login(authProvider) async {
     try {
+      final internetConnection = await checkInternetConnection();
+
+      if (!internetConnection) {
+        return emit(AuthErrorState(message: 'No internet connection!'));
+      }
+
       final credential = await authRepository.login(authProvider);
 
       if (credential == null) {
         emit(AuthUnauthorizedState());
       } else {
-        User? userData = credential?.user;
+        final User? userData = credential?.user;
         UserInfo? userInfo = userData?.providerData[0];
 
-        AuthUserModel user =
-            AuthUserModel.fromFirebaseCredential(userData, userInfo);
+        final user = AuthUserModel.fromFirebaseCredential(userData, userInfo);
         emit(AuthAuthorizedState(userData: user));
       }
     } catch (e) {
-      emit(AuthErrorState());
+      emit(AuthErrorState(message: 'Login Error!'));
     }
   }
 
   Future logout(authProvider) async {
-    try {
-      await authRepository.logout(authProvider);
-      emit(AuthUnauthorizedState());
-    } catch (e) {
-      emit(AuthErrorState());
-    }
+    await authRepository.logout(authProvider);
+    emit(AuthUnauthorizedState());
   }
 
   Future setCachedData(User? userData, UserInfo? userInfo) async {
-    AuthUserModel user =
-        AuthUserModel.fromFirebaseCredential(userData, userInfo);
+    final user = AuthUserModel.fromFirebaseCredential(userData, userInfo);
     emit(AuthAuthorizedState(userData: user));
   }
 }
