@@ -18,90 +18,94 @@ class CatDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final catCubit = context.read<CatCubit>();
-    final favoriteCubit = context.read<FavoriteCatCubit>();
-    final authCubit = context.read<AuthCubit>();
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Cat App'),
-        centerTitle: true,
-      ),
-      body: (cubit is CatCubit)
-          ? BlocBuilder<CatCubit, CatState>(builder: (context, catState) {
-              final catDetail = (catState as CatLoadedState)
-                  .catList
-                  .where((c) => c.id == cat.id)
-                  .toList()
-                  .first;
-
-              return _body(context, cubit, catDetail, catCubit, favoriteCubit,
-                  authCubit);
-            })
-          : BlocBuilder<FavoriteCatCubit, CatState>(
-              builder: (context, favoriteState) {
-              final catDetail = (favoriteState as FavoriteCatLoadedState)
-                  .catList
-                  .where((c) => c.id == cat.id)
-                  .toList()
-                  .first;
-
-              return _body(context, cubit, catDetail, catCubit, favoriteCubit,
-                  authCubit);
-            }),
+    return Center(
+      child: Text('Detail page'),
     );
-  }
 
-  Widget _body(context, cubit, catDetail, catCubit, favoriteCubit, authCubit) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 250,
-            child: CachedNetworkImage(
-              fit: BoxFit.fill,
-              placeholder: (context, url) =>
-                  Center(child: CircularProgressIndicator()),
-              imageUrl: cat.image,
-              errorWidget: (context, url, error) => Icon(Icons.error),
-            ),
-          ),
-          IconButton(
-              onPressed: () {
-                if (catDetail.isFavorite) {
-                  if (cubit is CatCubit) {
-                    catCubit.removeFromFavorites(catDetail.favoriteId);
-                  } else {
-                    favoriteCubit.removeFavorite(catDetail.favoriteId);
-                  }
-                } else {
-                  final userId =
-                      (authCubit.state as AuthAuthorizedState).userData.id;
+    //   final catCubit = context.read<CatCubit>();
+    //   final favoriteCubit = context.read<FavoriteCatCubit>();
+    //   final authCubit = context.read<AuthCubit>();
 
-                  if (cubit is CatCubit) {
-                    catCubit.addFavorite(catDetail.id, userId);
-                  } else {
-                    favoriteCubit.addToFavorite(catDetail.id, userId);
-                  }
-                }
-              },
-              icon: FaIcon(
-                catDetail.isFavorite
-                    ? FontAwesomeIcons.solidHeart
-                    : FontAwesomeIcons.heart,
-                color: Colors.red[900],
-                size: 30,
-              )),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              child: Text(catDetail.fact),
-            ),
-          ),
-        ],
-      ),
-    );
+    //   return Scaffold(
+    //     appBar: AppBar(
+    //       title: Text('Cat App'),
+    //       centerTitle: true,
+    //     ),
+    //     body: (cubit is CatCubit)
+    //         ? BlocBuilder<CatCubit, CatState>(builder: (context, catState) {
+    //             final catDetail = (catState as CatLoadedState)
+    //                 .catList
+    //                 .where((c) => c.id == cat.id)
+    //                 .toList()
+    //                 .first;
+
+    //             return _body(context, cubit, catDetail, catCubit, favoriteCubit,
+    //                 authCubit);
+    //           })
+    //         : BlocBuilder<FavoriteCatCubit, CatState>(
+    //             builder: (context, favoriteState) {
+    //             final catDetail = (favoriteState as FavoriteCatLoadedState)
+    //                 .catList
+    //                 .where((c) => c.id == cat.id)
+    //                 .toList()
+    //                 .first;
+
+    //             return _body(context, cubit, catDetail, catCubit, favoriteCubit,
+    //                 authCubit);
+    //           }),
+    //   );
+    // }
+
+    // Widget _body(context, cubit, catDetail, catCubit, favoriteCubit, authCubit) {
+    //   return Container(
+    //     padding: EdgeInsets.symmetric(vertical: 10),
+    //     child: Column(
+    //       children: [
+    //         Container(
+    //           width: MediaQuery.of(context).size.width,
+    //           height: 250,
+    //           child: CachedNetworkImage(
+    //             fit: BoxFit.fill,
+    //             placeholder: (context, url) =>
+    //                 Center(child: CircularProgressIndicator()),
+    //             imageUrl: cat.image,
+    //             errorWidget: (context, url, error) => Icon(Icons.error),
+    //           ),
+    //         ),
+    //         IconButton(
+    //             onPressed: () {
+    //               if (catDetail.isFavorite) {
+    //                 if (cubit is CatCubit) {
+    //                   catCubit.removeFromFavorites(catDetail.favoriteId);
+    //                 } else {
+    //                   favoriteCubit.removeFavorite(catDetail.favoriteId);
+    //                 }
+    //               } else {
+    //                 final userId =
+    //                     (authCubit.state as AuthAuthorizedState).userData.id;
+
+    //                 if (cubit is CatCubit) {
+    //                   catCubit.addFavorite(catDetail.id, userId);
+    //                 } else {
+    //                   favoriteCubit.addToFavorite(catDetail.id, userId);
+    //                 }
+    //               }
+    //             },
+    //             icon: FaIcon(
+    //               catDetail.isFavorite
+    //                   ? FontAwesomeIcons.solidHeart
+    //                   : FontAwesomeIcons.heart,
+    //               color: Colors.red[900],
+    //               size: 30,
+    //             )),
+    //         Expanded(
+    //           child: Padding(
+    //             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+    //             child: Text(catDetail.fact),
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   );
   }
 }

@@ -32,13 +32,14 @@ class MyApp extends StatelessWidget {
           return MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (_) => CatCubit(CatFromApiRepository())..loadCat(),
+                create: (_) => CatCubit(CatFromApiRepository())
+                  ..loadCats(context.read<AuthCubit>().userId),
               ),
-              BlocProvider(
-                create: (_) => FavoriteCatCubit(CatFromApiRepository())
-                  ..loadFavorites(
-                      (authCubit.state as AuthAuthorizedState).userData.id),
-              ),
+              // BlocProvider(
+              //   create: (_) => FavoriteCatCubit(CatFromApiRepository())
+              //     ..loadFavorites(
+              //         (authCubit.state as AuthAuthorizedState).userData.id),
+              // ),
             ],
             child: HomePage(),
           );

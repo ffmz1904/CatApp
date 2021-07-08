@@ -13,15 +13,11 @@ class CatsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<CatCubit, CatState>(
       listener: (context, state) {
-        print('$state');
+        if (state is CatErrorState) {
+          //todo
+        }
       },
       builder: (context, state) {
-        if (state is CatEmptyState) {
-          return Center(
-            child: Text('No cats yet!'),
-          );
-        }
-
         if (state is CatLoadingState) {
           return Center(
             child: CircularProgressIndicator(),
@@ -30,9 +26,9 @@ class CatsPage extends StatelessWidget {
 
         if (state is CatLoadedState) {
           return CatList(
-            cubit: context.read<CatCubit>(),
-            catList: state.catList,
-            loadMore: () => context.read<CatCubit>().loadCat(state.page + 1),
+            catList: state.catsList,
+            loadMore: () =>
+                context.read<CatCubit>().loadMoreCats(CatTypes.common),
             limit: CAT_LIMIT,
           );
         }

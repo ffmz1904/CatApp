@@ -7,13 +7,21 @@ class CatEmptyState extends CatState {}
 class CatLoadingState extends CatState {}
 
 class CatLoadedState extends CatState {
-  List<CatModel> catList;
-  int page;
+  List<CatModel> catsList;
+  int catsPage;
+
+  List<CatModel> favoritesList;
+  int favoritesPage;
 
   CatLoadedState({
-    required this.catList,
-    this.page = 1,
+    required this.catsList,
+    required this.favoritesList,
+    this.catsPage = 1,
+    this.favoritesPage = 0,
   });
 }
 
-class CatErrorState extends CatState {}
+class CatErrorState extends CatState {
+  String message;
+  CatErrorState({this.message = 'Error!'});
+}

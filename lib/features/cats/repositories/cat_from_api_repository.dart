@@ -30,31 +30,31 @@ class CatFromApiRepository extends CatRepository {
     }
   }
 
-  @override
-  Future<bool> setCatLocal(
-      {required List<CatModel> catList, required CatTypes type}) async {
-    var key = (type == CatTypes.favorite) ? localFavoriteCatKey : localCatKey;
-    final local = await SharedPreferences.getInstance();
-    final catListString = CatModel.encode(catList);
+  // @override
+  // Future<bool> setCatLocal(
+  //     {required List<CatModel> catList, required CatTypes type}) async {
+  //   var key = (type == CatTypes.favorite) ? localFavoriteCatKey : localCatKey;
+  //   final local = await SharedPreferences.getInstance();
+  //   final catListString = CatModel.encode(catList);
 
-    await local.setString(key, catListString);
-    print('set cat in cache');
-    return true;
-  }
+  //   await local.setString(key, catListString);
+  //   print('set cat in cache');
+  //   return true;
+  // }
 
-  @override
-  Future<List<CatModel>?> getCatLocal({required CatTypes type}) async {
-    var key = (type == CatTypes.favorite) ? localFavoriteCatKey : localCatKey;
-    final local = await SharedPreferences.getInstance();
-    final catListString = local.getString(key);
+  // @override
+  // Future<List<CatModel>?> getCatLocal({required CatTypes type}) async {
+  //   var key = (type == CatTypes.favorite) ? localFavoriteCatKey : localCatKey;
+  //   final local = await SharedPreferences.getInstance();
+  //   final catListString = local.getString(key);
 
-    if (catListString == null) {
-      return null;
-    }
+  //   if (catListString == null) {
+  //     return null;
+  //   }
 
-    final catList = CatModel.decode(catListString);
-    return catList;
-  }
+  //   final catList = CatModel.decode(catListString);
+  //   return catList;
+  // }
 
   @override
   Future addToFavorite(String catId, String userId) =>

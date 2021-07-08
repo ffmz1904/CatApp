@@ -11,15 +11,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CatListItem extends StatelessWidget {
   final CatModel cat;
-  final Cubit cubit;
-  CatListItem({Key? key, required this.cubit, required this.cat})
-      : super(key: key);
+  CatListItem({Key? key, required this.cat}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final authCubit = context.read<AuthCubit>();
     final catCubit = context.read<CatCubit>();
-    final favoriteCubit = context.read<FavoriteCatCubit>();
 
     return Card(
       elevation: 4,
@@ -33,7 +30,7 @@ class CatListItem extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => CatDetailsPage(
-                            cubit: cubit,
+                            cubit: catCubit,
                             cat: cat,
                           )));
             },
@@ -51,24 +48,24 @@ class CatListItem extends StatelessWidget {
           ),
           IconButton(
               onPressed: () {
-                if (cat.isFavorite) {
-                  final favoriteId = cat.favoriteId;
+                // if (cat.isFavorite) {
+                //   final favoriteId = cat.favoriteId;
 
-                  if (cubit is CatCubit) {
-                    catCubit.removeFromFavorites(favoriteId);
-                  } else {
-                    favoriteCubit.removeFavorite(favoriteId);
-                    catCubit.removeFromFavorites(favoriteId, true);
-                  }
-                } else {
-                  final userId =
-                      (authCubit.state as AuthAuthorizedState).userData.id;
-                  if (cubit is CatCubit) {
-                    catCubit.addFavorite(cat.id, userId);
-                  } else {
-                    favoriteCubit.addToFavorite(cat.id, userId);
-                  }
-                }
+                //   if (cubit is CatCubit) {
+                //     catCubit.removeFromFavorites(favoriteId);
+                //   } else {
+                //     favoriteCubit.removeFavorite(favoriteId);
+                //     catCubit.removeFromFavorites(favoriteId, true);
+                //   }
+                // } else {
+                //   final userId =
+                //       (authCubit.state as AuthAuthorizedState).userData.id;
+                //   if (cubit is CatCubit) {
+                //     catCubit.addFavorite(cat.id, userId);
+                //   } else {
+                //     favoriteCubit.addToFavorite(cat.id, userId);
+                //   }
+                // }
               },
               icon: FaIcon(
                 cat.isFavorite
