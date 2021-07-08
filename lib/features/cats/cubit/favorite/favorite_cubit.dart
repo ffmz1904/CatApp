@@ -14,11 +14,11 @@ class FavoriteCatCubit extends Cubit<CatState> {
       emit(FavoriteCatLoadingState());
     }
 
-    int limit = 5;
+    final limit = 5;
 
     try {
       List<CatModel> cats;
-      List<CatModel> loadedCats =
+      final loadedCats =
           await catRepository.getUserFavorites(userId, limit, page);
 
       if (page != 0) {
@@ -36,8 +36,7 @@ class FavoriteCatCubit extends Cubit<CatState> {
       }
     } catch (e) {
       print(e);
-      List<CatModel>? cats =
-          await catRepository.getCatLocal(type: CatTypes.favorite);
+      final cats = await catRepository.getCatLocal(type: CatTypes.favorite);
       if (cats == null) {
         emit(FavoriteCatErrorState(message: 'Error fatching data!'));
       } else {
@@ -51,7 +50,7 @@ class FavoriteCatCubit extends Cubit<CatState> {
     final response = await catRepository.addToFavorite(catId, userId);
 
     if (response['message'] == 'SUCCESS') {
-      List<CatModel> catList = stateData.catList
+      final catList = stateData.catList
           .map((cat) => cat.id != catId
               ? cat
               : CatModel(
@@ -75,7 +74,7 @@ class FavoriteCatCubit extends Cubit<CatState> {
     final response = await catRepository.removeFromFavorite(favoriteId);
 
     if (response['message'] == 'SUCCESS') {
-      List<CatModel> catList = stateData.catList
+      final catList = stateData.catList
           .map((cat) => cat.favoriteId != favoriteId
               ? cat
               : CatModel(
@@ -87,9 +86,9 @@ class FavoriteCatCubit extends Cubit<CatState> {
                 ))
           .toList();
 
-      bool isEmpty = true;
+      var isEmpty = true;
 
-      for (int i = 0; i < catList.length; i++) {
+      for (var i = 0; i < catList.length; i++) {
         if (catList[i].favoriteId != null) {
           isEmpty = false;
           break;

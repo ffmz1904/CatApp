@@ -18,9 +18,9 @@ class CatDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CatCubit catCubit = context.read<CatCubit>();
-    FavoriteCatCubit favoriteCubit = context.read<FavoriteCatCubit>();
-    AuthCubit authCubit = context.read<AuthCubit>();
+    final catCubit = context.read<CatCubit>();
+    final favoriteCubit = context.read<FavoriteCatCubit>();
+    final authCubit = context.read<AuthCubit>();
 
     return Scaffold(
       appBar: AppBar(
@@ -29,7 +29,7 @@ class CatDetailsPage extends StatelessWidget {
       ),
       body: (cubit is CatCubit)
           ? BlocBuilder<CatCubit, CatState>(builder: (context, catState) {
-              CatModel catDetail = (catState as CatLoadedState)
+              final catDetail = (catState as CatLoadedState)
                   .catList
                   .where((c) => c.id == cat.id)
                   .toList()
@@ -40,7 +40,7 @@ class CatDetailsPage extends StatelessWidget {
             })
           : BlocBuilder<FavoriteCatCubit, CatState>(
               builder: (context, favoriteState) {
-              CatModel catDetail = (favoriteState as FavoriteCatLoadedState)
+              final catDetail = (favoriteState as FavoriteCatLoadedState)
                   .catList
                   .where((c) => c.id == cat.id)
                   .toList()

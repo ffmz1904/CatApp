@@ -14,32 +14,29 @@ class HomePage extends StatelessWidget {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-              title: Text('Cat App'),
-              centerTitle: true,
-              bottom: TabBar(
-                tabs: [
-                  Tab(
-                    text: 'Cats',
-                  ),
-                  Tab(
-                    text: 'Favorite',
-                  ),
-                  Tab(
-                    text: 'Profile',
-                  )
-                ],
-              )),
-          body: TabBarView(children: [
-            Container(
-              child: CatsPage(),
+            title: Text('Cat App'),
+            centerTitle: true,
+            bottom: TabBar(
+              tabs: [
+                Tab(
+                  text: 'Cats',
+                ),
+                Tab(
+                  text: 'Favorite',
+                ),
+                Tab(
+                  text: 'Profile',
+                )
+              ],
             ),
-            Container(
-              child: FavoritesPage(),
-            ),
-            Container(
-              child: ProfilePage(),
-            ),
-          ]),
+          ),
+          body: TabBarView(
+            children: [
+              CatsPage(),
+              FavoritesPage(),
+              ProfilePage(),
+            ],
+          ),
         ),
       ),
     );

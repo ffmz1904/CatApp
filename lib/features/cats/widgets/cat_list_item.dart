@@ -17,9 +17,9 @@ class CatListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthCubit authCubit = context.read<AuthCubit>();
-    CatCubit catCubit = context.read<CatCubit>();
-    FavoriteCatCubit favoriteCubit = context.read<FavoriteCatCubit>();
+    final authCubit = context.read<AuthCubit>();
+    final catCubit = context.read<CatCubit>();
+    final favoriteCubit = context.read<FavoriteCatCubit>();
 
     return Card(
       elevation: 4,

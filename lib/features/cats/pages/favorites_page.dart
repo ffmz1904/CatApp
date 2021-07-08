@@ -1,10 +1,8 @@
 import 'package:cat_app/features/authentication/cubit/auth_cubit.dart';
 import 'package:cat_app/features/authentication/cubit/auth_state.dart';
-import 'package:cat_app/features/cats/cubit/cat/cat_cubit.dart';
 import 'package:cat_app/features/cats/cubit/cat/cat_state.dart';
 import 'package:cat_app/features/cats/cubit/favorite/favorite_cubit.dart';
 import 'package:cat_app/features/cats/cubit/favorite/favorite_state.dart';
-import 'package:cat_app/features/cats/repositories/cat_from_api_repository.dart';
 import 'package:cat_app/features/cats/widgets/cat_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,8 +16,8 @@ class FavoritesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FavoriteCatCubit, CatState>(
         builder: (context, favoriteState) {
-      FavoriteCatCubit favoriteCubit = context.read<FavoriteCatCubit>();
-      AuthCubit authCubit = context.read<AuthCubit>();
+      final favoriteCubit = context.read<FavoriteCatCubit>();
+      final authCubit = context.read<AuthCubit>();
 
       if (favoriteState is FavoriteCatEmptyState) {
         favoriteCubit.loadFavorites(
@@ -36,19 +34,15 @@ class FavoritesPage extends StatelessWidget {
       }
 
       if (favoriteState is FavoriteCatLoadedState) {
-        loadMoreCats() {
-          favoriteCubit.loadFavorites(
-              (authCubit.state as AuthAuthorizedState).userData.id,
-              favoriteState.page + 1);
-        }
-
         return Container(
           child: CatList(
             cubit: favoriteCubit,
             catList: favoriteState.catList
                 .where((cat) => cat.favoriteId != null)
                 .toList(),
-            loadMore: loadMoreCats,
+            loadMore: () => favoriteCubit.loadFavorites(
+                (authCubit.state as AuthAuthorizedState).userData.id,
+                favoriteState.page + 1),
             limit: CAT_LIMIT,
           ),
         );

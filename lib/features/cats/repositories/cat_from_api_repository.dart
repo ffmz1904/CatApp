@@ -14,9 +14,9 @@ class CatFromApiRepository extends CatRepository {
       List images = await api.getCatImages(limit, page);
       List facts = await api.getCatFacts(limit);
 
-      List<CatModel> cats = [];
+      var cats = <CatModel>[];
 
-      for (int i = 0; i < images.length; i++) {
+      for (var i = 0; i < images.length; i++) {
         cats.add(CatModel(
           id: images[i]['id'],
           image: images[i]['img'],
@@ -33,10 +33,9 @@ class CatFromApiRepository extends CatRepository {
   @override
   Future<bool> setCatLocal(
       {required List<CatModel> catList, required CatTypes type}) async {
-    String key =
-        (type == CatTypes.favorite) ? localFavoriteCatKey : localCatKey;
-    SharedPreferences local = await SharedPreferences.getInstance();
-    String catListString = CatModel.encode(catList);
+    var key = (type == CatTypes.favorite) ? localFavoriteCatKey : localCatKey;
+    final local = await SharedPreferences.getInstance();
+    final catListString = CatModel.encode(catList);
 
     await local.setString(key, catListString);
     print('set cat in cache');
@@ -45,16 +44,15 @@ class CatFromApiRepository extends CatRepository {
 
   @override
   Future<List<CatModel>?> getCatLocal({required CatTypes type}) async {
-    String key =
-        (type == CatTypes.favorite) ? localFavoriteCatKey : localCatKey;
-    SharedPreferences local = await SharedPreferences.getInstance();
-    String? catListString = local.getString(key);
+    var key = (type == CatTypes.favorite) ? localFavoriteCatKey : localCatKey;
+    final local = await SharedPreferences.getInstance();
+    final catListString = local.getString(key);
 
     if (catListString == null) {
       return null;
     }
 
-    List<CatModel> catList = CatModel.decode(catListString);
+    final catList = CatModel.decode(catListString);
     return catList;
   }
 
@@ -73,9 +71,9 @@ class CatFromApiRepository extends CatRepository {
       List favorites = await api.getFavorites(userId, limit, page);
       List facts = await api.getCatFacts(limit);
 
-      List<CatModel> cats = [];
+      var cats = <CatModel>[];
 
-      for (int i = 0; i < favorites.length; i++) {
+      for (var i = 0; i < favorites.length; i++) {
         cats.add(CatModel(
           id: favorites[i]['id'],
           image: favorites[i]['img'],

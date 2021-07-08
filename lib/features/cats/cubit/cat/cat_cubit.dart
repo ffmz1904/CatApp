@@ -13,11 +13,11 @@ class CatCubit extends Cubit<CatState> {
       emit(CatLoadingState());
     }
 
-    int limit = 5;
+    final limit = 5;
 
     try {
       List<CatModel> cats;
-      List<CatModel> loadedCats = await catRepository.getCats(limit, page);
+      final loadedCats = await catRepository.getCats(limit, page);
 
       if (page != 1) {
         cats = (state as CatLoadedState).catList;
@@ -26,15 +26,14 @@ class CatCubit extends Cubit<CatState> {
         cats = loadedCats;
       }
 
-      bool setToLocal =
+      final setToLocal =
           await catRepository.setCatLocal(catList: cats, type: CatTypes.cats);
 
       if (setToLocal) {
         emit(CatLoadedState(catList: cats, page: page));
       }
     } catch (e) {
-      List<CatModel>? cats =
-          await catRepository.getCatLocal(type: CatTypes.cats);
+      final cats = await catRepository.getCatLocal(type: CatTypes.cats);
       if (cats == null) {
         emit(CatEmptyState());
       } else {
@@ -48,7 +47,7 @@ class CatCubit extends Cubit<CatState> {
       final response = await catRepository.addToFavorite(catId, userId);
 
       if (response['message'] == 'SUCCESS') {
-        List<CatModel> cats = (state as CatLoadedState)
+        final cats = (state as CatLoadedState)
             .catList
             .map((cat) => cat.id != catId
                 ? cat
@@ -63,12 +62,14 @@ class CatCubit extends Cubit<CatState> {
         emit(CatLoadedState(
             catList: cats, page: (state as CatLoadedState).page));
       }
-    } catch (e) {}
+    } catch (e) {
+      //todo: error!
+    }
   }
 
   Future removeFromFavorites(favoriteId, [favoriteBlocEvent = false]) async {
     if (favoriteBlocEvent) {
-      List<CatModel> cats = (state as CatLoadedState)
+      final cats = (state as CatLoadedState)
           .catList
           .map((cat) => cat.favoriteId != favoriteId
               ? cat
@@ -84,7 +85,7 @@ class CatCubit extends Cubit<CatState> {
       final response = await catRepository.removeFromFavorite(favoriteId);
 
       if (response['message'] == 'SUCCESS') {
-        List<CatModel> cats = (state as CatLoadedState)
+        final cats = (state as CatLoadedState)
             .catList
             .map((cat) => cat.favoriteId != favoriteId
                 ? cat

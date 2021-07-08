@@ -22,7 +22,7 @@ class CatList extends StatefulWidget {
 }
 
 class _CatListState extends State<CatList> {
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _CatListState extends State<CatList> {
 
   @override
   Widget build(BuildContext context) {
-    int catLength = widget.catList.length;
+    final catLength = widget.catList.length;
 
     return Container(
       child: ListView.builder(

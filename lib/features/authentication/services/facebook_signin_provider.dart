@@ -18,7 +18,7 @@ class FacebookSignInProvider {
       switch (res.status) {
         case FacebookLoginStatus.success:
           print('success');
-          final FacebookAccessToken? fbToken = res.accessToken;
+          final fbToken = res.accessToken;
           final token = fbToken?.token;
           final AuthCredential credential =
               FacebookAuthProvider.credential(token!);

@@ -13,20 +13,20 @@ class ApiService {
   ApiService.get({required this.endpoint, this.headers});
 
   ApiService.post({required this.endpoint, required this.body, this.headers})
-      : this.method = RequestTypes.POST;
+      : method = RequestTypes.POST;
 
   ApiService.put({required this.endpoint, required this.body, this.headers})
-      : this.method = RequestTypes.PUT;
+      : method = RequestTypes.PUT;
 
   ApiService.patch({required this.endpoint, required this.body, this.headers})
-      : this.method = RequestTypes.PATCH;
+      : method = RequestTypes.PATCH;
 
   ApiService.delete({required this.endpoint, this.headers})
-      : this.method = RequestTypes.DELETE;
+      : method = RequestTypes.DELETE;
 
   Future request() async {
-    var uri = Uri.parse(this.endpoint);
-    Map<String, String> headers = {'Content-Type': 'application/json'};
+    var uri = Uri.parse(endpoint);
+    final headers = {'Content-Type': 'application/json'};
 
     if (this.headers != null) {
       headers.addAll(this.headers!);
@@ -40,16 +40,16 @@ class ApiService {
           response = await http.get(uri, headers: headers);
           break;
         case RequestTypes.POST:
-          response = await http.post(uri,
-              body: json.encode(this.body), headers: headers);
+          response =
+              await http.post(uri, body: json.encode(body), headers: headers);
           break;
         case RequestTypes.PUT:
-          response = await http.put(uri,
-              body: json.encode(this.body), headers: headers);
+          response =
+              await http.put(uri, body: json.encode(body), headers: headers);
           break;
         case RequestTypes.PATCH:
-          response = await http.patch(uri,
-              body: json.encode(this.body), headers: headers);
+          response =
+              await http.patch(uri, body: json.encode(body), headers: headers);
           break;
         case RequestTypes.DELETE:
           response = await http.delete(uri, headers: headers);

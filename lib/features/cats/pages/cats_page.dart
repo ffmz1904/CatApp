@@ -11,34 +11,35 @@ class CatsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CatCubit, CatState>(builder: (context, catState) {
-      final catCubit = context.read<CatCubit>();
-      loadMoreCats() => catCubit.loadCat((catState as CatLoadedState).page + 1);
+    return BlocConsumer<CatCubit, CatState>(
+      listener: (context, state) {
+        // to do
+      },
+      builder: (context, state) {
+        if (state is CatEmptyState) {
+          context.read<CatCubit>().loadCat();
+          return Center(
+            child: Text('No cats yet!'),
+          );
+        }
 
-      if (catState is CatEmptyState) {
-        catCubit.loadCat();
-        return Center(
-          child: Text('No cats yet!'),
-        );
-      }
+        if (state is CatLoadingState) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
 
-      if (catState is CatLoadingState) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      }
+        if (state is CatLoadedState) {
+          return CatList(
+            cubit: context.read<CatCubit>(),
+            catList: state.catList,
+            loadMore: () => context.read<CatCubit>().loadCat(state.page + 1),
+            limit: CAT_LIMIT,
+          );
+        }
 
-      if (catState is CatLoadedState) {
-        return CatList(
-          cubit: catCubit,
-          catList: catState.catList,
-          loadMore: loadMoreCats,
-          limit: CAT_LIMIT,
-        );
-      }
-
-      return const SizedBox();
-    });
-    // );
+        return const SizedBox();
+      },
+    );
   }
 }
