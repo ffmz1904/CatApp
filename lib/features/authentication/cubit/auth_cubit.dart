@@ -14,7 +14,7 @@ class AuthCubit extends Cubit<AuthState> {
         return emit(AuthUnauthorizedState());
       }
 
-      UserInfo? userInfo = userData.providerData[0]!;
+      final userInfo = userData.providerData[0];
       final user = AuthUserModel.fromFirebaseCredential(userData, userInfo);
 
       emit(AuthAuthorizedState(userData: user));
@@ -34,10 +34,10 @@ class AuthCubit extends Cubit<AuthState> {
       if (credential == null) {
         emit(AuthUnauthorizedState());
       } else {
-        final User? userData = credential?.user;
-        UserInfo? userInfo = userData?.providerData[0];
-
+        final userData = credential?.user;
+        final userInfo = userData?.providerData[0];
         final user = AuthUserModel.fromFirebaseCredential(userData, userInfo);
+
         emit(AuthAuthorizedState(userData: user));
       }
     } catch (e) {
@@ -48,10 +48,5 @@ class AuthCubit extends Cubit<AuthState> {
   Future logout(authProvider) async {
     await authRepository.logout(authProvider);
     emit(AuthUnauthorizedState());
-  }
-
-  Future setCachedData(User? userData, UserInfo? userInfo) async {
-    final user = AuthUserModel.fromFirebaseCredential(userData, userInfo);
-    emit(AuthAuthorizedState(userData: user));
   }
 }
