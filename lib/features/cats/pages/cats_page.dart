@@ -12,9 +12,7 @@ class CatsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CatCubit, CatState>(
-      listener: (context, state) {
-        // to do
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         if (state is CatEmptyState) {
           context.read<CatCubit>().loadCat();
