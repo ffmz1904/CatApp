@@ -8,7 +8,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AuthCubit extends Cubit<AuthState> {
   final AuthenticationRepository authRepository;
 
-  AuthCubit(this.authRepository) : super(AuthUnauthorizedState());
+  AuthCubit(this.authRepository) : super(AuthUnauthorizedState()) {
+    FirebaseAuth.instance.authStateChanges().listen((userData) {
+      if (userData == null) {
+        return emit(AuthUnauthorizedState());
+      }
+
+      UserInfo? userInfo = userData.providerData[0]!;
+      final user = AuthUserModel.fromFirebaseCredential(userData, userInfo);
+
+      emit(AuthAuthorizedState(userData: user));
+    });
+  }
 
   Future login(authProvider) async {
     try {

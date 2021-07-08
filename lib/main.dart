@@ -16,40 +16,33 @@ void main() async {
   await Firebase.initializeApp();
   runApp(
     BlocProvider(
-        create: (context) => AuthCubit(AuthenticationRepository()),
-        child: MyApp()),
+      create: (context) => AuthCubit(AuthenticationRepository()),
+      child: MyApp(),
+    ),
   );
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
-      if (state is AuthAuthorizedState) {
-        return MultiBlocProvider(providers: [
-          BlocProvider(create: (context) => CatCubit(CatFromApiRepository())),
-          BlocProvider(
-              create: (context) => FavoriteCatCubit(CatFromApiRepository())),
-        ], child: HomePage());
-      }
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, state) {
+        if (state is AuthAuthorizedState) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => CatCubit(CatFromApiRepository()),
+              ),
+              BlocProvider(
+                create: (_) => FavoriteCatCubit(CatFromApiRepository()),
+              ),
+            ],
+            child: HomePage(),
+          );
+        }
 
-      return StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
-
-            if (snapshot.hasData) {
-              final user = FirebaseAuth.instance.currentUser;
-              final info = user?.providerData[0];
-              context.read<AuthCubit>().setCachedData(user, info);
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return AuthPage();
-          });
-    });
+        return AuthPage();
+      },
+    );
   }
 }

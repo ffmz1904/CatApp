@@ -12,7 +12,7 @@ class CatsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CatCubit, CatState>(builder: (context, catState) {
-      CatCubit catCubit = context.read<CatCubit>();
+      final catCubit = context.read<CatCubit>();
       loadMoreCats() => catCubit.loadCat((catState as CatLoadedState).page + 1);
 
       if (catState is CatEmptyState) {
@@ -37,7 +37,7 @@ class CatsPage extends StatelessWidget {
         );
       }
 
-      return SizedBox();
+      return const SizedBox();
     });
     // );
   }
