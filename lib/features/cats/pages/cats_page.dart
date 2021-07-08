@@ -1,3 +1,4 @@
+import 'package:cat_app/core/widgets/error_dialog.dart';
 import 'package:cat_app/features/cats/cubit/cat/cat_cubit.dart';
 import 'package:cat_app/features/cats/cubit/cat/cat_state.dart';
 import 'package:cat_app/features/cats/widgets/cat_list.dart';
@@ -14,7 +15,11 @@ class CatsPage extends StatelessWidget {
     return BlocConsumer<CatCubit, CatState>(
       listener: (context, state) {
         if (state is CatErrorState) {
-          //todo
+          showDialog(
+              context: context,
+              builder: (BuildContext dialogContext) {
+                return ErrorDialog(message: state.message);
+              });
         }
       },
       builder: (context, state) {

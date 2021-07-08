@@ -1,12 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cat_app/features/authentication/cubit/auth_cubit.dart';
-import 'package:cat_app/features/authentication/cubit/auth_state.dart';
-import 'package:cat_app/features/cats/cubit/cat/cat_cubit.dart';
-import 'package:cat_app/features/cats/cubit/favorite/favorite_cubit.dart';
 import 'package:cat_app/features/cats/model/cat_model.dart';
 import 'package:cat_app/features/cats/pages/cat_details_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CatListItem extends StatelessWidget {
@@ -15,9 +10,6 @@ class CatListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authCubit = context.read<AuthCubit>();
-    final catCubit = context.read<CatCubit>();
-
     return Card(
       elevation: 4,
       margin: EdgeInsets.symmetric(vertical: 15),
@@ -30,7 +22,6 @@ class CatListItem extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => CatDetailsPage(
-                            cubit: catCubit,
                             cat: cat,
                           )));
             },
@@ -48,24 +39,8 @@ class CatListItem extends StatelessWidget {
           ),
           IconButton(
               onPressed: () {
-                // if (cat.isFavorite) {
-                //   final favoriteId = cat.favoriteId;
-
-                //   if (cubit is CatCubit) {
-                //     catCubit.removeFromFavorites(favoriteId);
-                //   } else {
-                //     favoriteCubit.removeFavorite(favoriteId);
-                //     catCubit.removeFromFavorites(favoriteId, true);
-                //   }
-                // } else {
-                //   final userId =
-                //       (authCubit.state as AuthAuthorizedState).userData.id;
-                //   if (cubit is CatCubit) {
-                //     catCubit.addFavorite(cat.id, userId);
-                //   } else {
-                //     favoriteCubit.addToFavorite(cat.id, userId);
-                //   }
-                // }
+                if (cat.isFavorite) {
+                } else {}
               },
               icon: FaIcon(
                 cat.isFavorite

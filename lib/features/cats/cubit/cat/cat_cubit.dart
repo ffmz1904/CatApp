@@ -79,43 +79,6 @@ class CatCubit extends Cubit<CatState> {
     }
   }
 
-  // Future loadCat([int page = 1]) async {
-  //   if (page == 1) {
-  //     emit(CatLoadingState());
-  //   }
-
-  //   final limit = 5;
-
-  //   try {
-  //     List<CatModel> cats;
-  //     final loadedCats = await catRepository.getCats(limit, page);
-
-  //     if (page != 1) {
-  //       cats = (state as CatLoadedState).catList;
-  //       cats.addAll(loadedCats);
-  //     } else {
-  //       cats = loadedCats;
-  //     }
-
-  //     final setToLocal =
-  //         await catRepository.setCatLocal(catList: cats, type: CatTypes.cats);
-
-  //     if (setToLocal) {
-  //       emit(CatLoadedState(
-  //         catList: cats,
-  //         page: page,
-  //       ));
-  //     }
-  //   } catch (e) {
-  //     final cats = await catRepository.getCatLocal(type: CatTypes.cats);
-  //     if (cats == null) {
-  //       emit(CatEmptyState());
-  //     } else {
-  //       emit(CatLoadedState(catList: cats));
-  //     }
-  //   }
-  // }
-
   // Future addFavorite(catId, userId) async {
   //   try {
   //     final response = await catRepository.addToFavorite(catId, userId);

@@ -7,7 +7,6 @@ import 'features/authentication/cubit/auth_state.dart';
 import 'features/authentication/pages/auth_page.dart';
 import 'features/authentication/repositories/authentication_repository.dart';
 import 'features/cats/cubit/cat/cat_cubit.dart';
-import 'features/cats/cubit/favorite/favorite_cubit.dart';
 import 'features/cats/repositories/cat_from_api_repository.dart';
 
 void main() async {
@@ -24,23 +23,12 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final authCubit = context.read<AuthCubit>();
-
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         if (state is AuthAuthorizedState) {
-          return MultiBlocProvider(
-            providers: [
-              BlocProvider(
-                create: (_) => CatCubit(CatFromApiRepository())
-                  ..loadCats(context.read<AuthCubit>().userId),
-              ),
-              // BlocProvider(
-              //   create: (_) => FavoriteCatCubit(CatFromApiRepository())
-              //     ..loadFavorites(
-              //         (authCubit.state as AuthAuthorizedState).userData.id),
-              // ),
-            ],
+          return BlocProvider(
+            create: (_) => CatCubit(CatFromApiRepository())
+              ..loadCats(context.read<AuthCubit>().userId),
             child: HomePage(),
           );
         }

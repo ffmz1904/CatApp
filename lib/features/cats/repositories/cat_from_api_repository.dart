@@ -1,7 +1,6 @@
 import 'package:cat_app/features/cats/api/cat_api.dart';
 import 'package:cat_app/features/cats/model/cat_model.dart';
 import 'package:cat_app/features/cats/repositories/cat_repository.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CatFromApiRepository extends CatRepository {
   CatApi api = CatApi();
