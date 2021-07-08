@@ -30,7 +30,10 @@ class CatCubit extends Cubit<CatState> {
           await catRepository.setCatLocal(catList: cats, type: CatTypes.cats);
 
       if (setToLocal) {
-        emit(CatLoadedState(catList: cats, page: page));
+        emit(CatLoadedState(
+          catList: cats,
+          page: page,
+        ));
       }
     } catch (e) {
       final cats = await catRepository.getCatLocal(type: CatTypes.cats);
@@ -94,7 +97,8 @@ class CatCubit extends Cubit<CatState> {
                     image: cat.image,
                     fact: cat.fact,
                     isFavorite: false,
-                    favoriteId: null))
+                    favoriteId: null,
+                  ))
             .toList();
         emit(CatLoadedState(
             catList: cats, page: (state as CatLoadedState).page));

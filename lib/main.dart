@@ -24,16 +24,20 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final authCubit = context.read<AuthCubit>();
+
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         if (state is AuthAuthorizedState) {
           return MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (_) => CatCubit(CatFromApiRepository()),
+                create: (_) => CatCubit(CatFromApiRepository())..loadCat(),
               ),
               BlocProvider(
-                create: (_) => FavoriteCatCubit(CatFromApiRepository()),
+                create: (_) => FavoriteCatCubit(CatFromApiRepository())
+                  ..loadFavorites(
+                      (authCubit.state as AuthAuthorizedState).userData.id),
               ),
             ],
             child: HomePage(),

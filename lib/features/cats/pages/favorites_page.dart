@@ -20,8 +20,8 @@ class FavoritesPage extends StatelessWidget {
       final authCubit = context.read<AuthCubit>();
 
       if (favoriteState is FavoriteCatEmptyState) {
-        favoriteCubit.loadFavorites(
-            (authCubit.state as AuthAuthorizedState).userData.id);
+        // favoriteCubit.loadFavorites(
+        //     (authCubit.state as AuthAuthorizedState).userData.id);
         return Center(
           child: Text('No favorite yet!'),
         );
