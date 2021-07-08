@@ -67,14 +67,19 @@ class AuthPage extends StatelessWidget {
     );
   }
 
-  Widget _loginBtn(
-      {required String label, required Widget icon, required void loginFunc}) {
+  Widget _loginBtn({
+    required String label,
+    required Widget icon,
+    required Function loginFunc,
+  }) {
     return Container(
       width: 220,
       height: 40,
       padding: const EdgeInsets.symmetric(horizontal: 50),
       child: ElevatedButton.icon(
-        onPressed: () => loginFunc,
+        onPressed: () {
+          loginFunc();
+        },
         icon: icon,
         label: Text(label),
       ),
