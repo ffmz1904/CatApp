@@ -49,4 +49,6 @@ class AuthCubit extends Cubit<AuthState> {
     await authRepository.logout(authProvider);
     emit(AuthUnauthorizedState());
   }
+
+  String get userId => (state as AuthAuthorizedState).userData.id;
 }

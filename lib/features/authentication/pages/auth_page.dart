@@ -1,3 +1,4 @@
+import 'package:cat_app/core/widgets/error_dialog.dart';
 import 'package:cat_app/features/authentication/cubit/auth_cubit.dart';
 import 'package:cat_app/features/authentication/cubit/auth_state.dart';
 import 'package:cat_app/features/authentication/model/auth_user_model.dart';
@@ -18,16 +19,7 @@ class AuthPage extends StatelessWidget {
             showDialog(
                 context: context,
                 builder: (BuildContext dialogContext) {
-                  return AlertDialog(
-                    title: Text(
-                      'Error',
-                      textAlign: TextAlign.center,
-                    ),
-                    content: Text(
-                      state.message,
-                      textAlign: TextAlign.center,
-                    ),
-                  );
+                  return ErrorDialog(message: state.message);
                 });
           }
         },

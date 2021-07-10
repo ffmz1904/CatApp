@@ -1,8 +1,7 @@
+import 'package:cat_app/core/widgets/error_dialog.dart';
 import 'package:cat_app/features/authentication/cubit/auth_cubit.dart';
-import 'package:cat_app/features/authentication/cubit/auth_state.dart';
-import 'package:cat_app/features/cats/cubit/cat/cat_state.dart';
-import 'package:cat_app/features/cats/cubit/favorite/favorite_cubit.dart';
-import 'package:cat_app/features/cats/cubit/favorite/favorite_state.dart';
+import 'package:cat_app/features/cats/cubit/cat_cubit.dart';
+import 'package:cat_app/features/cats/cubit/cat_state.dart';
 import 'package:cat_app/features/cats/widgets/cat_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,47 +13,35 @@ class FavoritesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FavoriteCatCubit, CatState>(
-        builder: (context, favoriteState) {
-      final favoriteCubit = context.read<FavoriteCatCubit>();
-      final authCubit = context.read<AuthCubit>();
+    return BlocConsumer<CatCubit, CatState>(
+      listener: (context, state) {
+        if (state is CatErrorState) {
+          showDialog(
+              context: context,
+              builder: (BuildContext dialogContext) {
+                return ErrorDialog(message: state.message);
+              });
+        }
+      },
+      builder: (context, state) {
+        if (state is CatLoadingState) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
 
-      if (favoriteState is FavoriteCatEmptyState) {
-        favoriteCubit.loadFavorites(
-            (authCubit.state as AuthAuthorizedState).userData.id);
-        return Center(
-          child: Text('No favorite yet!'),
-        );
-      }
-
-      if (favoriteState is FavoriteCatLoadingState) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-
-      if (favoriteState is FavoriteCatLoadedState) {
-        return Container(
-          child: CatList(
-            cubit: favoriteCubit,
-            catList: favoriteState.catList
-                .where((cat) => cat.favoriteId != null)
-                .toList(),
-            loadMore: () => favoriteCubit.loadFavorites(
-                (authCubit.state as AuthAuthorizedState).userData.id,
-                favoriteState.page + 1),
+        if (state is CatLoadedState) {
+          return CatList(
+            pageType: CatTypes.favorite,
+            catList: state.favoritesList,
+            loadMore: () => context.read<CatCubit>().loadMoreCats(
+                CatTypes.favorite, context.read<AuthCubit>().userId),
             limit: CAT_LIMIT,
-          ),
-        );
-      }
+          );
+        }
 
-      if (favoriteState is FavoriteCatErrorState) {
-        return Center(
-          child: Text(favoriteState.message),
-        );
-      }
-
-      return SizedBox();
-    });
+        return const SizedBox();
+      },
+    );
   }
 }

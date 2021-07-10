@@ -1,5 +1,6 @@
-import 'package:cat_app/features/cats/cubit/cat/cat_cubit.dart';
-import 'package:cat_app/features/cats/cubit/cat/cat_state.dart';
+import 'package:cat_app/core/widgets/error_dialog.dart';
+import 'package:cat_app/features/cats/cubit/cat_cubit.dart';
+import 'package:cat_app/features/cats/cubit/cat_state.dart';
 import 'package:cat_app/features/cats/widgets/cat_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,16 +14,15 @@ class CatsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<CatCubit, CatState>(
       listener: (context, state) {
-        // to do
+        if (state is CatErrorState) {
+          showDialog(
+              context: context,
+              builder: (BuildContext dialogContext) {
+                return ErrorDialog(message: state.message);
+              });
+        }
       },
       builder: (context, state) {
-        if (state is CatEmptyState) {
-          context.read<CatCubit>().loadCat();
-          return Center(
-            child: Text('No cats yet!'),
-          );
-        }
-
         if (state is CatLoadingState) {
           return Center(
             child: CircularProgressIndicator(),
@@ -31,9 +31,10 @@ class CatsPage extends StatelessWidget {
 
         if (state is CatLoadedState) {
           return CatList(
-            cubit: context.read<CatCubit>(),
-            catList: state.catList,
-            loadMore: () => context.read<CatCubit>().loadCat(state.page + 1),
+            pageType: CatTypes.common,
+            catList: state.catsList,
+            loadMore: () =>
+                context.read<CatCubit>().loadMoreCats(CatTypes.common),
             limit: CAT_LIMIT,
           );
         }
