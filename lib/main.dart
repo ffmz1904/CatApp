@@ -6,7 +6,7 @@ import 'features/authentication/cubit/auth_cubit.dart';
 import 'features/authentication/cubit/auth_state.dart';
 import 'features/authentication/pages/auth_page.dart';
 import 'features/authentication/repositories/authentication_repository.dart';
-import 'features/cats/cubit/cat/cat_cubit.dart';
+import 'features/cats/cubit/cat_cubit.dart';
 import 'features/cats/repositories/cat_from_api_repository.dart';
 
 void main() async {

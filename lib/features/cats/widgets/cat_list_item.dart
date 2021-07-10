@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cat_app/features/authentication/cubit/auth_cubit.dart';
-import 'package:cat_app/features/cats/cubit/cat/cat_cubit.dart';
+import 'package:cat_app/features/cats/cubit/cat_cubit.dart';
 import 'package:cat_app/features/cats/model/cat_model.dart';
 import 'package:cat_app/features/cats/pages/cat_details_page.dart';
 import 'package:flutter/material.dart';
