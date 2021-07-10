@@ -14,5 +14,6 @@ abstract class CatRepository {
 
   Future removeFromFavorite(dynamic favoriteId);
 
-  Future<List<CatModel>> getUserFavorites(String userId, int limit, int page);
+  Future<List<CatModel>> getUserFavorites(String userId, int limit,
+      [int page = 0]);
 }

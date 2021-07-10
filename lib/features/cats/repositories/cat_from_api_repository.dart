@@ -64,12 +64,11 @@ class CatFromApiRepository extends CatRepository {
       api.removeCatFromFavorite(favoriteId);
 
   @override
-  Future<List<CatModel>> getUserFavorites(
-      String userId, int limit, int page) async {
+  Future<List<CatModel>> getUserFavorites(String userId, int limit,
+      [int page = 0]) async {
     try {
       List favorites = await api.getFavorites(userId, limit, page);
       List facts = await api.getCatFacts(limit);
-
       var cats = <CatModel>[];
 
       for (var i = 0; i < favorites.length; i++) {

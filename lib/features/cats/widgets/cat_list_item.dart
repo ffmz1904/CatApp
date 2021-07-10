@@ -1,12 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cat_app/features/authentication/cubit/auth_cubit.dart';
+import 'package:cat_app/features/cats/cubit/cat/cat_cubit.dart';
 import 'package:cat_app/features/cats/model/cat_model.dart';
 import 'package:cat_app/features/cats/pages/cat_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CatListItem extends StatelessWidget {
   final CatModel cat;
-  CatListItem({Key? key, required this.cat}) : super(key: key);
+  final CatTypes pageType;
+  CatListItem({
+    Key? key,
+    required this.cat,
+    required this.pageType,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +48,12 @@ class CatListItem extends StatelessWidget {
           IconButton(
               onPressed: () {
                 if (cat.isFavorite) {
-                } else {}
+                  context.read<CatCubit>().removeFromFavorite(cat.favoriteId);
+                } else {
+                  context
+                      .read<CatCubit>()
+                      .addFavorite(cat.id, context.read<AuthCubit>().userId);
+                }
               },
               icon: FaIcon(
                 cat.isFavorite

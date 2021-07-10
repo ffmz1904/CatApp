@@ -31,6 +31,7 @@ class CatsPage extends StatelessWidget {
 
         if (state is CatLoadedState) {
           return CatList(
+            pageType: CatTypes.common,
             catList: state.catsList,
             loadMore: () =>
                 context.read<CatCubit>().loadMoreCats(CatTypes.common),
