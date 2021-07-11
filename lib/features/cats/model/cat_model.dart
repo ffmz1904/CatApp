@@ -32,6 +32,39 @@ class CatModel {
         'favoriteId': cat.favoriteId,
       };
 
+  static Map<String, dynamic> toSqliteMap(CatModel cat) {
+    final columnCatId = 'catId';
+    final columnFact = 'fact';
+    final columnImage = 'image';
+    final columnIsFavorite = 'isFavorite';
+    final columnFavoriteId = 'favoriteId';
+
+    return {
+      columnCatId: cat.id,
+      columnImage: cat.image,
+      columnFact: cat.fact,
+      columnIsFavorite: cat.isFavorite ? 1 : 0,
+      columnFavoriteId:
+          cat.favoriteId != null ? cat.favoriteId.toString() : null,
+    };
+  }
+
+  factory CatModel.fromSqliteMap(Map<dynamic, dynamic> map) {
+    final columnCatId = 'catId';
+    final columnFact = 'fact';
+    final columnImage = 'image';
+    final columnIsFavorite = 'isFavorite';
+    final columnFavoriteId = 'favoriteId';
+
+    return CatModel(
+      id: map[columnCatId],
+      fact: map[columnFact],
+      image: map[columnImage],
+      isFavorite: map[columnIsFavorite] == 1,
+      favoriteId: map[columnFavoriteId],
+    );
+  }
+
   static String encode(List<CatModel> catList) => json.encode(
         catList
             .map<Map<String, dynamic>>((cat) => CatModel.toMap(cat))

@@ -8,9 +8,9 @@ const CAT_LIMIT = 5;
 enum CatTypes { common, favorite }
 
 class CatCubit extends Cubit<CatState> {
-  final CatRepository catRepository;
+  final CatRepository dataRepository;
 
-  CatCubit(this.catRepository) : super(CatEmptyState());
+  CatCubit({required this.dataRepository}) : super(CatEmptyState());
 
   Future<void> loadCats(userId) async {
     if (state is CatEmptyState) {
@@ -21,9 +21,13 @@ class CatCubit extends Cubit<CatState> {
     const defaultFavoritesPage = 0;
 
     try {
-      final loadCats = await catRepository.getCats(CAT_LIMIT, defaultCatsPage);
-      final loadFavorites = await catRepository.getUserFavorites(
+      final loadCats = await dataRepository.getCats(CAT_LIMIT, defaultCatsPage);
+      final loadFavorites = await dataRepository.getUserFavorites(
           userId, CAT_LIMIT, defaultFavoritesPage);
+
+      final localData = loadCats;
+      localData.addAll(loadFavorites);
+      await dataRepository.setCatsToCache(localData);
 
       emit(CatLoadedState(
         catsList: loadCats,
@@ -33,6 +37,21 @@ class CatCubit extends Cubit<CatState> {
       ));
     } catch (e) {
       emit(CatErrorState(message: 'Data fetching error!'));
+
+      var commonCats = <CatModel>[];
+      var favoriteCats = <CatModel>[];
+
+      final localData = await dataRepository.getCatsFromCache();
+
+      if (localData != null) {
+        localData.forEach((cat) => {
+              if (cat.isFavorite)
+                {favoriteCats.add(cat)}
+              else
+                {commonCats.add(cat)}
+            });
+        emit(CatLoadedState(catsList: commonCats, favoritesList: favoriteCats));
+      }
     }
   }
 
@@ -43,7 +62,7 @@ class CatCubit extends Cubit<CatState> {
     try {
       switch (type) {
         case CatTypes.common:
-          loadedCats = await catRepository.getCats(
+          loadedCats = await dataRepository.getCats(
             CAT_LIMIT,
             stateData.catsPage + 1,
           );
@@ -62,7 +81,7 @@ class CatCubit extends Cubit<CatState> {
               ? stateData.favoritesPage + 1
               : stateData.favoritesPage;
 
-          loadedCats = await catRepository.getUserFavorites(
+          loadedCats = await dataRepository.getUserFavorites(
             userId!,
             CAT_LIMIT,
             page,
@@ -102,7 +121,7 @@ class CatCubit extends Cubit<CatState> {
   Future addFavorite(catId, userId) async {
     try {
       final stateData = (state as CatLoadedState);
-      final response = await catRepository.addToFavorite(catId, userId);
+      final response = await dataRepository.addToFavorite(catId, userId);
 
       if (response['message'] == 'SUCCESS') {
         CatModel? newCat;
@@ -143,7 +162,7 @@ class CatCubit extends Cubit<CatState> {
 
   Future removeFromFavorite(favoriteId) async {
     try {
-      final response = await catRepository.removeFromFavorite(favoriteId);
+      final response = await dataRepository.removeFromFavorite(favoriteId);
 
       if (response['message'] == 'SUCCESS') {
         final stateData = (state as CatLoadedState);
