@@ -1,3 +1,4 @@
+import 'package:cat_app/features/cache/cache_provider_types.dart';
 import 'package:cat_app/features/cache/shared_preferences/cat_shared_preferences_provider.dart';
 import 'package:cat_app/features/cache/sqlite/cat_sqlite_provider.dart';
 import 'package:cat_app/home_page.dart';
@@ -31,9 +32,12 @@ class MyApp extends StatelessWidget {
           return BlocProvider(
             create: (_) => CatCubit(
               dataRepository: CatFromApiRepository(
-                cacheProvider: CatSqliteProvider(),
+                cacheProvider:
+                    state.cacheProviderType == CACHE_SHARED_PREFERENCES
+                        ? CatSharedPreferencesProvider()
+                        : CatSqliteProvider(),
               ),
-            )..loadCats(context.read<AuthCubit>().userId),
+            )..loadCats(state.userData.id),
             child: HomePage(),
           );
         }
