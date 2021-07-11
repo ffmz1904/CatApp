@@ -25,9 +25,7 @@ class CatCubit extends Cubit<CatState> {
       final loadFavorites = await dataRepository.getUserFavorites(
           userId, CAT_LIMIT, defaultFavoritesPage);
 
-      final localData = loadCats;
-      localData.addAll(loadFavorites);
-      await dataRepository.setCatsToCache(localData);
+      await _saveCatLocal(loadCats, loadFavorites);
 
       emit(CatLoadedState(
         catsList: loadCats,
@@ -38,19 +36,13 @@ class CatCubit extends Cubit<CatState> {
     } catch (e) {
       emit(CatErrorState(message: 'Data fetching error!'));
 
-      var commonCats = <CatModel>[];
-      var favoriteCats = <CatModel>[];
-
-      final localData = await dataRepository.getCatsFromCache();
+      final localData = await _getLocalCats();
 
       if (localData != null) {
-        localData.forEach((cat) => {
-              if (cat.isFavorite)
-                {favoriteCats.add(cat)}
-              else
-                {commonCats.add(cat)}
-            });
-        emit(CatLoadedState(catsList: commonCats, favoritesList: favoriteCats));
+        emit(CatLoadedState(
+          catsList: localData['common'],
+          favoritesList: localData['favorite'],
+        ));
       }
     }
   }
@@ -69,6 +61,8 @@ class CatCubit extends Cubit<CatState> {
 
           final updatedCats = stateData.catsList;
           updatedCats.addAll(loadedCats);
+
+          await _saveCatLocal(updatedCats, stateData.favoritesList);
 
           return emit(CatLoadedState(
             catsList: updatedCats,
@@ -98,6 +92,8 @@ class CatCubit extends Cubit<CatState> {
           }
 
           if (loadedCats.isNotEmpty) {
+            await _saveCatLocal(stateData.catsList, updatedFavorites);
+
             return emit(CatLoadedState(
               catsList: stateData.catsList,
               favoritesList: updatedFavorites,
@@ -115,6 +111,15 @@ class CatCubit extends Cubit<CatState> {
       }
     } catch (e) {
       emit(CatErrorState(message: 'Data fetching error!'));
+
+      final localData = await _getLocalCats();
+
+      if (localData != null) {
+        emit(CatLoadedState(
+          catsList: localData['common'],
+          favoritesList: localData['favorite'],
+        ));
+      }
     }
   }
 
@@ -156,6 +161,8 @@ class CatCubit extends Cubit<CatState> {
         throw Error();
       }
     } catch (e) {
+      print('add to favo : ${e}');
+
       emit(CatErrorState(message: 'Failed adding to favorite!'));
     }
   }
@@ -197,5 +204,32 @@ class CatCubit extends Cubit<CatState> {
     } catch (e) {
       emit(CatErrorState(message: 'Remove from favorite failed!'));
     }
+  }
+
+  Future _saveCatLocal(
+      List<CatModel> commonCats, List<CatModel> favoriteCats) async {
+    final localData = List<CatModel>.from(commonCats);
+    localData.addAll(favoriteCats);
+    await dataRepository.setCatsToCache(localData);
+  }
+
+  Future _getLocalCats() async {
+    var commonCats = <CatModel>[];
+    var favoriteCats = <CatModel>[];
+
+    final localData = await dataRepository.getCatsFromCache();
+
+    if (localData != null) {
+      localData.forEach((cat) => {
+            if (cat.isFavorite)
+              {favoriteCats.add(cat)}
+            else
+              {commonCats.add(cat)}
+          });
+
+      return {'common': commonCats, 'favorite': favoriteCats};
+    }
+
+    return localData;
   }
 }
