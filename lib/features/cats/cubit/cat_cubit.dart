@@ -123,32 +123,26 @@ class CatCubit extends Cubit<CatState> {
     }
   }
 
-  Future addFavorite(catId, userId) async {
+  Future addFavorite(cat, userId) async {
     try {
       final stateData = (state as CatLoadedState);
-      final response = await dataRepository.addToFavorite(catId, userId);
+      final response = await dataRepository.addToFavorite(cat.id, userId);
 
       if (response['message'] == 'SUCCESS') {
-        CatModel? newCat;
-        final commonCats = stateData.catsList.map((cat) {
-          if (cat.id != catId) {
-            return cat;
-          } else {
-            newCat = CatModel(
-              id: cat.id,
-              image: cat.image,
-              fact: cat.fact,
-              isFavorite: true,
-              favoriteId: response['id'],
-            );
-            return newCat!;
-          }
-        }).toList();
+        final newCat = CatModel(
+          id: cat.id,
+          image: cat.image,
+          fact: cat.fact,
+          isFavorite: true,
+          favoriteId: response['id'],
+        );
+        final commonCats =
+            stateData.catsList.map((c) => c.id != cat.id ? c : newCat).toList();
 
         var favoriteCats = stateData.favoritesList;
 
         if (favoriteCats.length < CAT_LIMIT) {
-          favoriteCats.add(newCat!);
+          favoriteCats.add(newCat);
         }
 
         emit(CatLoadedState(
@@ -229,5 +223,43 @@ class CatCubit extends Cubit<CatState> {
     }
 
     return localData;
+  }
+
+  CatModel getCatData(CatModel cat) {
+    if (state is CatLoadedState) {
+      final stateData = (state as CatLoadedState);
+      CatModel catData;
+
+      final findInFavorite =
+          stateData.favoritesList.where((c) => c.id == cat.id).toList();
+
+      if (findInFavorite.isNotEmpty) {
+        catData = findInFavorite.first;
+        return catData;
+      }
+
+      final findInCommon =
+          stateData.catsList.where((c) => c.id == cat.id).toList();
+
+      if (findInCommon.isNotEmpty) {
+        catData = findInCommon.first;
+        return catData;
+      }
+
+      catData = CatModel(
+        id: cat.id,
+        image: cat.image,
+        fact: cat.fact,
+        isFavorite: false,
+      );
+      return catData;
+    } else {
+      return CatModel(
+        id: cat.id,
+        image: cat.image,
+        fact: cat.fact,
+        isFavorite: false,
+      );
+    }
   }
 }

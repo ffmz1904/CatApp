@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cat_app/features/authentication/cubit/auth_cubit.dart';
 import 'package:cat_app/features/cats/cubit/cat_cubit.dart';
 import 'package:cat_app/features/cats/cubit/cat_state.dart';
 import 'package:cat_app/features/cats/model/cat_model.dart';
@@ -18,8 +19,8 @@ class CatDetailsPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: BlocBuilder<CatCubit, CatState>(
-        builder: (context, catState) {
-          final catDetail = cat;
+        builder: (context, state) {
+          final catDetail = context.read<CatCubit>().getCatData(cat);
 
           return Container(
             padding: EdgeInsets.symmetric(vertical: 10),
@@ -32,12 +33,21 @@ class CatDetailsPage extends StatelessWidget {
                     fit: BoxFit.fill,
                     placeholder: (context, url) =>
                         Center(child: CircularProgressIndicator()),
-                    imageUrl: cat.image,
+                    imageUrl: catDetail.image,
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    if (catDetail.isFavorite) {
+                      context
+                          .read<CatCubit>()
+                          .removeFromFavorite(catDetail.favoriteId);
+                    } else {
+                      context.read<CatCubit>().addFavorite(
+                          catDetail, context.read<AuthCubit>().userId);
+                    }
+                  },
                   icon: FaIcon(
                     catDetail.isFavorite
                         ? FontAwesomeIcons.solidHeart
