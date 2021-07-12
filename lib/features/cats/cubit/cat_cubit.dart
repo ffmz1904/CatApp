@@ -161,8 +161,6 @@ class CatCubit extends Cubit<CatState> {
         throw Error();
       }
     } catch (e) {
-      print('add to favo : ${e}');
-
       emit(CatErrorState(message: 'Failed adding to favorite!'));
     }
   }

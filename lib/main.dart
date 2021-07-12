@@ -29,15 +29,17 @@ class MyApp extends StatelessWidget {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         if (state is AuthAuthorizedState) {
-          return BlocProvider(
-            create: (_) => CatCubit(
-              dataRepository: CatFromApiRepository(
-                cacheProvider:
-                    state.cacheProviderType == CACHE_SHARED_PREFERENCES
-                        ? CatSharedPreferencesProvider()
-                        : CatSqliteProvider(),
-              ),
-            )..loadCats(state.userData.id),
+          return BlocProvider<CatCubit>(
+            create: (_) {
+              return CatCubit(
+                dataRepository: CatFromApiRepository(
+                  cacheProvider:
+                      state.cacheProviderType == CACHE_SHARED_PREFERENCES
+                          ? CatSharedPreferencesProvider()
+                          : CatSqliteProvider(),
+                ),
+              )..loadCats(state.userData.id);
+            },
             child: HomePage(),
           );
         }
