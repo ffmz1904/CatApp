@@ -1,3 +1,6 @@
+import 'package:cat_app/features/cache/cache_provider_types.dart';
+import 'package:cat_app/features/cache/shared_preferences/cat_shared_preferences_provider.dart';
+import 'package:cat_app/features/cache/sqlite/cat_sqlite_provider.dart';
 import 'package:cat_app/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -26,9 +29,17 @@ class MyApp extends StatelessWidget {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         if (state is AuthAuthorizedState) {
-          return BlocProvider(
-            create: (_) => CatCubit(CatFromApiRepository())
-              ..loadCats(context.read<AuthCubit>().userId),
+          return BlocProvider<CatCubit>(
+            create: (_) {
+              return CatCubit(
+                dataRepository: CatFromApiRepository(
+                  cacheProvider:
+                      state.cacheProviderType == CACHE_SHARED_PREFERENCES
+                          ? CatSharedPreferencesProvider()
+                          : CatSqliteProvider(),
+                ),
+              )..loadCats(state.userData.id);
+            },
             child: HomePage(),
           );
         }

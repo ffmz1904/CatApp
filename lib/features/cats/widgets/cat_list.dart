@@ -33,9 +33,16 @@ class _CatListState extends State<CatList> {
           _scrollController.position.maxScrollExtent) {
         //getMoreCats
         widget.loadMore();
+
         setState(() {});
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
   }
 
   @override

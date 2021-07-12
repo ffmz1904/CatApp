@@ -16,4 +16,8 @@ abstract class CatRepository {
 
   Future<List<CatModel>> getUserFavorites(String userId, int limit,
       [int page = 0]);
+
+  Future<void> setCatsToCache(data);
+
+  Future<List<CatModel>?> getCatsFromCache();
 }

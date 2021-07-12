@@ -1,11 +1,13 @@
+import 'package:cat_app/features/cache/cache_provider.dart';
 import 'package:cat_app/features/cats/api/cat_api.dart';
 import 'package:cat_app/features/cats/model/cat_model.dart';
 import 'package:cat_app/features/cats/repositories/cat_repository.dart';
 
 class CatFromApiRepository extends CatRepository {
   CatApi api = CatApi();
-  final String localCatKey = 'CAT_LIST_LOCAL';
-  final String localFavoriteCatKey = 'FAVORITE_CAT_LIST_LOCAL';
+  CacheProvider cacheProvider;
+
+  CatFromApiRepository({required this.cacheProvider});
 
   @override
   Future<List<CatModel>> getCats(int limit, int page) async {
@@ -28,32 +30,6 @@ class CatFromApiRepository extends CatRepository {
       throw Exception(e);
     }
   }
-
-  // @override
-  // Future<bool> setCatLocal(
-  //     {required List<CatModel> catList, required CatTypes type}) async {
-  //   var key = (type == CatTypes.favorite) ? localFavoriteCatKey : localCatKey;
-  //   final local = await SharedPreferences.getInstance();
-  //   final catListString = CatModel.encode(catList);
-
-  //   await local.setString(key, catListString);
-  //   print('set cat in cache');
-  //   return true;
-  // }
-
-  // @override
-  // Future<List<CatModel>?> getCatLocal({required CatTypes type}) async {
-  //   var key = (type == CatTypes.favorite) ? localFavoriteCatKey : localCatKey;
-  //   final local = await SharedPreferences.getInstance();
-  //   final catListString = local.getString(key);
-
-  //   if (catListString == null) {
-  //     return null;
-  //   }
-
-  //   final catList = CatModel.decode(catListString);
-  //   return catList;
-  // }
 
   @override
   Future addToFavorite(String catId, String userId) =>
@@ -84,5 +60,16 @@ class CatFromApiRepository extends CatRepository {
     } catch (e) {
       throw Exception(e);
     }
+  }
+
+  @override
+  Future<void> setCatsToCache(data) async {
+    await cacheProvider.setLocalData(data);
+  }
+
+  @override
+  Future<List<CatModel>?> getCatsFromCache() async {
+    final cats = await cacheProvider.getLocalData();
+    return cats;
   }
 }
