@@ -13,35 +13,21 @@ final String columnIsFavorite = 'isFavorite';
 final String columnFavoriteId = 'favoriteId';
 
 class CatSqliteProvider extends CacheProvider {
-  Database? db;
+  static Database? _db;
 
-  @override
-  Future getLocalData() async {
-    final path = await getPath();
-    await open(path);
-
-    final cats = await getAll();
-    await close();
-    print('get sqlite cache!');
-    return cats;
+  Future<Database> get database async {
+    if (_db != null) {
+      return _db!;
+    }
+    _db = await create();
+    return _db!;
   }
 
-  @override
-  Future<void> setLocalData(data) async {
-    final path = await getPath();
-    await open(path);
-    await incertAll(data);
-    print('Set sqlite cache !');
-  }
-
-  Future<String> getPath() async {
+  Future create() async {
     var databasesPath = await getDatabasesPath();
     final path = databasesPath + '/$DB_NAME';
-    return path;
-  }
 
-  Future open(String path) async {
-    db = await openDatabase(path, version: 1,
+    return await openDatabase(path, version: 1,
         onCreate: (Database db, int version) async {
       await db.execute('''
               create table $catTable ( 
@@ -55,17 +41,32 @@ class CatSqliteProvider extends CacheProvider {
     });
   }
 
+  @override
+  Future getLocalData() async {
+    final cats = await getAll();
+    print('get sqlite cache!');
+    return cats;
+  }
+
+  @override
+  Future<void> setLocalData(data) async {
+    await incertAll(data);
+    print('Set sqlite cache !');
+  }
+
   Future incertAll(List<CatModel> cats) async {
     cats.forEach((cat) async => {await insert(cat)});
   }
 
   Future<CatModel> insert(CatModel cat) async {
-    cat.id = await db!.insert(catTable, CatModel.toSqliteMap(cat));
+    final db = await database;
+    cat.id = await db.insert(catTable, CatModel.toSqliteMap(cat));
     return cat;
   }
 
   Future<List<CatModel>?> getAll() async {
-    List<Map> maps = await db!.query(
+    final db = await database;
+    List<Map> maps = await db.query(
       catTable,
       columns: [
         columnCatId,
@@ -83,5 +84,5 @@ class CatSqliteProvider extends CacheProvider {
     return null;
   }
 
-  Future close() async => db!.close();
+  Future close() async => _db!.close();
 }
