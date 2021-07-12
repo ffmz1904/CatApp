@@ -126,7 +126,8 @@ class CatCubit extends Cubit<CatState> {
   Future addFavorite(cat, userId) async {
     try {
       final stateData = (state as CatLoadedState);
-      final response = await dataRepository.addToFavorite(cat.id, userId);
+      final response =
+          await dataRepository.addToFavorite(cat.id.toString(), userId);
 
       if (response['message'] == 'SUCCESS') {
         final newCat = CatModel(
