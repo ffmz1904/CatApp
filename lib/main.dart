@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
                 dataRepository: CatFromApiRepository(
                   cacheProvider:
                       state.cacheProviderType == CACHE_SHARED_PREFERENCES
-                          ? CatSqliteProvider()
+                          ? CatSharedPreferencesProvider()
                           : CatSqliteProvider(),
                 ),
               )..loadCats(state.userData.id);
