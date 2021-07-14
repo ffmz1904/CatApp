@@ -50,13 +50,5 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthUnauthorizedState());
   }
 
-  Future changeCacheProvider(String type) async {
-    final stateData = (state as AuthAuthorizedState);
-    emit(AuthAuthorizedState(
-      userData: stateData.userData,
-      cacheProviderType: type,
-    ));
-  }
-
   String get userId => (state as AuthAuthorizedState).userData.id;
 }
