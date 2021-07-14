@@ -23,7 +23,7 @@ class CatSqliteProvider extends CacheProvider {
     return _db!;
   }
 
-  Future create() async {
+  Future<Database> create() async {
     var databasesPath = await getDatabasesPath();
     final path = databasesPath + '/$DB_NAME';
 
@@ -42,7 +42,7 @@ class CatSqliteProvider extends CacheProvider {
   }
 
   @override
-  Future getLocalData() async {
+  Future<List<CatModel>?> getLocalData() async {
     final cats = await getAll();
     print('get sqlite cache!');
     return cats;
@@ -54,8 +54,8 @@ class CatSqliteProvider extends CacheProvider {
     print('Set sqlite cache !');
   }
 
-  Future incertAll(List<CatModel> cats) async {
-    cats.forEach((cat) async => {await insert(cat)});
+  Future<void> incertAll(List<CatModel> cats) async {
+    cats.forEach((cat) async => { await insert(cat) });
   }
 
   Future<CatModel> insert(CatModel cat) async {
@@ -84,5 +84,5 @@ class CatSqliteProvider extends CacheProvider {
     return null;
   }
 
-  Future close() async => _db!.close();
+  Future<void> close() async => _db!.close();
 }

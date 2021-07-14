@@ -32,11 +32,11 @@ class CatFromApiRepository extends CatRepository {
   }
 
   @override
-  Future addToFavorite(String catId, String userId) =>
+  Future<Map<String, dynamic>> addToFavorite(String catId, String userId) =>
       api.addCatToFavorite(catId, userId);
 
   @override
-  Future removeFromFavorite(dynamic favoriteId) =>
+  Future<Map<String, dynamic>> removeFromFavorite(dynamic favoriteId) =>
       api.removeCatFromFavorite(favoriteId);
 
   @override
@@ -63,7 +63,7 @@ class CatFromApiRepository extends CatRepository {
   }
 
   @override
-  Future<void> setCatsToCache(data) async {
+  Future<void> setCatsToCache(List<CatModel> data) async {
     await cacheProvider.setLocalData(data);
   }
 

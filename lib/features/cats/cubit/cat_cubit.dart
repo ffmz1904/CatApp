@@ -12,7 +12,7 @@ class CatCubit extends Cubit<CatState> {
 
   CatCubit({required this.dataRepository}) : super(CatEmptyState());
 
-  Future<void> loadCats(userId) async {
+  Future<void> loadCats(String userId) async {
     if (state is CatEmptyState) {
       emit(CatLoadingState());
     }
@@ -41,8 +41,8 @@ class CatCubit extends Cubit<CatState> {
 
       if (localData != null) {
         emit(CatLoadedState(
-          catsList: localData['common'],
-          favoritesList: localData['favorite'],
+          catsList: localData['common']!,
+          favoritesList: localData['favorite']!,
         ));
       }
     }
@@ -117,14 +117,14 @@ class CatCubit extends Cubit<CatState> {
 
       if (localData != null) {
         emit(CatLoadedState(
-          catsList: localData['common'],
-          favoritesList: localData['favorite'],
+          catsList: localData['common']!,
+          favoritesList: localData['favorite']!,
         ));
       }
     }
   }
 
-  Future addFavorite(cat, userId) async {
+  Future<void> addFavorite(CatModel cat, String userId) async {
     try {
       final stateData = (state as CatLoadedState);
       final response =
@@ -161,7 +161,7 @@ class CatCubit extends Cubit<CatState> {
     }
   }
 
-  Future removeFromFavorite(favoriteId) async {
+  Future<void> removeFromFavorite(dynamic favoriteId) async {
     try {
       final response = await dataRepository.removeFromFavorite(favoriteId);
 
@@ -200,14 +200,14 @@ class CatCubit extends Cubit<CatState> {
     }
   }
 
-  Future _saveCatLocal(
+  Future<void> _saveCatLocal(
       List<CatModel> commonCats, List<CatModel> favoriteCats) async {
     final localData = List<CatModel>.from(commonCats);
     localData.addAll(favoriteCats);
     await dataRepository.setCatsToCache(localData);
   }
 
-  Future _getLocalCats() async {
+  Future<Map<String, List<CatModel>>?> _getLocalCats() async {
     var commonCats = <CatModel>[];
     var favoriteCats = <CatModel>[];
 
@@ -224,7 +224,7 @@ class CatCubit extends Cubit<CatState> {
       return {'common': commonCats, 'favorite': favoriteCats};
     }
 
-    return localData;
+    return null;
   }
 
   CatModel getCatData(CatModel cat) {

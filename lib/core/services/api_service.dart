@@ -57,7 +57,7 @@ class ApiService {
       }
       return json.decode(response.body);
     } catch (e) {
-      return throw Exception('No interner connection!');
+      return throw Exception('No internet connection!');
     }
   }
 }

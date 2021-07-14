@@ -60,7 +60,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _apiSettings(apiType, changeTypeFunc) {
+  Widget _apiSettings(String apiType, Function changeTypeFunc) {
     return  Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -86,7 +86,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _cacheSettings(cacheType, changeTypeFunc) {
+  Widget _cacheSettings(String cacheType, Function changeTypeFunc) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -112,7 +112,11 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _switch({text, value, onChangeFunc}) {
+  Widget _switch({
+    required String text,
+    required bool value,
+    required Function onChangeFunc
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

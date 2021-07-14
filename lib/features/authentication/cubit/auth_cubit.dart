@@ -21,7 +21,7 @@ class AuthCubit extends Cubit<AuthState> {
     });
   }
 
-  Future login(authProvider) async {
+  Future<void> login(AuthProviders authProvider) async {
     try {
       final internetConnection = await checkInternetConnection();
 
@@ -45,7 +45,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future logout(authProvider) async {
+  Future logout(AuthProviders authProvider) async {
     await authRepository.logout(authProvider);
     emit(AuthUnauthorizedState());
   }

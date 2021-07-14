@@ -1,7 +1,7 @@
 abstract class CatApiAbstract {
-  Future getCatImages(int limit, int page);
-  Future getCatFacts(int limit);
-  Future addCatToFavorite(String catId, String userId);
-  Future removeCatFromFavorite(dynamic favoriteId);
-  Future getFavorites(String userId, int limit, int page);
+  Future<List<Map<String, dynamic>>> getCatImages(int limit, int page);
+  Future<List<String>> getCatFacts(int limit);
+  Future<Map<String, dynamic>> addCatToFavorite(String catId, String userId);
+  Future<Map<String, dynamic>> removeCatFromFavorite(dynamic favoriteId);
+  Future<List<Map<String, dynamic>>> getFavorites(String userId, int limit, int page);
 }

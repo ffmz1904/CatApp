@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class CatListItem extends StatelessWidget {
   final CatModel cat;
   final CatTypes pageType;
+
   CatListItem({
     Key? key,
     required this.cat,

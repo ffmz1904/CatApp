@@ -7,7 +7,7 @@ class AuthenticationRepository {
   GoogleSignInRepository googleRepository = GoogleSignInRepository();
   FacebookSignInRepository facebookRepository = FacebookSignInRepository();
 
-  Future login(AuthProviders provider) async {
+  Future<UserCredential?> login(AuthProviders provider) async {
     UserCredential? credential;
 
     try {

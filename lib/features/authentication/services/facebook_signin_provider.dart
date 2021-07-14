@@ -6,7 +6,7 @@ class FacebookSignInProvider {
 
   Stream get currentUser => _auth.authStateChanges();
 
-  Future signIn() async {
+  Future<UserCredential?> signIn() async {
     try {
       final fb = FacebookLogin();
 
@@ -36,5 +36,5 @@ class FacebookSignInProvider {
     }
   }
 
-  Future logout() => _auth.signOut();
+  Future<void> logout() => _auth.signOut();
 }

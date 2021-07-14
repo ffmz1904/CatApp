@@ -6,7 +6,7 @@ const LOCAL_CAT_KEY = 'CAT_LOCAL';
 
 class CatSharedPreferencesProvider extends CacheProvider {
   @override
-  Future getLocalData() async {
+  Future<List<CatModel>?> getLocalData() async {
     final instance = await SharedPreferences.getInstance();
     final data = instance.get(LOCAL_CAT_KEY);
 
@@ -19,7 +19,7 @@ class CatSharedPreferencesProvider extends CacheProvider {
   }
 
   @override
-  Future<void> setLocalData(data) async {
+  Future<void> setLocalData(List<CatModel> data) async {
     final instance = await SharedPreferences.getInstance();
     final dataToString = CatModel.encode(data);
     await instance.setString(LOCAL_CAT_KEY, dataToString);
