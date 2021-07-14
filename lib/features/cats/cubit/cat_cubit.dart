@@ -34,6 +34,7 @@ class CatCubit extends Cubit<CatState> {
         favoritesPage: defaultFavoritesPage,
       ));
     } catch (e) {
+      print(e);
       emit(CatErrorState(message: 'Data fetching error!'));
 
       final localData = await _getLocalCats();

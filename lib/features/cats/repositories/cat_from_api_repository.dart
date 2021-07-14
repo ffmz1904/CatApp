@@ -1,10 +1,12 @@
 import 'package:cat_app/features/cache/cache_provider.dart';
 import 'package:cat_app/features/cats/api/cat_api.dart';
+import 'package:cat_app/features/cats/api/cat_firestore_api.dart';
 import 'package:cat_app/features/cats/model/cat_model.dart';
 import 'package:cat_app/features/cats/repositories/cat_repository.dart';
 
 class CatFromApiRepository extends CatRepository {
-  CatApi api = CatApi();
+  // CatApi api = CatApi();
+  CatFirestoreApi api = CatFirestoreApi();
   CacheProvider cacheProvider;
 
   CatFromApiRepository({required this.cacheProvider});
