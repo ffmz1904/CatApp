@@ -2,6 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cat_app/features/authentication/cubit/auth_cubit.dart';
 import 'package:cat_app/features/authentication/cubit/auth_state.dart';
 import 'package:cat_app/features/cache/cache_provider_types.dart';
+import 'package:cat_app/features/cats/api/cat_api_types.dart';
+import 'package:cat_app/features/profile/cubit/settings_cubit.dart';
+import 'package:cat_app/features/profile/cubit/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -39,15 +42,47 @@ class ProfilePage extends StatelessWidget {
           child: Text('Logout'),
         ),
         const SizedBox(height: 25),
-        BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
-          final changeType =
-              (type) => context.read<AuthCubit>().changeCacheProvider(type);
-          return _cacheSettings(
-            (state as AuthAuthorizedState).cacheProviderType,
-            changeType,
+        BlocBuilder<SettingsCubit, SettingsState>(builder: (context, state) {
+          return Column(
+            children: [
+              _apiSettings(
+                state.apiProvider,
+                (type) => context.read<SettingsCubit>().changeApiProvider(type),
+              ),
+              _cacheSettings(
+                state.cacheProvider,
+                (type) => context.read<SettingsCubit>().changeCacheProvider(type),
+              ),
+            ],
           );
         }),
       ],
+    );
+  }
+
+  Widget _apiSettings(apiType, changeTypeFunc) {
+    return  Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'Api type:',
+            textAlign: TextAlign.start,
+            style: TextStyle(fontSize: 20),
+          ),
+          _switch(
+            text: 'Cats Api',
+            value: apiType == CAT_API_CATS_API,
+            onChangeFunc: () => changeTypeFunc(CAT_API_CATS_API),
+          ),
+          _switch(
+            text: 'Firestore',
+            value: apiType == CAT_API_FIRESTORE,
+            onChangeFunc: () => changeTypeFunc(CAT_API_FIRESTORE),
+          ),
+        ],
+      ),
     );
   }
 
@@ -63,7 +98,7 @@ class ProfilePage extends StatelessWidget {
             style: TextStyle(fontSize: 20),
           ),
           _switch(
-            text: 'Shared Preferences:',
+            text: 'Shared Preferences',
             value: cacheType == CACHE_SHARED_PREFERENCES,
             onChangeFunc: () => changeTypeFunc(CACHE_SHARED_PREFERENCES),
           ),

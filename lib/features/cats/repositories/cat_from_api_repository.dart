@@ -1,13 +1,13 @@
 import 'package:cat_app/features/cache/cache_provider.dart';
-import 'package:cat_app/features/cats/api/cat_api.dart';
+import 'package:cat_app/features/cats/api/cat_api_abstract.dart';
 import 'package:cat_app/features/cats/model/cat_model.dart';
 import 'package:cat_app/features/cats/repositories/cat_repository.dart';
 
 class CatFromApiRepository extends CatRepository {
-  CatApi api = CatApi();
+  CatApiAbstract api;
   CacheProvider cacheProvider;
 
-  CatFromApiRepository({required this.cacheProvider});
+  CatFromApiRepository({required this.cacheProvider, required this.api});
 
   @override
   Future<List<CatModel>> getCats(int limit, int page) async {
