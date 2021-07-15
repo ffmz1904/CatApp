@@ -53,8 +53,6 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthUnauthorizedState());
   }
 
-  String get userId => (state as AuthAuthorizedState).userData.id;
-
   @override
   Future<void> close() {
     _userStreamSubscription.cancel();

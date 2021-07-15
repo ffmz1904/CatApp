@@ -53,7 +53,7 @@ class CatListItem extends StatelessWidget {
                 } else {
                   context
                       .read<CatCubit>()
-                      .addFavorite(cat, context.read<AuthCubit>().userId);
+                      .addFavorite(cat, context.read<AuthCubit>().state.userId);
                 }
               },
               icon: FaIcon(

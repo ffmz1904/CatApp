@@ -53,6 +53,7 @@ class CatLoadedState extends CatState {
       fact: cat.fact,
       isFavorite: false,
     );
+
     return catData;
   }
 }

@@ -38,13 +38,14 @@ class CatDetailsPage extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () {
+                    print(context.read<AuthCubit>().state.userId);
                     if (catDetail.isFavorite) {
                       context
                           .read<CatCubit>()
                           .removeFromFavorite(catDetail.favoriteId);
                     } else {
                       context.read<CatCubit>().addFavorite(
-                          catDetail, context.read<AuthCubit>().userId);
+                          catDetail, context.read<AuthCubit>().state.userId);
                     }
                   },
                   icon: FaIcon(

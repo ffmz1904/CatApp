@@ -92,7 +92,6 @@ class ApiService {
           break;
       }
 
-
       return json.decode(response.body);
     } catch (e) {
       return throw Exception('No internet connection!');

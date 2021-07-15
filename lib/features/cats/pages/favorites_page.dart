@@ -35,7 +35,7 @@ class FavoritesPage extends StatelessWidget {
             pageType: CatTypes.favorite,
             catList: state.favoritesList,
             loadMore: () => context.read<CatCubit>().loadMoreCats(
-                CatTypes.favorite, context.read<AuthCubit>().userId),
+                CatTypes.favorite, context.read<AuthCubit>().state.userId),
             limit: CAT_LIMIT,
           );
         }
