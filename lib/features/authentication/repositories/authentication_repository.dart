@@ -4,8 +4,8 @@ import 'package:cat_app/features/authentication/services/google_signin_repositor
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthenticationRepository {
-  GoogleSignInRepository googleRepository = GoogleSignInRepository();
-  FacebookSignInRepository facebookRepository = FacebookSignInRepository();
+  GoogleSignInRepository _googleRepository = GoogleSignInRepository();
+  FacebookSignInRepository _facebookRepository = FacebookSignInRepository();
 
   Future<UserCredential?> login(AuthProviders provider) async {
     UserCredential? credential;
@@ -13,10 +13,10 @@ class AuthenticationRepository {
     try {
       switch (provider) {
         case AuthProviders.google_auth:
-          credential = await googleRepository.login();
+          credential = await _googleRepository.login();
           break;
         case AuthProviders.facebook_auth:
-          credential = await facebookRepository.login();
+          credential = await _facebookRepository.login();
           break;
       }
 
@@ -29,10 +29,10 @@ class AuthenticationRepository {
   Future<void> logout(AuthProviders provider) async {
     switch (provider) {
       case AuthProviders.google_auth:
-        await googleRepository.logout();
+        await _googleRepository.logout();
         break;
       case AuthProviders.facebook_auth:
-        await facebookRepository.logout();
+        await _facebookRepository.logout();
         break;
     }
   }

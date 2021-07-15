@@ -31,7 +31,7 @@ class CatSqliteProvider extends CacheProvider {
   }
 
   Future<Database> create() async {
-    var databasesPath = await getDatabasesPath();
+    final databasesPath = await getDatabasesPath();
     final path = databasesPath + '/$DB_NAME';
 
     return await openDatabase(path, version: 1,
@@ -56,7 +56,7 @@ class CatSqliteProvider extends CacheProvider {
   }
 
   @override
-  Future<void> setLocalData(data) async {
+  Future<void> setLocalData(List<CatModel> data) async {
     await incertAll(data);
     print('Set sqlite cache !');
   }

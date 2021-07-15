@@ -16,11 +16,11 @@ class CatEmptyState extends CatState {}
 class CatLoadingState extends CatState {}
 
 class CatLoadedState extends CatState {
-  List<CatModel> catsList;
-  int catsPage;
+  final List<CatModel> catsList;
+  final int catsPage;
 
-  List<CatModel> favoritesList;
-  int favoritesPage;
+  final List<CatModel> favoritesList;
+  final int favoritesPage;
 
   CatLoadedState({
     required this.catsList,
@@ -30,7 +30,7 @@ class CatLoadedState extends CatState {
   });
 
   @override
-  CatModel getCatData(CatModel cat) {
+  CatModel getCatData(final CatModel cat) {
     CatModel catData;
 
     final findInFavorite = favoritesList.where((c) => c.id == cat.id).toList();
@@ -59,7 +59,7 @@ class CatLoadedState extends CatState {
 }
 
 class CatErrorState extends CatState {
-  String message;
+  final String message;
 
   CatErrorState({this.message = 'Error!'});
 }

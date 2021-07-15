@@ -17,10 +17,11 @@ class AuthPage extends StatelessWidget {
         listener: (context, state) {
           if (state is AuthErrorState) {
             showDialog(
-                context: context,
-                builder: (BuildContext dialogContext) {
-                  return ErrorDialog(message: state.message);
-                });
+              context: context,
+              builder: (BuildContext dialogContext) {
+                return ErrorDialog(message: state.message);
+              },
+            );
           }
         },
         child: Scaffold(
@@ -36,7 +37,7 @@ class AuthPage extends StatelessWidget {
               SizedBox(
                 height: 320,
               ),
-              _loginBtn(
+              _LoginBtn(
                 label: 'Sign in with Google',
                 icon: FaIcon(FontAwesomeIcons.google, color: Colors.white),
                 loginFunc: () =>
@@ -45,7 +46,7 @@ class AuthPage extends StatelessWidget {
               SizedBox(
                 height: 25,
               ),
-              _loginBtn(
+              _LoginBtn(
                 label: 'Sign in with Facebook',
                 icon: FaIcon(FontAwesomeIcons.facebook, color: Colors.white),
                 loginFunc: () => context
@@ -58,12 +59,21 @@ class AuthPage extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _loginBtn({
-    required String label,
-    required Widget icon,
-    required Function loginFunc,
-  }) {
+class _LoginBtn extends StatelessWidget {
+  final String label;
+  final Widget icon;
+  final Function loginFunc;
+
+  _LoginBtn({
+    required this.label,
+    required this.icon,
+    required this.loginFunc,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       width: 220,
       height: 40,

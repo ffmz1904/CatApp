@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class GoogleSignInProvider extends ChangeNotifier {
-  final googleSignIn = GoogleSignIn();
+  final _googleSignIn = GoogleSignIn();
 
   GoogleSignInAccount? _user;
 
@@ -11,7 +11,7 @@ class GoogleSignInProvider extends ChangeNotifier {
 
   Future<UserCredential?> googleLogin() async {
     try {
-      final googleUser = await googleSignIn.signIn();
+      final googleUser = await _googleSignIn.signIn();
 
       if (googleUser == null) return null;
 
@@ -31,7 +31,7 @@ class GoogleSignInProvider extends ChangeNotifier {
   }
 
   Future<void> googleLogout() async {
-    await googleSignIn.disconnect();
+    await _googleSignIn.disconnect();
     await FirebaseAuth.instance.signOut();
   }
 }

@@ -2,10 +2,10 @@ import 'package:cat_app/features/cats/api/cat_api_abstract.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 
 class CatFirestoreApi extends CatApiAbstract {
-  FirebaseFunctions functions = FirebaseFunctions.instance;
+  final FirebaseFunctions functions = FirebaseFunctions.instance;
   /// get cat images with pagination (page and limit)
   @override
-  Future<List<Map<String, dynamic>>> getCatImages(int limit, int page) async {
+  Future<List<Map<String, dynamic>>> getCatImages(final int limit, final int page) async {
     var callable = functions.httpsCallable('getImages');
     final results = await callable.call({
       'page': page,
@@ -22,7 +22,7 @@ class CatFirestoreApi extends CatApiAbstract {
 
   /// get random count (limit) of cat facts
   @override
-  Future<List<String>> getCatFacts(int limit) async {
+  Future<List<String>> getCatFacts(final int limit) async {
     var callable = functions.httpsCallable('getFacts');
     final results = await callable.call({ 'limit': limit });
     final catFacts = (results.data as List).map((fact) => fact['text'].toString()).toList();
@@ -32,7 +32,7 @@ class CatFirestoreApi extends CatApiAbstract {
   ///save cat image to favorite
   /// catId: id from CatModel
   @override
-  Future<Map<String, dynamic>> addCatToFavorite(String catId, String userId) async {
+  Future<Map<String, dynamic>> addCatToFavorite(final String catId, final String userId) async {
     var callable = functions.httpsCallable('addToFavorites');
     final results = await callable.call({
       'catId': catId,
@@ -45,7 +45,7 @@ class CatFirestoreApi extends CatApiAbstract {
   ///remove cat image from favorite
   /// favoriteId: id which we get when we add cat to favorites
   @override
-  Future<Map<String, dynamic>> removeCatFromFavorite(dynamic favoriteId) async {
+  Future<Map<String, dynamic>> removeCatFromFavorite(final dynamic favoriteId) async {
     var callable = functions.httpsCallable('removeFavorite');
     final results = await callable.call({ 'favoriteId': favoriteId });
 
@@ -54,7 +54,7 @@ class CatFirestoreApi extends CatApiAbstract {
 
   /// get favorites by user id with pagination (limit and page params)
   @override
-  Future<List<Map<String, dynamic>>> getFavorites(String userId, int limit, int page) async {
+  Future<List<Map<String, dynamic>>> getFavorites(final String userId, final int limit, final int page) async {
     var callable = functions.httpsCallable('getUserFavorites');
     final results = await callable.call({
       'userId': userId,

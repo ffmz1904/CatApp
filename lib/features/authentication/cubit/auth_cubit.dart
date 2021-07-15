@@ -12,7 +12,7 @@ class AuthCubit extends Cubit<AuthState> {
   late StreamSubscription<User?> _userStreamSubscription;
 
   AuthCubit(this._authRepository) : super(AuthUnauthorizedState()) {
-    _userStreamSubscription = FirebaseAuth.instance.authStateChanges().listen((userData) {
+    _userStreamSubscription = FirebaseAuth.instance.authStateChanges().listen((User? userData) {
       if (userData == null) {
         return emit(AuthUnauthorizedState());
       }

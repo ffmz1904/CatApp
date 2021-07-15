@@ -15,7 +15,7 @@ class CatModel {
     this.favoriteId,
   });
 
-  factory CatModel.fromJson(Map<String, dynamic> jsonData) {
+  factory CatModel.fromJson(final Map<String, dynamic> jsonData) {
     return CatModel(
         id: jsonData['id'],
         image: jsonData['image'],
@@ -24,7 +24,7 @@ class CatModel {
         favoriteId: jsonData['favoriteId']);
   }
 
-  static Map<String, dynamic> toMap(CatModel cat) => {
+  static Map<String, dynamic> toMap(final CatModel cat) => {
         'id': cat.id,
         'image': cat.image,
         'fact': cat.fact,
@@ -32,7 +32,7 @@ class CatModel {
         'favoriteId': cat.favoriteId,
       };
 
-  static Map<String, dynamic> toSqliteMap(CatModel cat) {
+  static Map<String, dynamic> toSqliteMap(final CatModel cat) {
     final columnCatId = 'catId';
     final columnFact = 'fact';
     final columnImage = 'image';
@@ -49,7 +49,7 @@ class CatModel {
     };
   }
 
-  factory CatModel.fromSqliteMap(Map<dynamic, dynamic> map) {
+  factory CatModel.fromSqliteMap(final Map<dynamic, dynamic> map) {
     final columnCatId = 'catId';
     final columnFact = 'fact';
     final columnImage = 'image';
@@ -65,13 +65,13 @@ class CatModel {
     );
   }
 
-  static String encode(List<CatModel> catList) => json.encode(
+  static String encode(final List<CatModel> catList) => json.encode(
         catList
             .map<Map<String, dynamic>>((cat) => CatModel.toMap(cat))
             .toList(),
       );
 
-  static List<CatModel> decode(String catListString) =>
+  static List<CatModel> decode(final String catListString) =>
       (json.decode(catListString) as List<dynamic>)
           .map<CatModel>((item) => CatModel.fromJson(item))
           .toList();

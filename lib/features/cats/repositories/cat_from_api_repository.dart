@@ -1,5 +1,4 @@
 import 'package:cat_app/features/cache/cache_provider.dart';
-import 'package:cat_app/features/cache/sqlite/cat_sqlite_provider.dart';
 import 'package:cat_app/features/cats/api/cat_api_abstract.dart';
 import 'package:cat_app/features/cats/model/cat_model.dart';
 import 'package:cat_app/features/cats/repositories/cat_repository.dart';
@@ -11,7 +10,7 @@ class CatFromApiRepository extends CatRepository {
   CatFromApiRepository({required this.cacheProvider, required this.api});
 
   @override
-  Future<List<CatModel>> getCats(int limit, int page) async {
+  Future<List<CatModel>> getCats(final int limit, final int page) async {
     try {
     final images = await api.getCatImages(limit, page);
       final facts = await api.getCatFacts(limit);
@@ -33,15 +32,15 @@ class CatFromApiRepository extends CatRepository {
   }
 
   @override
-  Future<Map<String, dynamic>> addToFavorite(String catId, String userId) =>
+  Future<Map<String, dynamic>> addToFavorite(final String catId, final String userId) =>
       api.addCatToFavorite(catId, userId);
 
   @override
-  Future<Map<String, dynamic>> removeFromFavorite(dynamic favoriteId) =>
+  Future<Map<String, dynamic>> removeFromFavorite(final dynamic favoriteId) =>
       api.removeCatFromFavorite(favoriteId);
 
   @override
-  Future<List<CatModel>> getUserFavorites(String userId, int limit,
+  Future<List<CatModel>> getUserFavorites(final String userId, final int limit,
       [int page = 0]) async {
     try {
       List favorites = await api.getFavorites(userId, limit, page);
@@ -64,7 +63,7 @@ class CatFromApiRepository extends CatRepository {
   }
 
   @override
-  Future<void> setCatsToCache(List<CatModel> data) async {
+  Future<void> setCatsToCache(final List<CatModel> data) async {
     await cacheProvider.setLocalData(data);
   }
 

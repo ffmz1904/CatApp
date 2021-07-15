@@ -1,16 +1,16 @@
 import 'package:cat_app/features/cats/model/cat_model.dart';
 
 abstract class CatRepository {
-  Future<List<CatModel>> getCats(int limit, int page);
+  Future<List<CatModel>> getCats(final int limit, final int page);
 
-  Future<Map<String, dynamic>> addToFavorite(String catId, String userId);
+  Future<Map<String, dynamic>> addToFavorite(final String catId, final String userId);
 
-  Future<Map<String, dynamic>> removeFromFavorite(dynamic favoriteId);
+  Future<Map<String, dynamic>> removeFromFavorite(final dynamic favoriteId);
 
-  Future<List<CatModel>> getUserFavorites(String userId, int limit,
-      [int page = 0]);
+  Future<List<CatModel>> getUserFavorites(final String userId, final int limit,
+      [final int page = 0]);
 
-  Future<void> setCatsToCache(List<CatModel> data);
+  Future<void> setCatsToCache(final List<CatModel> data);
 
   Future<List<CatModel>?> getCatsFromCache();
 

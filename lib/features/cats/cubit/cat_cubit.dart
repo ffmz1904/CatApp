@@ -1,4 +1,3 @@
-import 'package:cat_app/features/cache/sqlite/cat_sqlite_provider.dart';
 import 'package:cat_app/features/cats/cubit/cat_state.dart';
 import 'package:cat_app/features/cats/model/cat_model.dart';
 import 'package:cat_app/features/cats/repositories/cat_repository.dart';
@@ -13,7 +12,7 @@ class CatCubit extends Cubit<CatState> {
 
   CatCubit({required this.dataRepository}) : super(CatEmptyState());
 
-  Future<void> loadCats(String userId) async {
+  Future<void> loadCats(final String userId) async {
     if (state is CatEmptyState) {
       emit(CatLoadingState());
     }
@@ -51,7 +50,7 @@ class CatCubit extends Cubit<CatState> {
     }
   }
 
-  Future<void> loadMoreCats(CatTypes type, [String? userId]) async {
+  Future<void> loadMoreCats(final CatTypes type, [final String? userId]) async {
     final stateData = (state as CatLoadedState);
     var loadedCats = <CatModel>[];
 
@@ -127,7 +126,7 @@ class CatCubit extends Cubit<CatState> {
     }
   }
 
-  Future<void> addFavorite(CatModel cat, String userId) async {
+  Future<void> addFavorite(final CatModel cat, final String userId) async {
     try {
       final stateData = (state as CatLoadedState);
       final response =
@@ -164,7 +163,7 @@ class CatCubit extends Cubit<CatState> {
     }
   }
 
-  Future<void> removeFromFavorite(dynamic favoriteId) async {
+  Future<void> removeFromFavorite(final dynamic favoriteId) async {
     try {
       final response = await dataRepository.removeFromFavorite(favoriteId);
 
@@ -204,7 +203,7 @@ class CatCubit extends Cubit<CatState> {
   }
 
   Future<void> _saveCatLocal(
-      List<CatModel> commonCats, List<CatModel> favoriteCats) async {
+      final List<CatModel> commonCats, final List<CatModel> favoriteCats) async {
     final localData = List<CatModel>.from(commonCats);
     localData.addAll(favoriteCats);
     await dataRepository.setCatsToCache(localData);

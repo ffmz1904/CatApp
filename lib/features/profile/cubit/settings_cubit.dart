@@ -4,13 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SettingsCubit extends Cubit<SettingsState> {
   SettingsCubit() : super(SettingsState());
 
-  Future<void> changeCacheProvider(String type) async {
+  Future<void> changeCacheProvider(final String type) async {
     emit(state.copyWith(
       cacheProvider: type,
     ));
   }
 
-  Future<void> changeApiProvider(String type) async {
+  Future<void> changeApiProvider(final String type) async {
     emit(state.copyWith(
       apiProvider: type,
     ));
