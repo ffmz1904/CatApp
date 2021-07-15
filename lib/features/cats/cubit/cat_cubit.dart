@@ -17,6 +17,7 @@ class CatCubit extends Cubit<CatState> {
       emit(CatLoadingState());
     }
 
+
     const defaultCatsPage = 1;
     const defaultFavoritesPage = 0;
 
@@ -33,7 +34,8 @@ class CatCubit extends Cubit<CatState> {
         catsPage: defaultCatsPage,
         favoritesPage: defaultFavoritesPage,
       ));
-    } catch (e) {
+    } catch (e, stack) {
+      print(stack);
       print(e);
       emit(CatErrorState(message: 'Data fetching error!'));
 
@@ -214,54 +216,17 @@ class CatCubit extends Cubit<CatState> {
     final localData = await dataRepository.getCatsFromCache();
 
     if (localData != null) {
-      localData.forEach((cat) => {
-            if (cat.isFavorite)
-              {favoriteCats.add(cat)}
-            else
-              {commonCats.add(cat)}
+      localData.forEach((cat) {
+            if (cat.isFavorite) {
+              favoriteCats.add(cat);
+            } else {
+              commonCats.add(cat);
+            }
           });
 
       return {'common': commonCats, 'favorite': favoriteCats};
     }
 
     return null;
-  }
-
-  CatModel getCatData(CatModel cat) {
-    if (state is CatLoadedState) {
-      final stateData = (state as CatLoadedState);
-      CatModel catData;
-
-      final findInFavorite =
-          stateData.favoritesList.where((c) => c.id == cat.id).toList();
-
-      if (findInFavorite.isNotEmpty) {
-        catData = findInFavorite.first;
-        return catData;
-      }
-
-      final findInCommon =
-          stateData.catsList.where((c) => c.id == cat.id).toList();
-
-      if (findInCommon.isNotEmpty) {
-        catData = findInCommon.first;
-        return catData;
-      }
-
-      catData = CatModel(
-        id: cat.id,
-        image: cat.image,
-        fact: cat.fact,
-        isFavorite: false,
-      );
-      return catData;
-    } else {
-      return CatModel(
-        id: cat.id,
-        image: cat.image,
-        fact: cat.fact,
-        isFavorite: false,
-      );
-    }
   }
 }

@@ -20,14 +20,15 @@ import 'features/cats/repositories/cat_from_api_repository.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(
-    MultiBlocProvider(providers: [
+  runApp(MultiBlocProvider(
+    providers: [
       BlocProvider(
         create: (context) => AuthCubit(AuthenticationRepository()),
       ),
       BlocProvider(create: (context) => SettingsCubit()),
-    ], child: MyApp())
-  );
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -36,12 +37,14 @@ class MyApp extends StatelessWidget {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         if (state is AuthAuthorizedState) {
-          return BlocBuilder<SettingsCubit, SettingsState>(builder: (context, settingsState) {
+          return BlocBuilder<SettingsCubit, SettingsState>(
+              builder: (context, settingsState) {
             final catCubit = CatCubit(
               dataRepository: CatFromApiRepository(
-                cacheProvider: settingsState.cacheProvider == CACHE_SHARED_PREFERENCES
-                    ? CatSharedPreferencesProvider()
-                    : CatSqliteProvider(),
+                cacheProvider:
+                    settingsState.cacheProvider == CACHE_SHARED_PREFERENCES
+                        ? CatSharedPreferencesProvider()
+                        : CatSqliteProvider(),
                 api: settingsState.apiProvider == CAT_API_CATS_API
                     ? CatApi()
                     : CatFirestoreApi(),

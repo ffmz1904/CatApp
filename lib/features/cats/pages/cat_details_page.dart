@@ -20,8 +20,7 @@ class CatDetailsPage extends StatelessWidget {
       ),
       body: BlocBuilder<CatCubit, CatState>(
         builder: (context, state) {
-          final catDetail = context.read<CatCubit>().getCatData(cat);
-
+          final catDetail = state.getCatData(cat);
           return Container(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: Column(

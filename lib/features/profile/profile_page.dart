@@ -131,3 +131,35 @@ class ProfilePage extends StatelessWidget {
     );
   }
 }
+
+// class SwitchData {
+//   final String title;
+//   final String type;
+// }
+//
+// class _SettingsSection extends StatelessWidget {
+//   final List<SwitchData> switchData;
+//   @override
+//   Widget build(BuildContext context) {
+//     return  Padding(
+//       padding: const EdgeInsets.symmetric(horizontal: 20),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.stretch,
+//         children: [
+//           Text(
+//             'Cache type:',
+//             textAlign: TextAlign.start,
+//             style: TextStyle(fontSize: 20),
+//           ),
+//           ...switchData.map((e) => _Switch()).toList(),
+//         ],
+//       ),
+//     )
+//   }
+//
+// }
+//
+//
+// class _Switch extends StatelessWidget {
+//
+// }

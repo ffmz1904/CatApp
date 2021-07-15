@@ -4,18 +4,18 @@ import 'package:cat_app/features/cats/model/cat_model.dart';
 import 'package:cat_app/features/cats/repositories/cat_repository.dart';
 
 class CatFromApiRepository extends CatRepository {
-  CatApiAbstract api;
-  CacheProvider cacheProvider;
+  final CatApiAbstract api;
+  final CacheProvider cacheProvider;
 
   CatFromApiRepository({required this.cacheProvider, required this.api});
 
   @override
   Future<List<CatModel>> getCats(int limit, int page) async {
     try {
-      List images = await api.getCatImages(limit, page);
-      List facts = await api.getCatFacts(limit);
+    final images = await api.getCatImages(limit, page);
+      final facts = await api.getCatFacts(limit);
 
-      var cats = <CatModel>[];
+      final cats = <CatModel>[];
 
       for (var i = 0; i < images.length; i++) {
         cats.add(CatModel(

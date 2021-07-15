@@ -5,15 +5,13 @@ class SettingsCubit extends Cubit<SettingsState> {
   SettingsCubit() : super(SettingsState());
 
   Future<void> changeCacheProvider(String type) async {
-    emit(SettingsState(
+    emit(state.copyWith(
       cacheProvider: type,
-      apiProvider: state.apiProvider,
     ));
   }
 
   Future<void> changeApiProvider(String type) async {
-    emit(SettingsState(
-      cacheProvider: state.cacheProvider,
+    emit(state.copyWith(
       apiProvider: type,
     ));
   }

@@ -12,8 +12,8 @@ class CatApi extends CatApiAbstract {
                 'https://api.thecatapi.com/v1/images/search?limit=$limit&page=$page&order=rand')
         .request();
 
-    final catImages = response
-        .map((cat) => {
+    final catImages = (response as List)
+        .map((cat) => <String, dynamic>{
               'id': cat['id'],
               'img': cat['url'],
             })
@@ -29,7 +29,7 @@ class CatApi extends CatApiAbstract {
             endpoint: 'https://catfact.ninja/facts?limit=$limit')
         .request();
 
-    final catFacts = response['data'].map((fact) => fact['fact']).toList();
+    final catFacts = ((response as Map)['data'] as List).map((fact) => fact['fact'].toString()).toList();
     return catFacts;
   }
 
@@ -71,8 +71,8 @@ class CatApi extends CatApiAbstract {
       headers: {'x-api-key': CAT_API_KEY},
     ).request();
 
-    final favoritesData = response
-        .map((favorite) => {
+    final favoritesData = (response as List)
+        .map((favorite) => <String, dynamic>{
               'id': favorite['image']['id'],
               'img': favorite['image']['url'],
               'favoriteId': favorite['id'],

@@ -12,7 +12,7 @@ class CatFirestoreApi extends CatApiAbstract {
       'limit': limit,
     });
 
-    final catImages = results.data.map((cat) => {
+    final catImages = (results.data as List).map((cat) => {
       'id': cat['id'],
       'img': cat['image'],
     }).toList();
@@ -25,7 +25,7 @@ class CatFirestoreApi extends CatApiAbstract {
   Future<List<String>> getCatFacts(int limit) async {
     var callable = functions.httpsCallable('getFacts');
     final results = await callable.call({ 'limit': limit });
-    final catFacts = results.data.map((fact) => fact['text']).toList();
+    final catFacts = (results.data as List).map((fact) => fact['text'].toString()).toList();
     return catFacts;
   }
 
@@ -62,7 +62,7 @@ class CatFirestoreApi extends CatApiAbstract {
       'page': page,
     });
 
-    final favoritesData = results.data.map((favorite) => {
+    final favoritesData = (results.data as List).map((favorite) => {
       'id': favorite['catId'],
       'img': favorite['image'],
       'favoriteId': favorite['favoriteId'],
