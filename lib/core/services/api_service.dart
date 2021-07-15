@@ -14,13 +14,12 @@ class ApiService {
 
   ApiService._();
 
-  Future<dynamic> get({
-    required String endpoint,
-    Map<String, String> headers = const {}
-  }) async {
+  // send Get request
+  Future<dynamic> get({ required String endpoint, Map<String, String> headers = const {}}) async {
     return request(method: RequestTypes.GET, endpoint: endpoint, extraHeaders: headers);
   }
 
+  // send Post request
   Future<dynamic> post({
     required String endpoint,
     required Map<String, dynamic> body,
@@ -29,6 +28,7 @@ class ApiService {
     return request(method: RequestTypes.POST, endpoint: endpoint, body: body, extraHeaders: headers);
   }
 
+  // send Put request
   Future<dynamic> put({
     required String endpoint,
     required Map<String, dynamic> body,
@@ -37,6 +37,7 @@ class ApiService {
     return request(method: RequestTypes.PUT, endpoint: endpoint, body: body, extraHeaders: headers);
   }
 
+  // send Patch request
   Future<dynamic> patch({
     required String endpoint,
     required Map<String, dynamic> body,
@@ -45,6 +46,7 @@ class ApiService {
     return request(method: RequestTypes.PATCH, endpoint: endpoint, body: body, extraHeaders: headers);
   }
 
+  // send Delete request
   Future<dynamic> delete({
     required String endpoint,
     Map<String, String> headers = const {}
@@ -52,6 +54,7 @@ class ApiService {
     return request(method: RequestTypes.DELETE, endpoint: endpoint, extraHeaders: headers);
   }
 
+  // send Request using passed type
   Future<dynamic> request({
     required RequestTypes method,
     required String endpoint,
@@ -88,6 +91,8 @@ class ApiService {
           response = await http.delete(uri, headers: headers);
           break;
       }
+
+
       return json.decode(response.body);
     } catch (e) {
       return throw Exception('No internet connection!');
