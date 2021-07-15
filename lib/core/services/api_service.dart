@@ -1,38 +1,71 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 enum RequestTypes { GET, POST, PUT, PATCH, DELETE }
 
 class ApiService {
-  String endpoint;
-  Map<String, dynamic> body = {};
-  Map<String, String>? headers;
-  RequestTypes method = RequestTypes.GET;
+  static final ApiService _apiService = ApiService._();
 
-  ApiService.get({required this.endpoint, this.headers});
+  factory ApiService() {
+    return _apiService;
+  }
 
-  ApiService.post({required this.endpoint, required this.body, this.headers})
-      : method = RequestTypes.POST;
+  ApiService._();
 
-  ApiService.put({required this.endpoint, required this.body, this.headers})
-      : method = RequestTypes.PUT;
+  Future<dynamic> get({
+    required String endpoint,
+    Map<String, String> headers = const {}
+  }) async {
+    return request(method: RequestTypes.GET, endpoint: endpoint, extraHeaders: headers);
+  }
 
-  ApiService.patch({required this.endpoint, required this.body, this.headers})
-      : method = RequestTypes.PATCH;
+  Future<dynamic> post({
+    required String endpoint,
+    required Map<String, dynamic> body,
+    Map<String, String> headers = const {}
+  }) async {
+    return request(method: RequestTypes.POST, endpoint: endpoint, body: body, extraHeaders: headers);
+  }
 
-  ApiService.delete({required this.endpoint, this.headers})
-      : method = RequestTypes.DELETE;
+  Future<dynamic> put({
+    required String endpoint,
+    required Map<String, dynamic> body,
+    Map<String, String> headers = const {}
+  }) async {
+    return request(method: RequestTypes.PUT, endpoint: endpoint, body: body, extraHeaders: headers);
+  }
 
-  Future request() async {
-    var uri = Uri.parse(endpoint);
-    final headers = {'Content-Type': 'application/json'};
+  Future<dynamic> patch({
+    required String endpoint,
+    required Map<String, dynamic> body,
+    Map<String, String> headers = const {}
+  }) async {
+    return request(method: RequestTypes.PATCH, endpoint: endpoint, body: body, extraHeaders: headers);
+  }
 
-    if (this.headers != null) {
-      headers.addAll(this.headers!);
+  Future<dynamic> delete({
+    required String endpoint,
+    Map<String, String> headers = const {}
+  }) async {
+    return request(method: RequestTypes.DELETE, endpoint: endpoint, extraHeaders: headers);
+  }
+
+  Future<dynamic> request({
+    required RequestTypes method,
+    required String endpoint,
+    Map<String, dynamic> body = const {},
+    Map<String, String> extraHeaders = const {},
+  }) async {
+    final uri = Uri.parse(endpoint);
+    var headers = <String, String>{'Content-Type': 'application/json'};
+
+    if (extraHeaders.isNotEmpty) {
+      headers.addAll(extraHeaders);
     }
 
-    var response;
+    Response response;
 
     try {
       switch (method) {
