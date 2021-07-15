@@ -25,4 +25,7 @@ class CatSharedPreferencesProvider extends CacheProvider {
     await instance.setString(LOCAL_CAT_KEY, dataToString);
     print('set to shared preferences cache');
   }
+
+  @override
+  Future<void> closeConnection() async {}
 }

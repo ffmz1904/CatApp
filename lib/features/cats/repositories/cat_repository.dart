@@ -13,4 +13,6 @@ abstract class CatRepository {
   Future<void> setCatsToCache(List<CatModel> data);
 
   Future<List<CatModel>?> getCatsFromCache();
+
+  Future<void> closeCacheConnection();
 }

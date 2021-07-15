@@ -5,5 +5,7 @@ abstract class ICache {
   Future<void> setLocalData(List<CatModel> data);
 
   // Get data from cache
-  Future getLocalData();
+  Future<List<CatModel>?> getLocalData();
+
+  Future<void> closeConnection();
 }

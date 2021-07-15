@@ -31,7 +31,12 @@ void main() async {
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(
@@ -61,5 +66,11 @@ class MyApp extends StatelessWidget {
         return AuthPage();
       },
     );
+  }
+
+  @override
+  void dispose() {
+    context.read<CatCubit>().close();
+    super.dispose();
   }
 }

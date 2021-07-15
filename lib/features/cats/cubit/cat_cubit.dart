@@ -1,3 +1,4 @@
+import 'package:cat_app/features/cache/sqlite/cat_sqlite_provider.dart';
 import 'package:cat_app/features/cats/cubit/cat_state.dart';
 import 'package:cat_app/features/cats/model/cat_model.dart';
 import 'package:cat_app/features/cats/repositories/cat_repository.dart';
@@ -228,5 +229,11 @@ class CatCubit extends Cubit<CatState> {
     }
 
     return null;
+  }
+
+  @override
+  Future<void> close() {
+    dataRepository.closeCacheConnection();
+    return super.close();
   }
 }

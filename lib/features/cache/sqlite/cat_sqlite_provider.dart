@@ -13,7 +13,14 @@ final String columnIsFavorite = 'isFavorite';
 final String columnFavoriteId = 'favoriteId';
 
 class CatSqliteProvider extends CacheProvider {
+  static final CatSqliteProvider _instance = CatSqliteProvider._();
   static Database? _db;
+
+  factory CatSqliteProvider() {
+    return _instance;
+  }
+
+  CatSqliteProvider._();
 
   Future<Database> get database async {
     if (_db != null) {
@@ -54,6 +61,9 @@ class CatSqliteProvider extends CacheProvider {
     print('Set sqlite cache !');
   }
 
+  @override
+  Future<void> closeConnection() async => _db!.close();
+
   Future<void> incertAll(List<CatModel> cats) async {
     cats.forEach((cat) async => { await insert(cat) });
   }
@@ -83,6 +93,4 @@ class CatSqliteProvider extends CacheProvider {
     }
     return null;
   }
-
-  Future<void> close() async => _db!.close();
 }

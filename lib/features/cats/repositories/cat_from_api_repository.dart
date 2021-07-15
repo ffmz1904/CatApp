@@ -1,4 +1,5 @@
 import 'package:cat_app/features/cache/cache_provider.dart';
+import 'package:cat_app/features/cache/sqlite/cat_sqlite_provider.dart';
 import 'package:cat_app/features/cats/api/cat_api_abstract.dart';
 import 'package:cat_app/features/cats/model/cat_model.dart';
 import 'package:cat_app/features/cats/repositories/cat_repository.dart';
@@ -71,5 +72,10 @@ class CatFromApiRepository extends CatRepository {
   Future<List<CatModel>?> getCatsFromCache() async {
     final cats = await cacheProvider.getLocalData();
     return cats;
+  }
+
+  @override
+  Future<void> closeCacheConnection() async {
+    await cacheProvider.closeConnection();
   }
 }
