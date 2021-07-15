@@ -11,7 +11,7 @@ class CatApi extends CatApiAbstract {
   Future<List<Map<String, dynamic>>> getCatImages(int limit, int page) async {
     final response = await _apiService.get(endpoint: 'https://api.thecatapi.com/v1/images/search?limit=$limit&page=$page&order=rand');
 
-    final catImages = ApiResponse.toList(response).map((cat) => {
+    final catImages = (response as List).map((cat) => {
               'id': cat['id'],
               'img': cat['url'],
             })
@@ -25,7 +25,7 @@ class CatApi extends CatApiAbstract {
   Future<List<String>> getCatFacts(int limit) async {
     final response = await _apiService.get(endpoint: 'https://catfact.ninja/facts?limit=$limit');
 
-    final catFacts = ApiResponse.toList(response['data']).map((fact) => fact['fact'].toString()).toList();
+    final catFacts = ((response as Map<String, dynamic>)['data'] as List).map((fact) => fact['fact'].toString()).toList();
     return catFacts;
   }
 
@@ -67,7 +67,7 @@ class CatApi extends CatApiAbstract {
       headers: {'x-api-key': CAT_API_KEY},
     );
 
-    final favoritesData = ApiResponse.toList(response).map((favorite) => {
+    final favoritesData = (response as List).map((favorite) => {
               'id': favorite['image']['id'],
               'img': favorite['image']['url'],
               'favoriteId': favorite['id'],
@@ -75,15 +75,5 @@ class CatApi extends CatApiAbstract {
         .toList();
 
     return favoritesData;
-  }
-}
-
-class ApiResponse {
-  static Map<String, dynamic> toMap(response) {
-    return response as Map<String, dynamic>;
-  }
-
-  static List toList(response) {
-    return response as List;
   }
 }

@@ -45,12 +45,20 @@ class ProfilePage extends StatelessWidget {
         BlocBuilder<SettingsCubit, SettingsState>(builder: (context, state) {
           return Column(
             children: [
-              _apiSettings(
-                state.apiProvider,
+              _SettingsSection(
+                'Api type:',
+                [
+                  _SwitchData(title: 'CatsApi', type: CAT_API_CATS_API, value: state.apiProvider == CAT_API_CATS_API),
+                  _SwitchData(title: 'Firestore', type: CAT_API_FIRESTORE, value: state.apiProvider == CAT_API_FIRESTORE),
+                ],
                 (type) => context.read<SettingsCubit>().changeApiProvider(type),
               ),
-              _cacheSettings(
-                state.cacheProvider,
+              _SettingsSection(
+                'Cache type:',
+                [
+                  _SwitchData(title: 'Shared Preferences', type: CACHE_SHARED_PREFERENCES, value: state.cacheProvider == CACHE_SHARED_PREFERENCES),
+                  _SwitchData(title: 'SQLite', type: CACHE_SQLITE, value: state.cacheProvider == CACHE_SQLITE),
+                ],
                 (type) => context.read<SettingsCubit>().changeCacheProvider(type),
               ),
             ],
@@ -59,71 +67,58 @@ class ProfilePage extends StatelessWidget {
       ],
     );
   }
+}
 
-  Widget _apiSettings(String apiType, Function changeTypeFunc) {
+
+class _SettingsSection extends StatelessWidget {
+  final List<_SwitchData> _switchData;
+  final String title;
+  final Function _handleSwitch;
+
+  _SettingsSection(this.title, this._switchData, this._handleSwitch);
+
+  @override
+  Widget build(BuildContext context) {
     return  Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'Api type:',
+            title,
             textAlign: TextAlign.start,
             style: TextStyle(fontSize: 20),
           ),
-          _switch(
-            text: 'Cats Api',
-            value: apiType == CAT_API_CATS_API,
-            onChangeFunc: () => changeTypeFunc(CAT_API_CATS_API),
-          ),
-          _switch(
-            text: 'Firestore',
-            value: apiType == CAT_API_FIRESTORE,
-            onChangeFunc: () => changeTypeFunc(CAT_API_FIRESTORE),
-          ),
+          ..._switchData.map((e) => _Switch(e, _handleSwitch)).toList(),
         ],
       ),
     );
   }
+}
 
-  Widget _cacheSettings(String cacheType, Function changeTypeFunc) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            'Cache type:',
-            textAlign: TextAlign.start,
-            style: TextStyle(fontSize: 20),
-          ),
-          _switch(
-            text: 'Shared Preferences',
-            value: cacheType == CACHE_SHARED_PREFERENCES,
-            onChangeFunc: () => changeTypeFunc(CACHE_SHARED_PREFERENCES),
-          ),
-          _switch(
-            text: 'SQLite',
-            value: cacheType == CACHE_SQLITE,
-            onChangeFunc: () => changeTypeFunc(CACHE_SQLITE),
-          ),
-        ],
-      ),
-    );
-  }
+class _SwitchData {
+  final String title;
+  final String type;
+  final bool value;
 
-  Widget _switch({
-    required String text,
-    required bool value,
-    required Function onChangeFunc
-  }) {
+  _SwitchData({ required this.title, required this.type, required this.value});
+}
+
+class _Switch extends StatelessWidget {
+  final _SwitchData _data;
+  final Function _onChange;
+
+  _Switch(this._data, this._onChange);
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(text),
+        Text(_data.title),
         Switch(
-          value: value,
-          onChanged: (value) => onChangeFunc(),
+          value: _data.value,
+          onChanged: (_) => _onChange(_data.type),
           activeTrackColor: Colors.blue[200],
           activeColor: Colors.blueAccent,
         ),
@@ -131,35 +126,3 @@ class ProfilePage extends StatelessWidget {
     );
   }
 }
-
-// class SwitchData {
-//   final String title;
-//   final String type;
-// }
-//
-// class _SettingsSection extends StatelessWidget {
-//   final List<SwitchData> switchData;
-//   @override
-//   Widget build(BuildContext context) {
-//     return  Padding(
-//       padding: const EdgeInsets.symmetric(horizontal: 20),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.stretch,
-//         children: [
-//           Text(
-//             'Cache type:',
-//             textAlign: TextAlign.start,
-//             style: TextStyle(fontSize: 20),
-//           ),
-//           ...switchData.map((e) => _Switch()).toList(),
-//         ],
-//       ),
-//     )
-//   }
-//
-// }
-//
-//
-// class _Switch extends StatelessWidget {
-//
-// }
